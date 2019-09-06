@@ -40,6 +40,44 @@
             small
           >View details</v-btn>
         </template>
+        <template v-slot:item.sellingPrice="{ item }">
+          <b>₹ {{item.sellingPrice }}</b>
+        </template>
+        <template v-slot:item.originalPrice="{ item }">
+          ₹ {{item.originalPrice }}
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-btn
+            small
+            outlined
+            text
+            rounded
+            x-small
+            class="mr-2"
+          >
+            <v-icon
+              left
+              size="16"
+            >mdi-pencil</v-icon>
+            Edit
+          </v-btn>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                icon
+                elevation="0"
+                rounded
+                color="red darken-1"
+                v-on="on"
+              >
+                <v-icon size="24">mdi-delete</v-icon>
+
+              </v-btn>
+            </template>
+            <span>Delete item</span>
+          </v-tooltip>
+
+        </template>
       </v-data-table>
     </v-row>
 
