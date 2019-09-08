@@ -4,8 +4,8 @@
     tile
     class="pa-12 ma-4"
   >
-    <h1 class=" display-1">Vendors</h1>
-    <h2 class=" body-1 my-4">View all vendors</h2>
+    <h1 class=" display-1">New Vendor Requests</h1>
+    <h2 class=" body-1 my-4">View requests by vendors interested to join your app</h2>
 
     <v-row class="mt-8">
       <v-data-table

@@ -371,6 +371,8 @@ export default Vue.extend({
     async submitDetails() {
       var shopPhotoUrl = "";
       var panPhotoUrls = [];
+      var promises = [];
+      var vm = this;
       var userPhone = this.formInputs.phoneNumberInput;
       this.isSubmitDialogVisible = true;
       this.submissionProgressMessage = "Uploading your images (Step 1/2)";
@@ -378,14 +380,30 @@ export default Vue.extend({
       var shopPhotoRef = storageRef.child(`${userPhone}/shop.jpg`);
       await this.formInputs.panImagesInput.forEach(async (image, i) => {
         var panPhotoRef = storageRef.child(`${userPhone}/pan${i}.jpg`);
-        await panPhotoRef.put(image).then(async function(snapshot) {
-          console.log("PAN uploaded");
-          await panPhotoRef.getDownloadURL().then(function(url) {
-            console.log("Got URL for PAN: " + url);
-            panPhotoUrls.push(url);
-          });
-        });
+        var uploadTask = panPhotoRef.put(image);
+        promises.push(uploadTask);
+        uploadTask.on(
+          "state_changed",
+          function(snapshot) {
+            var progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            vm.uploadProgress = progress;
+            console.log("Upload is " + progress + "% done");
+          },
+          function(error) {
+            console.log("FIREBASE ERROR", error);
+          },
+          async function() {
+            await uploadTask.snapshot.ref
+              .getDownloadURL()
+              .then(function(downloadURL) {
+                console.log("Returned URL ", downloadURL);
+                panPhotoUrls.push(downloadURL);
+              });
+          }
+        );
       });
+      await Promise.all(promises);
       this.submissionProgressMessage = "Uploading your images (Step 2/2)";
       await shopPhotoRef
         .put(this.formInputs.shopImageInput)
@@ -405,7 +423,7 @@ export default Vue.extend({
             phoneNumber: this.formInputs.phoneNumberInput,
             email: this.formInputs.emailAddressInput,
             password: this.formInputs.passwordInput,
-            pancardPhotoUrls: panPhotoUrls.toString,
+            pancardPhotoUrls: JSON.stringify(panPhotoUrls),
             shopPhotoUrl: shopPhotoUrl,
             address: {
               name: this.formInputs.storeNameInput,

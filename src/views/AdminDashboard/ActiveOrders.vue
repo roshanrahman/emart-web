@@ -14,6 +14,7 @@
         :loading="$apollo.loading"
         loading-text="Fetching data, please wait..."
         :sort-by="['updatedDate']"
+        :items-per-page="100"
         sort-desc
       >
         <template v-slot:item.items="{ item }">
@@ -28,6 +29,16 @@
         <template v-slot:item.datePlaced="{ item }">
 
           {{ computedDate(item.datePlaced) }}
+
+        </template>
+        <template v-slot:item.updateStatus="{ item }">
+
+          <v-btn
+            rounded
+            color="primary"
+            small
+            @click="currentOrder = item; isUpdateStatusDialogVisible = true;"
+          >Update</v-btn>
 
         </template>
         <template v-slot:item.updatedDate="{ item }">
@@ -125,6 +136,44 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <v-dialog
+      v-model="isUpdateStatusDialogVisible"
+      max-width="600"
+    >
+      <v-card>
+        <v-card-title>
+          <v-flex>
+            Update Status of Order #{{ currentOrder.orderNo }}
+          </v-flex>
+          <v-btn
+            text
+            color="primary"
+            @click="isUpdateStatusDialogVisible = false;"
+          >Close</v-btn>
+        </v-card-title>
+        <v-card-text>
+          <v-list>
+            <v-list-item>
+
+              <v-list-item-content>
+                <v-list-item-subtitle class="mb-2">Current Status</v-list-item-subtitle>
+                <v-list-item-title class="primary--text title">{{ computedStatus(currentOrder.status).short }}</v-list-item-title>
+                <v-list-item-subtitle class="black--text subtitle-2">{{ computedStatus(currentOrder.status).long }}</v-list-item-subtitle>
+              </v-list-item-content>
+
+            </v-list-item>
+            <v-list-item>
+
+              <v-list-item-content>
+                <v-list-item-subtitle class="my-2">Next Action</v-list-item-subtitle>
+                <v-list-item-title class="primary--text subtitle-1">{{ computedStatus(currentOrder.status).next }}</v-list-item-title>
+              </v-list-item-content>
+
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -144,9 +193,10 @@ export default Vue.extend({
     filteredOrders: function () {
       var orders = [];
       orders = this.getAllOrders.orders;
-      orders.filter(order => {
+      orders = orders.filter(order => {
         return order.status == 'PLACED_BY_CUSTOMER' ||
-          order.status == 'RECEIVED_BY_STORE'
+          order.status == 'RECEIVED_BY_STORE' ||
+          order.status == 'PICKED_UP'
       });
       return orders;
     }
@@ -154,7 +204,9 @@ export default Vue.extend({
   },
   methods: {
     computedStatus: function (status) {
-
+      if (status == '') {
+        return { short: '', long: '' }
+      }
       return OrderStatuses.resolveOrderStatus(status);
     },
     computedDate: function (dateString) {
@@ -170,7 +222,8 @@ export default Vue.extend({
   data () {
     return {
       isItemDetailDialogVisible: false,
-      currentOrder: {},
+      isUpdateStatusDialogVisible: false,
+      currentOrder: { status: '' },
       getAllOrders: {},
       headers: [
         {
@@ -204,6 +257,10 @@ export default Vue.extend({
         {
           text: "Transaction Success",
           value: "transactionSuccess"
+        },
+        {
+          text: "Update Order Status",
+          value: "updateStatus"
         }
       ]
     }
@@ -211,9 +268,6 @@ export default Vue.extend({
   apollo: {
     getAllOrders: {
       query: getAllOrders,
-      variables () {
-        vendorId: this.loggedInUser.id;
-      },
       pollInterval: 3
     }
   }

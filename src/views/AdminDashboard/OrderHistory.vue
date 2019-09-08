@@ -13,6 +13,7 @@
         :headers="headers"
         :loading="$apollo.loading"
         loading-text="Fetching data, please wait..."
+        :items-per-page="100"
       >
         <template v-slot:item.items="{ item }">
           <v-btn

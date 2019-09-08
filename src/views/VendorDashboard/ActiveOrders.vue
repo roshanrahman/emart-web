@@ -14,6 +14,7 @@
         :loading="$apollo.loading"
         loading-text="Fetching data, please wait..."
         :sort-by="['updatedDate']"
+        :items-per-page="100"
         sort-desc
       >
         <template v-slot:item.items="{ item }">
@@ -144,7 +145,7 @@ export default Vue.extend({
     filteredOrders: function () {
       var orders = [];
       orders = this.getVendorOrders.orders;
-      orders.filter(order => {
+      orders = orders.filter(order => {
         return order.status == 'PLACED_BY_CUSTOMER' ||
           order.status == 'RECEIVED_BY_STORE'
       });

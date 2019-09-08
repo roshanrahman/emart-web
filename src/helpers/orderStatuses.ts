@@ -18,17 +18,17 @@ export class OrderStatuses {
     DELIVERED_AND_PAID: {
       short: "DELIVERED",
       long: "Order has reached the customer",
-      next: null
+      next: "No action is necessary"
     },
     CANCELLED_BY_CUSTOMER: {
       short: "CANCELLED BY CUSTOMER",
       long: "Order cancelled by customer",
-      next: null
+      next: "No action is necessary"
     },
     CANCELLED_BY_STORE: {
       short: "CANCELLED BY STORE",
       long: "Order cancelled by store",
-      next: null
+      next: "No action is necessary"
     }
   };
 

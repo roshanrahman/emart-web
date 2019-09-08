@@ -194,7 +194,7 @@ export default Vue.extend({
     loggedInUser: function () {
       return new LoginSessionHandler()
     },
-    pendingApprovalCount: function () {
+    activeOrdersCount: function () {
       var ordersList = this.getAllOrders.orders;
       if (!!ordersList == false) {
         return 0;
