@@ -7,7 +7,7 @@
     <v-row>
       <h1 class=" display-1">Inventory</h1>
       <v-spacer></v-spacer>
-      <v-btn
+      <!-- <v-btn
         rounded
         elevation="0"
         color="primary"
@@ -15,12 +15,12 @@
       >
         <v-icon left>mdi-plus</v-icon>
         Add new item
-      </v-btn>
+      </v-btn> -->
     </v-row>
 
     <v-row class="mt-8">
       <v-data-table
-        :items="getVendorInventory.inventory"
+        :items="getAllInventory.inventory"
         :headers="headers"
         :loading="$apollo.loading"
         loading-text="Fetching data, please wait..."
@@ -245,7 +245,7 @@
 import Vue from "vue";
 
 import { LoginSessionHandler } from '../../helpers/loginSessionHandler';
-import { getVendorInventory } from "../../graphql/getVendorInventory";
+import { getAllInventory } from "../../graphql/getAllInventory";
 import InventoryFormComponent from "../../components/InventoryFormComponent";
 import InventoryDetailsComponent from "../../components/InventoryDetailsComponent";
 import { addNewInventoryMutation } from "../../graphql/addNewInventory";
@@ -279,6 +279,10 @@ export default Vue.extend({
           value: 'category'
         },
         {
+          text: 'Sold by',
+          value: 'vendor.storeName'
+        },
+        {
           text: 'Description',
           value: 'description'
         },
@@ -300,7 +304,7 @@ export default Vue.extend({
         }
 
       ],
-      getVendorInventory: {},
+      getAllInventory: {},
       isAddInventoryDialogVisible: false,
       isErrorDialogVisible: false,
       isEditInventoryDialogVisible: false,
@@ -365,8 +369,8 @@ export default Vue.extend({
     }
   },
   apollo: {
-    getVendorInventory: {
-      query: getVendorInventory,
+    getAllInventory: {
+      query: getAllInventory,
 
       pollInterval: 3
     }

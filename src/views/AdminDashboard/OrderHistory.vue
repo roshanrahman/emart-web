@@ -9,7 +9,7 @@
 
     <v-row class="mt-8">
       <v-data-table
-        :items="getVendorOrders.orders"
+        :items="getAllOrders.orders"
         :headers="headers"
         :loading="$apollo.loading"
         loading-text="Fetching data, please wait..."
@@ -130,7 +130,7 @@
 import Vue from "vue";
 
 import { LoginSessionHandler } from '../../helpers/loginSessionHandler';
-import { getVendorOrders } from "../../graphql/getVendorOrders";
+import { getAllOrders } from "../../graphql/getAllOrders";
 import { OrderStatuses } from '../../helpers/orderStatuses';
 import moment from "moment";
 
@@ -160,7 +160,7 @@ export default Vue.extend({
     return {
       isItemDetailDialogVisible: false,
       currentOrder: {},
-      getVendorOrders: {},
+      getAllOrders: {},
       headers: [
         {
           text: "Order No.",
@@ -198,8 +198,8 @@ export default Vue.extend({
     }
   },
   apollo: {
-    getVendorOrders: {
-      query: getVendorOrders,
+    getAllOrders: {
+      query: getAllOrders,
       variables () {
         vendorId: this.loggedInUser.id;
       },

@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
-export let getVendorInventory = gql`
-  query {
-    getVendorInventory(vendorId: null) {
+export let deleteInventoryMutation = gql`
+  mutation($inventoryId: String) {
+    deleteInventory(inventoryId: $inventoryId) {
       error {
         message
       }
@@ -15,13 +15,6 @@ export let getVendorInventory = gql`
         category
         inStock
         imageUrl
-        vendor {
-          id
-          name
-          phoneNumber
-          storeName
-          address
-        }
       }
     }
   }

@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
-export let getVendorInventory = gql`
+export let getAllInventory = gql`
   query {
-    getVendorInventory(vendorId: null) {
+    getAllInventory {
       error {
         message
       }

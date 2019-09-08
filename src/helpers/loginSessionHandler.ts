@@ -20,6 +20,7 @@ export class LoginSessionHandler {
     }
   }
   static setLogin(jsonString, jwt) {
+    console.log("Going to store string", jsonString);
     localStorage.setItem("loginInfo", jsonString);
     localStorage.setItem("apollo-token", jwt);
     console.log("Saved login info to localStorage");

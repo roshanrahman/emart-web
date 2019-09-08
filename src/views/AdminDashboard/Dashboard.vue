@@ -16,7 +16,7 @@
               Application
             </v-list-item-title>
             <v-list-item-subtitle>
-              Vendor Panel
+              Admin Panel
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -27,7 +27,7 @@
           <v-list-item
             value="home"
             color="primary"
-            @click="routeTo('vendor')"
+            @click="routeTo('admin')"
           >
             <v-list-item-icon>
               <v-icon>mdi-home</v-icon>
@@ -39,9 +39,9 @@
           <v-subheader class="mt-4 grey--text text--darken-1">ORDERS</v-subheader>
 
           <v-list-item
-            value="vendor-active-orders"
+            value="admin-active-orders"
             color="primary"
-            @click="routeTo('vendor-active-orders')"
+            @click="routeTo('admin-active-orders')"
           >
             <v-list-item-icon v-if="activeOrdersCount > 0">
 
@@ -64,8 +64,8 @@
             </v-list-item-content>
           </v-list-item>
           <v-list-item
-            value="vendor-order-history"
-            @click="routeTo('vendor-order-history')"
+            value="admin-order-history"
+            @click="routeTo('admin-order-history')"
             color="primary"
           >
             <v-list-item-icon>
@@ -80,23 +80,51 @@
           <v-subheader class="mt-4 grey--text text--darken-1">INVENTORY</v-subheader>
 
           <v-list-item
-            value="vendor-inventory"
+            value="admin-inventory"
             color="primary"
-            @click="routeTo('vendor-inventory')"
+            @click="routeTo('admin-inventory')"
           >
             <v-list-item-icon>
               <v-icon>mdi-cart</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>Your Inventory</v-list-item-title>
+              <v-list-item-title>Inventory</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider class="my-4"></v-divider>
+
+          <v-subheader class="mt-4 grey--text text--darken-1">VENDORS</v-subheader>
+
+          <v-list-item
+            value="admin-vendor-requests"
+            color="primary"
+            @click="routeTo('admin-vendor-requests')"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-account-multiple-plus</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>New Vendor Requests</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item
+            value="admin-vendors"
+            color="primary"
+            @click="routeTo('admin-vendors')"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-account-check</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>All Vendors</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-divider class="my-4"></v-divider>
 
           <v-subheader class="mt-4 grey--text text--darken-1">PROFILE</v-subheader>
           <v-list-item
-            value="vendor-profile"
-            @click="routeTo('vendor-profile')"
+            value="admin-profile"
+            @click="routeTo('admin-profile')"
             color="primary"
           >
             <v-list-item-icon>
@@ -107,9 +135,9 @@
             </v-list-item-content>
           </v-list-item>
           <v-list-item
-            value="vendor-stats"
+            value="admin-stats"
             color="primary"
-            @click="routeTo('vendor-stats')"
+            @click="routeTo('admin-stats')"
           >
             <v-list-item-icon>
               <v-icon>mdi-chart-line</v-icon>
@@ -160,14 +188,14 @@
 import Vue from "vue";
 import HomePage from "./HomePage.vue";
 import { LoginSessionHandler } from '../../helpers/loginSessionHandler';
-import { getVendorOrders } from "../../graphql/getVendorOrders";
+import { getAllOrders } from "../../graphql/getAllOrders";
 export default Vue.extend({
   computed: {
     loggedInUser: function () {
       return new LoginSessionHandler()
     },
-    activeOrdersCount: function () {
-      var ordersList = this.getVendorOrders.orders;
+    pendingApprovalCount: function () {
+      var ordersList = this.getAllOrders.orders;
       if (!!ordersList == false) {
         return 0;
       }
@@ -182,11 +210,8 @@ export default Vue.extend({
     }
   },
   apollo: {
-    getVendorOrders: {
-      query: getVendorOrders,
-      variables () {
-        vendorId: this.loggedInUser.id;
-      },
+    getAllOrders: {
+      query: getAllOrders,
       pollInterval: 3
     }
   },
@@ -217,7 +242,7 @@ export default Vue.extend({
       selectedDrawerItem: 'home',
       isDrawerOpen: null,
       isDark: false,
-      getVendorOrders: {}
+      getAllOrders: {}
     }
   }
 })

@@ -6,7 +6,7 @@
     <h1 class="title text-center primary--text my-4">Recommended Actions</h1>
 
     <v-list>
-      <v-list-item @click="">
+      <v-list-item @click="changeRoute('vendor-inventory');">
         <v-list-item-avatar class="d-none d-lg-block">
           <v-icon class="grey lighten-1 white--text">mdi-cart</v-icon>
         </v-list-item-avatar>
@@ -18,7 +18,7 @@
           <v-icon>mdi-arrow-right</v-icon>
         </v-list-item-action>
       </v-list-item>
-      <v-list-item @click="">
+      <v-list-item @click="changeRoute('vendor-active-orders');">
         <v-list-item-avatar class="d-none d-lg-block">
           <v-icon class="grey lighten-1 white--text">mdi-inbox</v-icon>
         </v-list-item-avatar>
@@ -38,9 +38,15 @@
 
 <script>
 import Vue from "vue";
-export default Vue.extend({
-  name: 'QuickStatisticsComponent'
-});
+export default {
+  name: 'QuickStatisticsComponent',
+  methods: {
+    changeRoute (item) {
+      console.log('clicked')
+      this.$emit('emitRoute', item);
+    }
+  }
+}
 </script>
 
 <style>

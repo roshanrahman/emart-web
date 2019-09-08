@@ -139,6 +139,12 @@ export default {
   props: [
     'imageURL'
   ],
+  watch: {
+    imageURL: function () {
+      console.log('Prop changed!');
+      this.currentImageURL = this.imageURL;
+    }
+  },
   computed: {
     imageAvailable: function () {
       return !!this.currentImageURL;

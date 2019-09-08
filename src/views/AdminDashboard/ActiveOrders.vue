@@ -4,15 +4,17 @@
     tile
     class="pa-12 ma-4"
   >
-    <h1 class=" display-1">Order History</h1>
-    <h2 class=" body-1 my-4">View all orders of your items</h2>
+    <h1 class=" display-1">Active Orders</h1>
+    <h2 class=" body-1 my-4">View orders that are in processing</h2>
 
     <v-row class="mt-8">
       <v-data-table
-        :items="getVendorOrders.orders"
+        :items="filteredOrders"
         :headers="headers"
         :loading="$apollo.loading"
         loading-text="Fetching data, please wait..."
+        :sort-by="['updatedDate']"
+        sort-desc
       >
         <template v-slot:item.items="{ item }">
           <v-btn
@@ -23,11 +25,6 @@
             @click="currentOrder = item; isItemDetailDialogVisible = true;"
           >View items</v-btn>
         </template>
-        <template v-slot:item.totalPrice="{ item }">
-
-          <b class="subtitle-2"> ₹ {{ item.totalPrice }} </b>
-
-        </template>
         <template v-slot:item.datePlaced="{ item }">
 
           {{ computedDate(item.datePlaced) }}
@@ -36,6 +33,11 @@
         <template v-slot:item.updatedDate="{ item }">
 
           {{ computedDate(item.updatedDate) }}
+
+        </template>
+        <template v-slot:item.totalPrice="{ item }">
+
+          <b class="subtitle-2"> ₹ {{ item.totalPrice }} </b>
 
         </template>
         <template v-slot:item.status="{ item }">
@@ -130,7 +132,7 @@
 import Vue from "vue";
 
 import { LoginSessionHandler } from '../../helpers/loginSessionHandler';
-import { getVendorOrders } from "../../graphql/getVendorOrders";
+import { getAllOrders } from "../../graphql/getAllOrders";
 import { OrderStatuses } from '../../helpers/orderStatuses';
 import moment from "moment";
 
@@ -139,6 +141,15 @@ export default Vue.extend({
     loggedInUser: function () {
       return new LoginSessionHandler()
     },
+    filteredOrders: function () {
+      var orders = [];
+      orders = this.getAllOrders.orders;
+      orders.filter(order => {
+        return order.status == 'PLACED_BY_CUSTOMER' ||
+          order.status == 'RECEIVED_BY_STORE'
+      });
+      return orders;
+    }
 
   },
   methods: {
@@ -160,7 +171,7 @@ export default Vue.extend({
     return {
       isItemDetailDialogVisible: false,
       currentOrder: {},
-      getVendorOrders: {},
+      getAllOrders: {},
       headers: [
         {
           text: "Order No.",
@@ -198,8 +209,8 @@ export default Vue.extend({
     }
   },
   apollo: {
-    getVendorOrders: {
-      query: getVendorOrders,
+    getAllOrders: {
+      query: getAllOrders,
       variables () {
         vendorId: this.loggedInUser.id;
       },

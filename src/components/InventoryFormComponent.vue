@@ -1,5 +1,8 @@
 <template>
-  <v-c>
+  <v-card
+    class="pa-4"
+    elevation="0"
+  >
     <v-flex>
 
       <v-form
@@ -223,7 +226,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-c>
+  </v-card>
 </template>
 
 <script>
@@ -253,6 +256,8 @@ export default {
   methods: {
     resetValidation () {
       this.$refs.form.reset();
+      this.selectedCategory = null;
+      this.imageURLInput = null;
     },
     setImage (url) {
       this.imageURLInput = url;
@@ -265,6 +270,7 @@ export default {
       this.menu = false;
     },
     handleFormSubmit () {
+      this.$refs.form.validate();
       if (!!this.imageURLInput == false) {
         this.error.title = "Product photo not provided";
         this.error.text = "Please upload an image for the product photo."
@@ -287,6 +293,23 @@ export default {
         imageUrl: this.imageURLInput
       };
       this.$emit('submit', inventoryObj);
+      this.$refs.form.reset();
+    }
+  },
+  props: ['existingItem'],
+  mounted () {
+    if (!!this.existingItem) {
+      if (this.categories.map((v) => v.toLowerCase()).indexOf(this.existingItem.category.toLowerCase()) == -1) {
+        this.categories.push(this.existingItem.category);
+        this.selectedCategory = this.existingItem.category;
+      }
+    }
+  },
+  watch: {
+    existingItem: function () {
+      console.log('Prop changed!', this.existingItem);
+      this.$forceUpdate();
+
     }
   },
   data () {
@@ -302,19 +325,19 @@ export default {
         quantityRules: [v => !!v || 'Quantity is required',
         v => v > 0 || 'Quantity must be a positive value']
       },
-      nameInput: '',
-      descriptionInput: '',
-      originalPriceInput: null,
-      sellingPriceInput: null,
-      quantityInput: null,
-      imageURLInput: '',
+      nameInput: !!this.existingItem ? this.existingItem.name : '',
+      descriptionInput: !!this.existingItem ? this.existingItem.description : '',
+      originalPriceInput: !!this.existingItem ? this.existingItem.originalPrice : null,
+      sellingPriceInput: !!this.existingItem ? this.existingItem.sellingPrice : null,
+      quantityInput: !!this.existingItem ? this.existingItem.inStock : null,
+      imageURLInput: !!this.existingItem ? this.existingItem.imageUrl : '',
       isFormValid: false,
-      selectedCategory: '',
+      selectedCategory: !!this.existingItem ? this.existingItem.category : '',
       error: {
         title: '',
         text: ''
       },
-      categories: ['Mobile Phones', 'PC Parts', 'Television', 'Laptops', 'Laptop Accessories', 'Mobile Accessories'],
+      categories: ['Mobile Phones', 'PC Parts', 'Laptops', 'Laptop Accessories', 'Mobile Accessories'],
       menu: false,
       newCategoryTextInput: ''
     }

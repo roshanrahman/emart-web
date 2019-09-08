@@ -11,7 +11,7 @@ export let vendorLogin = gql`
         email
         storeName
         blocked
-        panCardPhotoUrls
+        pancardPhotoUrls
         shopPhotoUrl
         admin
       }

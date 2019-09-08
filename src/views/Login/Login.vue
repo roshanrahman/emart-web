@@ -48,10 +48,7 @@
               type="password"
               v-model="passwordInput"
             ></v-text-field>
-            <v-checkbox
-              dark
-              label="Remember me"
-            />
+
           </v-form>
           <v-row
             justify="end"
@@ -168,7 +165,11 @@ export default Vue.extend({
               data.data.vendorLogin.jwtToken
             );
             this.isBusy = false;
-            this.$router.replace("/vendor");
+            if (data.data.vendorLogin.user.admin) {
+              this.$router.replace("/admin");
+            } else {
+              this.$router.replace("/vendor");
+            }
           }
           //Error handling ->
           if (!!data.data.vendorLogin.error || !!data.errors) {

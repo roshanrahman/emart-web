@@ -52,6 +52,53 @@ export default new Router({
           component: () => import("./views/VendorDashboard/Stats.vue")
         }
       ]
+    },
+    {
+      path: "/admin",
+      name: "admin",
+      component: () => import("./views/AdminDashboard/Dashboard.vue"),
+      children: [
+        {
+          path: "/",
+          name: "admin",
+          component: () => import("./views/AdminDashboard/HomePage.vue")
+        },
+        {
+          path: "/admin-active-orders",
+          name: "admin-active-orders",
+          component: () => import("./views/AdminDashboard/ActiveOrders.vue")
+        },
+        {
+          path: "/admin-order-history",
+          name: "admin-order-history",
+          component: () => import("./views/AdminDashboard/OrderHistory.vue")
+        },
+        {
+          path: "/admin-inventory",
+          name: "admin-inventory",
+          component: () => import("./views/AdminDashboard/Inventory.vue")
+        },
+        {
+          path: "/admin-profile",
+          name: "admin-profile",
+          component: () => import("./views/AdminDashboard/Profile.vue")
+        },
+        {
+          path: "/admin-stats",
+          name: "admin-stats",
+          component: () => import("./views/AdminDashboard/Stats.vue")
+        },
+        {
+          path: "/admin-vendors",
+          name: "admin-vendors",
+          component: () => import("./views/AdminDashboard/AllVendors.vue")
+        },
+        {
+          path: "/admin-vendor-requests",
+          name: "admin-vendor-requests",
+          component: () => import("./views/AdminDashboard/VendorRequests.vue")
+        }
+      ]
     }
   ]
 });
