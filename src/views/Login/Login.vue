@@ -27,7 +27,7 @@
             max-height="100"
             max-width="400"
             contain
-            src='http://pngimg.com/uploads/tesla_logo/tesla_logo_PNG12.png'
+            src='https://upload.wikimedia.org/wikipedia/commons/9/95/Transparent_google_logo_2015.png'
           ></v-img>
         </v-row>
         <v-col

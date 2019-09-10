@@ -55,6 +55,7 @@
 
         </template>
         <template v-slot:item.transactionSuccess="{ item }">
+          <v-card></v-card>
 
           <v-chip
             v-if="item.transactionSuccess"
@@ -80,7 +81,7 @@
               small
               left
             >mdi-timer-sand-empty</v-icon>
-            <span>Waiting for customer payment</span>
+            <div class="d-inline-block text-truncate">Waiting for customer payment</div>
 
           </v-chip>
 
@@ -110,16 +111,16 @@
             >
               <v-list-item-avatar>
                 <v-avatar>
-                  <v-img :src="item.imageUrl"></v-img>
+                  <v-img :src="item.inventory.imageUrl"></v-img>
                 </v-avatar>
               </v-list-item-avatar>
               <v-list-item-content>
 
-                <v-list-item-title>{{ item.name }}</v-list-item-title>
+                <v-list-item-title>{{ item.inventory.name }}</v-list-item-title>
 
               </v-list-item-content>
               <v-list-item-avatar>
-                <h2 class="subtitle-1"> ₹ {{item.sellingPrice}} </h2>
+                <h2 class="subtitle-1"> ₹ {{item.inventory.sellingPrice}} </h2>
               </v-list-item-avatar>
             </v-list-item>
           </v-list>
@@ -145,6 +146,9 @@ export default Vue.extend({
     filteredOrders: function () {
       var orders = [];
       orders = this.getVendorOrders.orders;
+      if (!!orders == false) {
+        return [];
+      }
       orders = orders.filter(order => {
         return order.status == 'PLACED_BY_CUSTOMER' ||
           order.status == 'RECEIVED_BY_STORE'

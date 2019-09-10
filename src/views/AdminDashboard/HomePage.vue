@@ -4,8 +4,8 @@
     tile
     class="pa-12 ma-4"
   >
-    <h1 class="text-center display-1">Welcome to App, {{ loggedInUser.name }}</h1>
-    <h2 class="text-center body-1 my-4">You are a registered vendor on App. Manage your inventory, check your orders and supercharge your business!</h2>
+    <h1 class="text-center display-1">Welcome <span class="primary--text">Administrator</span></h1>
+    <h2 class="text-center body-1 my-4">Take a look at incoming orders, manage inventory, and spearhead your business!</h2>
 
     <v-row>
       <v-col

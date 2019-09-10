@@ -20,11 +20,12 @@
 
     <v-row class="mt-8">
       <v-data-table
-        :items="getAllInventory.inventory"
+        :items="!!getAllInventory.inventory ? getAllInventory.inventory : []"
         :headers="headers"
         :loading="$apollo.loading"
         loading-text="Fetching data, please wait..."
         sort-by="name"
+        :items-per-page="100"
       >
         <template v-slot:item.image="{ item }">
           <v-avatar

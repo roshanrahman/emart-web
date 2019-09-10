@@ -5,11 +5,11 @@
     class="pa-12 ma-4"
   >
     <h1 class=" display-1">Vendors</h1>
-    <h2 class=" body-1 my-4">View all vendors</h2>
+    <h2 class=" body-1 my-4">View all registered vendors</h2>
 
     <v-row class="mt-8">
       <v-data-table
-        :items="getAllVendors"
+        :items="approvedVendors"
         :headers="headers"
         :loading="$apollo.loading"
         loading-text="Fetching data, please wait..."
@@ -29,7 +29,8 @@
             small
             color="primary"
             rounded
-            @click="isShopDialogVisible = true; currentVendor = item;"
+            :disabled="!!item.shopPhotoUrl == false"
+            @click="currentVendor = item; isShopDialogVisible = true; "
           >View Shop Photo</v-btn>
         </template>
         <template v-slot:item.panCard="{
@@ -41,7 +42,8 @@
             small
             color="primary"
             rounded
-            @click="isPanCardDialogVisible = true; currentVendor = item;"
+            :disabled="!!item.pancardPhotoUrls == false"
+            @click="currentVendor = item; isPanCardDialogVisible = true; "
           >View PAN Photos</v-btn>
         </template>
         <template v-slot:item.blocked="{
@@ -176,7 +178,7 @@
         >
           <template v-slot:placeholder>
             <v-row
-              class="fill-height ma-0"
+              class="fill-height ma-0 pa-2"
               align="center"
               justify="center"
             >
@@ -250,7 +252,14 @@ export default Vue.extend({
     loggedInUser: function () {
       return new LoginSessionHandler()
     },
-
+    approvedVendors: function () {
+      var vendors = this.getAllVendors;
+      if (!!vendors == false) {
+        return [];
+      }
+      vendors = vendors.filter((vendor) => vendor.approved == true && vendor.admin == false);
+      return vendors;
+    }
   },
   methods: {
     computedStatus: function (status) {

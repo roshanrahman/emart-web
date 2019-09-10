@@ -2,10 +2,77 @@
   <v-card
     outlined
     tile
-    class="pa-12 ma-4"
+    class="pa-12 "
   >
-    <h1 class=" display-1">Active Orders</h1>
-    <h2 class=" body-1 my-4">View orders that are in processing</h2>
+
+    <v-row>
+      <v-col
+        cols="12"
+        md="8"
+      >
+        <h1 class=" display-1">Active Orders</h1>
+        <h2 class=" body-1 my-4">View orders that are in processing</h2>
+      </v-col>
+      <v-col
+        cols="12"
+        md="4"
+      >
+        <v-card outlined>
+          <v-expansion-panels>
+            <v-expansion-panel>
+              <v-expansion-panel-header class="body-1 primary--text">Color Indicators Reference
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-list
+                  dense
+                  tile=""
+                >
+                  <v-list-item>
+                    <v-list-item-avatar>
+                      <v-avatar
+                        color="info white--text"
+                        size="24"
+                        tile=""
+                        left=""
+                      >1
+                      </v-avatar>
+                    </v-list-item-avatar>
+                    <v-list-item-content>Order is waiting for your confirmation (accept or reject).</v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-avatar>
+                      <v-avatar
+                        color="warning white--text"
+                        size="24"
+                        tile=""
+                        left=""
+                      >2</v-avatar>
+                    </v-list-item-avatar>
+                    <v-list-item-content>You need to collect items, package and ship this order.</v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-avatar>
+                      <v-avatar
+                        color="green white--text"
+                        size="24"
+                        tile=""
+                        left=""
+                      >3</v-avatar>
+                    </v-list-item-avatar>
+                    <v-list-item-content>The order is in shipping. Ensure it reaches the customer and confirm its delivery.</v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+
+                    <v-list-item-content class="body-2 grey--text mt-2">The progress indicator to the left of the status shows how close the order is towards completion.</v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+
+        </v-card>
+      </v-col>
+    </v-row>
 
     <v-row class="mt-8">
       <v-data-table
@@ -13,6 +80,7 @@
         :headers="headers"
         :loading="$apollo.loading"
         loading-text="Fetching data, please wait..."
+        no-data-text="No new orders"
         :sort-by="['updatedDate']"
         :items-per-page="100"
         sort-desc
@@ -52,59 +120,70 @@
 
         </template>
         <template v-slot:item.status="{ item }">
+
           <v-tooltip right>
             <template v-slot:activator="{ on }">
               <v-chip
-                color="primary"
+                :color="item.status == 'RECEIVED_BY_STORE' ? 'warning' : item.status == 'PICKED_UP' ? 'green' : 'info'"
                 dark
                 v-on="on"
-              >{{ computedStatus(item.status).short }}</v-chip>
+                :outlined="item.status != 'RECEIVED_BY_STORE' && item.status != 'PLACED_BY_CUSTOMER' && item.status != 'PICKED_UP'"
+              >
+                <v-avatar left>
+                  <v-progress-circular
+                    :value="item.status == 'PLACED_BY_CUSTOMER' ? 10 : item.status == 'RECEIVED_BY_STORE' ? 50 : item.status == 'PICKED_UP' ? 75 : 100"
+                    size="16"
+                    width="2"
+                  ></v-progress-circular>
+                </v-avatar>
+                {{ computedStatus(item.status).short }}
+              </v-chip>
             </template>
             <span>{{ computedStatus(item.status).long }}</span>
           </v-tooltip>
 
         </template>
         <template v-slot:item.transactionSuccess="{ item }">
-
-          <v-chip
-            v-if="item.transactionSuccess"
-            label
-            small
-            color="success"
-            outlined
-          >
-            <v-icon
+          <v-row>
+            <v-chip
+              v-if="item.transactionSuccess"
+              label
               small
-              left
-            >mdi-check</v-icon>
-            <span>Paid by customer</span>
-          </v-chip>
-          <v-chip
-            v-else
-            label
-            small
-            color="warning"
-            outlined
-          >
-            <v-icon
+              color="success"
+              outlined
+            >
+              <v-icon
+                small
+                left
+              >mdi-check</v-icon>
+              <span>Paid by customer</span>
+            </v-chip>
+            <v-chip
+              v-else
+              label
               small
-              left
-            >mdi-timer-sand-empty</v-icon>
-            <span>Waiting for customer payment</span>
+              color="warning"
+              outlined
+            >
+              <v-icon
+                small
+                left
+              >mdi-timer-sand-empty</v-icon>
+              <span>Payment pending</span>
 
-          </v-chip>
-
+            </v-chip>
+          </v-row>
         </template>
       </v-data-table>
     </v-row>
     <v-dialog
       v-model="isItemDetailDialogVisible"
-      max-width="600"
+      max-width="800"
     >
       <v-card>
         <v-card-title>
           <v-flex>
-            Items in Order #{{ currentOrder.orderNo }}
+            Items in Order #{{ currentOrder.orderNo }} - ({{ currentOrder.cartItems.length }} items)
           </v-flex>
           <v-btn
             text
@@ -113,26 +192,35 @@
           >Close</v-btn>
         </v-card-title>
         <v-card-text>
-          <v-list>
-            <v-list-item
+          <v-simple-table>
+            <thead>
+              <th>Product Photo</th>
+              <th>Product Name</th>
+              <th>Price</th>
+              <th>Sold by</th>
+            </thead>
+            <tr
               v-for="item in currentOrder.cartItems"
               :key="item.id"
             >
-              <v-list-item-avatar>
-                <v-avatar>
-                  <v-img :src="item.imageUrl"></v-img>
+              <td>
+                <v-avatar size="64">
+                  <v-img :src="item.inventory.imageUrl"></v-img>
                 </v-avatar>
-              </v-list-item-avatar>
-              <v-list-item-content>
+              </td>
+              <td>
+                <v-list-item-title class="title">{{ item.inventory.name }}</v-list-item-title>
+              </td>
+              <td>
+                <h2 class="subtitle-1"> ₹ {{item.inventory.sellingPrice}} </h2>
+              </td>
+              <td>
+                <v-list-item-title>{{item.inventory.vendor.storeName}}</v-list-item-title>
 
-                <v-list-item-title>{{ item.name }}</v-list-item-title>
+              </td>
+            </tr>
+          </v-simple-table>
 
-              </v-list-item-content>
-              <v-list-item-avatar>
-                <h2 class="subtitle-1"> ₹ {{item.sellingPrice}} </h2>
-              </v-list-item-avatar>
-            </v-list-item>
-          </v-list>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -170,6 +258,85 @@
               </v-list-item-content>
 
             </v-list-item>
+            <v-list-item v-if="currentOrder.status == 'PLACED_BY_CUSTOMER'">
+
+              <v-list-item-content>
+                <v-list-item-subtitle class="my-2">Available Actions</v-list-item-subtitle>
+                <v-list-item-title class="primary--text subtitle-1">
+
+                  <v-btn
+                    color="primary"
+                    class="ml-2"
+                    @click="changeStatus('RECEIVED_BY_STORE')"
+                  >Accept order</v-btn>
+
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        color="red"
+                        text
+                        v-on="on"
+                        @dblclick="changeStatus('CANCELLED_BY_STORE')"
+                      >Reject</v-btn>
+                    </template>
+                    <span> Are you sure you want to reject this order? Double click the button if you want to reject order.</span>
+                  </v-tooltip>
+                </v-list-item-title>
+              </v-list-item-content>
+
+            </v-list-item>
+            <v-list-item v-if="currentOrder.status == 'RECEIVED_BY_STORE'">
+
+              <v-list-item-content>
+                <v-list-item-subtitle class="my-2">Available Actions</v-list-item-subtitle>
+                <v-list-item-title class="primary--text subtitle-1">
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        color="red"
+                        text
+                        v-on="on"
+                        @dblclick="changeStatus('CANCELLED_BY_STORE')"
+                      >Cancel</v-btn>
+                    </template>
+                    <span> Are you sure you want to cancel this order? Double click the button if you want to cancel order.</span>
+                  </v-tooltip>
+                  <v-btn
+                    color="primary"
+                    class="mr-2"
+                    @click="changeStatus('PICKED_UP')"
+                  >Mark as sent for delivery</v-btn>
+
+                </v-list-item-title>
+              </v-list-item-content>
+
+            </v-list-item>
+            <v-list-item v-if="currentOrder.status == 'PICKED_UP'">
+
+              <v-list-item-content>
+                <v-list-item-subtitle class="my-2">Available Actions</v-list-item-subtitle>
+                <v-list-item-title class="primary--text subtitle-1">
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        color="red"
+                        text
+                        v-on="on"
+                        @dblclick="changeStatus('CANCELLED_BY_STORE')"
+                      >Cancel</v-btn>
+                    </template>
+                    <span> Are you sure you want to cancel this order? Double click the button if you want to cancel order.</span>
+                  </v-tooltip>
+                  <v-btn
+                    color="primary"
+                    class="mr-2"
+                    @click="changeStatus('DELIVERED_AND_PAID')"
+                  >Mark as delivered to customer</v-btn>
+
+                </v-list-item-title>
+              </v-list-item-content>
+
+            </v-list-item>
           </v-list>
         </v-card-text>
       </v-card>
@@ -182,6 +349,7 @@ import Vue from "vue";
 
 import { LoginSessionHandler } from '../../helpers/loginSessionHandler';
 import { getAllOrders } from "../../graphql/getAllOrders";
+import { changeOrderStatusMutation } from "../../graphql/changeOrderStatusMutation";
 import { OrderStatuses } from '../../helpers/orderStatuses';
 import moment from "moment";
 
@@ -193,6 +361,9 @@ export default Vue.extend({
     filteredOrders: function () {
       var orders = [];
       orders = this.getAllOrders.orders;
+      if (!!orders == false) {
+        return [];
+      }
       orders = orders.filter(order => {
         return order.status == 'PLACED_BY_CUSTOMER' ||
           order.status == 'RECEIVED_BY_STORE' ||
@@ -213,6 +384,18 @@ export default Vue.extend({
       var epoch = parseInt(dateString);
       var date = new Date(epoch);
       return moment(date).format('DD/MM/YYYY h:mm:ss A');
+    },
+    changeStatus (status) {
+      this.$apollo.mutate({
+        mutation: changeOrderStatusMutation,
+        variables: {
+          status: status,
+          orderId: this.currentOrder.id
+        }
+      }).then((successResult) => {
+        console.log(successResult);
+        this.isUpdateStatusDialogVisible = false;
+      }, (error) => console.log(error));
     }
   },
   components: {
@@ -223,8 +406,7 @@ export default Vue.extend({
     return {
       isItemDetailDialogVisible: false,
       isUpdateStatusDialogVisible: false,
-      currentOrder: { status: '' },
-      getAllOrders: {},
+      getAllOrders: { orders: [] },
       headers: [
         {
           text: "Order No.",
@@ -262,7 +444,9 @@ export default Vue.extend({
           text: "Update Order Status",
           value: "updateStatus"
         }
-      ]
+      ],
+      currentOrder: { status: '', cartItems: [], },
+
     }
   },
   apollo: {

@@ -5,11 +5,11 @@
     class="pa-12 ma-4"
   >
     <h1 class=" display-1">Order History</h1>
-    <h2 class=" body-1 my-4">View all orders of your items</h2>
+    <h2 class=" body-1 my-4">View all orders on the app so far</h2>
 
     <v-row class="mt-8">
       <v-data-table
-        :items="getAllOrders.orders"
+        :items="!!getAllOrders.orders ? getAllOrders.orders : []"
         :headers="headers"
         :loading="$apollo.loading"
         loading-text="Fetching data, please wait..."
@@ -43,7 +43,7 @@
           <v-tooltip right>
             <template v-slot:activator="{ on }">
               <v-chip
-                color="primary"
+                :color="item.status == 'RECEIVED_BY_STORE' ? 'warning' : item.status == 'PICKED_UP' ?  'green' : item.status == 'PLACED_BY_CUSTOMER' ? 'info' : 'red darken-2'"
                 dark
                 v-on="on"
               >{{ computedStatus(item.status).short }}</v-chip>
@@ -108,16 +108,16 @@
             >
               <v-list-item-avatar>
                 <v-avatar>
-                  <v-img :src="item.imageUrl"></v-img>
+                  <v-img :src="item.inventory.imageUrl"></v-img>
                 </v-avatar>
               </v-list-item-avatar>
               <v-list-item-content>
 
-                <v-list-item-title>{{ item.name }}</v-list-item-title>
+                <v-list-item-title>{{ item.inventory.name }}</v-list-item-title>
 
               </v-list-item-content>
               <v-list-item-avatar>
-                <h2 class="subtitle-1"> ₹ {{item.sellingPrice}} </h2>
+                <h2 class="subtitle-1"> ₹ {{item.inventory.sellingPrice}} </h2>
               </v-list-item-avatar>
             </v-list-item>
           </v-list>

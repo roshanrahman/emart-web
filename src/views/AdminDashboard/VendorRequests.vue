@@ -9,10 +9,11 @@
 
     <v-row class="mt-8">
       <v-data-table
-        :items="getAllVendors"
+        :items="unapprovedVendors"
         :headers="headers"
         :loading="$apollo.loading"
         loading-text="Fetching data, please wait..."
+        no-data-text="No new requests"
         :items-per-page="100"
       >
         <template v-slot:item.address="{
@@ -44,51 +45,19 @@
             @click="isPanCardDialogVisible = true; currentVendor = item;"
           >View PAN Photos</v-btn>
         </template>
-        <template v-slot:item.blocked="{
+        <template v-slot:item.approve="{
           item
           }">
-          <div v-if="item.blocked">
-            <v-chip
-              outlined
-              color="grey"
-              label=""
-            >
-              <v-icon
-                left
-                color="grey"
-              >mdi-close-circle</v-icon>BLOCKED FROM APP
-            </v-chip>
-            <v-btn
-              outlined
-              color="primary"
-              small
-              class="ml-4"
-              text
-              rounded
-              @click="currentVendor = item; isUnblockVendorDialogVisible = true;"
-            >Unblock</v-btn>
-          </div>
-          <div v-else>
-            <v-chip
-              outlined
-              color="success"
-              label=""
-            >
-              <v-icon
-                left
-                color="success"
-              >mdi-checkbox-marked-circle</v-icon>ACTIVE
-            </v-chip>
-            <v-btn
-              outlined
-              color="red"
-              small
-              class="ml-4"
-              text
-              rounded
-              @click="currentVendor = item; isBlockVendorDialogVisible = true;"
-            >Block</v-btn>
-          </div>
+
+          <v-btn
+            outlined
+            color="success"
+            small
+            class="ml-4"
+            text
+            rounded
+            @click="currentVendor = item; isBlockVendorDialogVisible = true;"
+          >Approve</v-btn>
         </template>
       </v-data-table>
     </v-row>
@@ -97,8 +66,8 @@
       max-width="400"
     >
       <v-card>
-        <v-card-title>Do you want to block {{ ` ${currentVendor.storeName }` }} from operating on this app?</v-card-title>
-        <v-card-text>You will be able to restore their access at anytime.</v-card-text>
+        <v-card-title>Do you want to approve the request {{ ` ${currentVendor.storeName }` }} and allow them on the platform?</v-card-title>
+        <v-card-text>You will be able to block or allow their access at anytime. If you do not approve, they will not be allowed in the app.</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
@@ -110,36 +79,10 @@
             elevation="0"
             outlined
             text
-            color="red"
-            @click="disableVendor()"
+            color="green"
+            @click="approveVendor()"
           >
-            Block
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <v-dialog
-      v-model="isUnblockVendorDialogVisible"
-      max-width="400"
-    >
-      <v-card>
-        <v-card-title>Do you want to restore {{ ` ${currentVendor.storeName }` }}'s access?</v-card-title>
-        <v-card-text>You will be able to block their access at anytime.</v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            text
-            color="primary"
-            @click="isUnblockVendorDialogVisible = false;"
-          >Cancel</v-btn>
-          <v-btn
-            elevation="0"
-            outlined
-            text
-            color="primary"
-            @click="enableVendor()"
-          >
-            Restore access
+            Approve
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -241,7 +184,7 @@ import Vue from "vue";
 import { LoginSessionHandler } from '../../helpers/loginSessionHandler';
 import { getAllVendors } from "../../graphql/getAllVendors";
 import { disableVendorAccountMutation } from "../../graphql/disableVendorAccountMutation";
-
+import { updateVendorAccountMutation } from "../../graphql/updateVendorAccount";
 import { OrderStatuses } from '../../helpers/orderStatuses';
 import moment from "moment";
 
@@ -250,6 +193,14 @@ export default Vue.extend({
     loggedInUser: function () {
       return new LoginSessionHandler()
     },
+    unapprovedVendors: function () {
+      var vendors = this.getAllVendors;
+      if (!!vendors == false) {
+        return [];
+      }
+      vendors = vendors.filter((vendor) => vendor.approved == false);
+      return vendors;
+    }
 
   },
   methods: {
@@ -262,15 +213,17 @@ export default Vue.extend({
       var date = new Date(epoch);
       return moment(date).format('DD/MM/YYYY h:mm:ss A');
     },
-    disableVendor () {
+    approveVendor () {
       this.isBlockVendorDialogVisible = false;
+      console.log('Going to approve ', this.currentVendor.id);
+      var vendorId = this.currentVendor.id;
       this.$apollo.mutate({
-        mutation: disableVendorAccountMutation,
+        mutation: updateVendorAccountMutation,
         variables: {
-          vendorId: this.currentVendor.id,
-          block: true
+          vendorId: vendorId,
+          approved: true
         }
-      }).then((successResult) => { }, (error) => { console.log('Disable Vendor failed', error) })
+      }).then((successResult) => { console.log("Approve vendor success ", successResult) }, (error) => { console.log('Verify vendor approved failed', error) })
     },
     enableVendor () {
       this.isUnblockVendorDialogVisible = false;
@@ -322,8 +275,8 @@ export default Vue.extend({
           value: "panCard"
         },
         {
-          text: "Blocked Status",
-          value: "blocked"
+          text: "Approval Status",
+          value: "approve"
         },
       ]
     }

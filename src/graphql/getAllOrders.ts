@@ -19,18 +19,22 @@ export let getAllOrders = gql`
         }
         cartItems {
           id
-          name
-          originalPrice
-          sellingPrice
-          description
-          category
-          inStock
-          imageUrl
-          vendor {
+          inventory {
             id
             name
-            phoneNumber
-            email
+            originalPrice
+            sellingPrice
+            description
+            category
+            inStock
+            imageUrl
+            vendor {
+              id
+              name
+              phoneNumber
+              email
+              storeName
+            }
           }
         }
         status

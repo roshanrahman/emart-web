@@ -9,6 +9,8 @@ export var updateVendorAccountMutation = gql`
     $shopPhotoUrl: String
     $vendorId: String
     $address: AddressType
+    $approved: Boolean
+    $password: String
   ) {
     updateVendorAccount(
       storeName: $storeName
@@ -18,7 +20,10 @@ export var updateVendorAccountMutation = gql`
       shopPhotoUrl: $shopPhotoUrl
       address: $address
       vendorId: $vendorId
+      approved: $approved
+      password: $password
     ) {
+      jwtToken
       user {
         id
         name
@@ -27,15 +32,15 @@ export var updateVendorAccountMutation = gql`
         email
         storeName
         blocked
-        panCardPhotoUrls
+        pancardPhotoUrls
         shopPhotoUrl
         admin
+        approved
       }
       error {
         path
         message
       }
-      jwtToken
     }
   }
 `;

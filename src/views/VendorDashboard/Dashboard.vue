@@ -13,10 +13,10 @@
           <v-list-item-content>
             <v-list-item-title class="
       title">
-              Application
+              {{ loggedInUser.storeName }}
             </v-list-item-title>
             <v-list-item-subtitle>
-              Vendor Panel
+              Registered Vendor
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>

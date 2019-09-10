@@ -3,6 +3,7 @@ export class LoginSessionHandler {
   isBlocked;
   email;
   name;
+  storeName;
   phoneNumber;
   address;
   id;
@@ -14,6 +15,7 @@ export class LoginSessionHandler {
       this.isBlocked = object.blocked;
       this.email = object.email;
       this.name = object.name;
+      this.storeName = object.storeName;
       this.phoneNumber = object.phoneNumber;
       this.address = JSON.parse(object.address);
       this.id = object.id;

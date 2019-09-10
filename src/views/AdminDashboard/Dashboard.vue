@@ -13,10 +13,10 @@
           <v-list-item-content>
             <v-list-item-title class="
       title">
-              Application
+              Administrator
             </v-list-item-title>
             <v-list-item-subtitle>
-              Admin Panel
+              App admin
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -100,8 +100,17 @@
             color="primary"
             @click="routeTo('admin-vendor-requests')"
           >
-            <v-list-item-icon>
+            <v-list-item-icon v-if="activeOrdersCount > 0">
+
+              <v-badge overlap="">
+                <template v-slot:badge> {{ activeOrdersCount }}</template>
+                <v-icon>mdi-account-multiple-plus</v-icon>
+              </v-badge>
+            </v-list-item-icon>
+            <v-list-item-icon v-else>
+
               <v-icon>mdi-account-multiple-plus</v-icon>
+
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title>New Vendor Requests</v-list-item-title>
@@ -189,6 +198,8 @@ import Vue from "vue";
 import HomePage from "./HomePage.vue";
 import { LoginSessionHandler } from '../../helpers/loginSessionHandler';
 import { getAllOrders } from "../../graphql/getAllOrders";
+import { getAllVendors } from "../../graphql/getAllVendors";
+
 export default Vue.extend({
   computed: {
     loggedInUser: function () {
@@ -202,7 +213,20 @@ export default Vue.extend({
       console.log(ordersList);
       var count = 0;
       ordersList.forEach(order => {
-        if (order.status == "PLACED_BY_CUSTOMER") {
+        if (order.status == "PLACED_BY_CUSTOMER" || order.status == 'RECEIVED_BY_STORE' || order.status == 'PICKED_UP') {
+          count += 1;
+        }
+      });
+      return count;
+    },
+    vendorsApprovedCount: function () {
+      var vendorsList = this.getAllVendors;
+      if (!!vendorsList == false) {
+        return 0;
+      }
+      var count = 0;
+      vendorsList.forEach(vendor => {
+        if (vendor.approved == false) {
           count += 1;
         }
       });
@@ -212,6 +236,10 @@ export default Vue.extend({
   apollo: {
     getAllOrders: {
       query: getAllOrders,
+      pollInterval: 3
+    },
+    getAllVendors: {
+      query: getAllVendors,
       pollInterval: 3
     }
   },

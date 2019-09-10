@@ -25,11 +25,12 @@
         cols="12"
         md="6"
       >
-        <v-alert
-          type="warning"
-          v-if="!isEditingDisabled"
-        >Please note that you are the admin of this entire service. If you forget your login credentials, you will <b>permanently</b> lose access. Please keep track of all the changes you make.</v-alert>
-
+        <v-fade-transition>
+          <v-alert
+            type="warning"
+            v-if="!isEditingDisabled"
+          >Please note that you are the admin of this entire service. If you forget your login credentials, you will <b>permanently</b> lose access. Please keep track of all the changes you make.</v-alert>
+        </v-fade-transition>
         <h1 class="subtitle-2 mb-4">Login Information</h1>
         <v-text-field
           :disabled="isEditingDisabled"
@@ -46,6 +47,13 @@
         >
         </v-text-field>
 
+        <v-text-field
+          :disabled="isEditingDisabled"
+          label="Change Password"
+          filled
+          v-model="passwordInput"
+        >
+        </v-text-field>
         <v-slide-y-transition>
           <v-row
             v-if="!isEditingDisabled"
@@ -100,6 +108,7 @@ export default Vue.extend({
       isEditingDisabled: true,
       nameInput: '',
       emailInput: '',
+      passwordInput: '',
       phoneNumberInput: '',
       addressLineInput: '',
       cityInput: '',
@@ -112,17 +121,9 @@ export default Vue.extend({
       this.$apollo.mutate({
         mutation: updateVendorAccountMutation,
         variables: {
-          name: this.nameInput,
-          storeName: this.nameInput,
           phoneNumber: this.phoneNumberInput,
-          email: this.emailInput,
-          pancardPhotoUrls: '',
-          shopPhotoUrl: '',
-          address: {
-            addressLine: this.addressLineInput,
-            city: this.cityInput,
-            phoneNumber: this.addressPhoneNumberInput
-          }
+          emailInput: this.emailInput,
+          passwordInput: this.passwordInput
         }
       }).then((data) => {
         console.log(data);

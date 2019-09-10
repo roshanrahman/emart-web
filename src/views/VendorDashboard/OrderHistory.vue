@@ -108,16 +108,16 @@
             >
               <v-list-item-avatar>
                 <v-avatar>
-                  <v-img :src="item.imageUrl"></v-img>
+                  <v-img :src="item.inventory.imageUrl"></v-img>
                 </v-avatar>
               </v-list-item-avatar>
               <v-list-item-content>
 
-                <v-list-item-title>{{ item.name }}</v-list-item-title>
+                <v-list-item-title>{{ item.inventory.name }}</v-list-item-title>
 
               </v-list-item-content>
               <v-list-item-avatar>
-                <h2 class="subtitle-1"> ₹ {{item.sellingPrice}} </h2>
+                <h2 class="subtitle-1"> ₹ {{item.inventory.sellingPrice}} </h2>
               </v-list-item-avatar>
             </v-list-item>
           </v-list>

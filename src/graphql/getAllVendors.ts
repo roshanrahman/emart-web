@@ -13,6 +13,7 @@ export let getAllVendors = gql`
       pancardPhotoUrls
       admin
       blocked
+      approved
     }
   }
 `;

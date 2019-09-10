@@ -57,7 +57,7 @@
             </v-list-item-content>
           </v-list-item>
           <v-divider class="my-4"></v-divider>
-          <v-list-item>
+          <v-list-item v-if="!!inventoryItem.vendor">
             <v-list-item-content>
               <v-list-item-subtitle> Sold by </v-list-item-subtitle>
               <v-list-item-title class="headline">{{ inventoryItem.vendor.storeName }}</v-list-item-title>
