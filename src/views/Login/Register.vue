@@ -535,7 +535,7 @@ export default Vue.extend({
   },
   mounted() {
     //Initing recaptcha
-    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+    (<any>window).recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
       "recaptcha-container",
       {
         size: "invisible",
@@ -547,7 +547,7 @@ export default Vue.extend({
         }
       }
     );
-    this.appVerifier = window.recaptchaVerifier;
+    this.appVerifier = (<any>window).recaptchaVerifier;
     console.log("Recaptcha is ready");
   },
   methods: {
@@ -614,7 +614,7 @@ export default Vue.extend({
         .auth()
         .signInWithPhoneNumber(phoneNumber, appVerifier)
         .then(function(smsSentResult) {
-          window.confirmationResult = smsSentResult;
+          (<any>window).confirmationResult = smsSentResult;
           vm.isOtpSent = true;
           console.log("OTP has been sent ", smsSentResult);
         })
@@ -625,7 +625,7 @@ export default Vue.extend({
     verifyOTP() {
       let vm = this;
       let otp = this.OTPInput;
-      window.confirmationResult
+      (<any>window).confirmationResult
         .confirm(otp)
         .then(function(successResult) {
           var user = successResult.user;
