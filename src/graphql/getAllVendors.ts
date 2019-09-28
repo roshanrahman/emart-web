@@ -9,11 +9,15 @@ export let getAllVendors = gql`
       address
       email
       storeName
-      shopPhotoUrl
-      pancardPhotoUrls
-      admin
       blocked
+      pancardPhotoUrls
+      shopPhotoUrl
+      admin
       approved
+      bankAccountName
+      bankAccountIFSC
+      bankAccountNumber
+      vendorGSTNumber
     }
   }
 `;

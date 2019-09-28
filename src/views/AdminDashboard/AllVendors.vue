@@ -31,7 +31,7 @@
             rounded
             :disabled="!!item.shopPhotoUrl == false"
             @click="currentVendor = item; isShopDialogVisible = true; "
-          >View Shop Photo</v-btn>
+          >View Photo</v-btn>
         </template>
         <template v-slot:item.panCard="{
           item
@@ -44,7 +44,7 @@
             rounded
             :disabled="!!item.pancardPhotoUrls == false"
             @click="currentVendor = item; isPanCardDialogVisible = true; "
-          >View PAN Photos</v-btn>
+          >View Photos</v-btn>
         </template>
         <template v-slot:item.blocked="{
           item
@@ -92,6 +92,20 @@
             >Block</v-btn>
           </div>
         </template>
+        <template v-slot:item.bankDetails="{
+          item
+          }">
+
+          <v-btn
+            outlined
+            color="primary"
+            small
+            class="ml-4"
+            text
+            rounded
+            @click="currentVendor = item; isBankDetailsDialogVisible = true;"
+          >View Details</v-btn>
+        </template>
       </v-data-table>
     </v-row>
     <v-dialog
@@ -117,6 +131,46 @@
           >
             Block
           </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="isBankDetailsDialogVisible"
+      max-width="400"
+    >
+      <v-card>
+        <v-card-title>Bank Details for {{ currentVendor.storeName }} </v-card-title>
+        <v-card-text>
+          <v-list two-line>
+
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-subtitle> Bank Account Number </v-list-item-subtitle>
+                <v-list-item-title class="headline">{{ currentVendor.bankAccountNumber }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-subtitle> Bank Account Holder Name </v-list-item-subtitle>
+                <v-list-item-title class="headline">{{ currentVendor.bankAccountName }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-subtitle> Bank Account IFSC Code </v-list-item-subtitle>
+                <v-list-item-title class="headline">{{ currentVendor.bankAccountIFSC }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            text
+            color="primary"
+            @click="isBankDetailsDialogVisible = false;"
+          >Okay</v-btn>
+          <h1></h1>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -301,6 +355,7 @@ export default Vue.extend({
       isItemDetailDialogVisible: false,
       isBlockVendorDialogVisible: false,
       isUnblockVendorDialogVisible: false,
+      isBankDetailsDialogVisible: false,
       isShopDialogVisible: false,
       isPanCardDialogVisible: false,
       currentVendor: {},
@@ -323,12 +378,20 @@ export default Vue.extend({
           value: "email"
         },
         {
+          text: "GST Number",
+          value: "vendorGSTNumber"
+        },
+        {
           text: "Store Photo",
           value: "shopPhoto"
         },
         {
           text: "PAN Card Photos",
           value: "panCard"
+        },
+        {
+          text: "Bank Details",
+          value: "bankDetails"
         },
         {
           text: "Blocked Status",

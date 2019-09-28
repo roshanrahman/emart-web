@@ -14,6 +14,11 @@ export let vendorLogin = gql`
         pancardPhotoUrls
         shopPhotoUrl
         admin
+        approved
+        bankAccountName
+        bankAccountIFSC
+        bankAccountNumber
+        vendorGSTNumber
       }
       error {
         path

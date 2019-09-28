@@ -1,7 +1,7 @@
 export class OrderStatuses {
   static orderStatusList = {
     PLACED_BY_CUSTOMER: {
-      short: "PLACED BY CUSTOMER",
+      short: "PLACED",
       long: "Order is awaiting confirmation by store",
       next: "Please accept or reject this order"
     },

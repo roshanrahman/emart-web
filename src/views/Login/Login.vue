@@ -27,7 +27,7 @@
             max-height="100"
             max-width="400"
             contain
-            src='https://upload.wikimedia.org/wikipedia/commons/9/95/Transparent_google_logo_2015.png'
+            src='@/assets/logo-large.png'
           ></v-img>
         </v-row>
         <v-col
@@ -37,13 +37,15 @@
         >
           <v-form>
             <v-text-field
-              solo
+              solo=""
+              single-line=""
               label="Phone Number"
               v-model="usernameInput"
               type="tel"
             ></v-text-field>
             <v-text-field
-              solo
+              solo=""
+              single-line=""
               label="Password"
               type="password"
               v-model="passwordInput"
@@ -58,6 +60,7 @@
             <v-btn
               color="primary"
               large
+              width="120"
               :disabled="!isValidated"
               @click="login()"
               :loading="isBusy"
@@ -123,6 +126,7 @@
 import Vue from "vue";
 import { vendorLogin } from "../../graphql/vendorLogin";
 import { LoginSessionHandler } from "../../helpers/loginSessionHandler";
+import { ErrorCodes } from "../../helpers/errorCodes";
 
 export default Vue.extend({
   computed: {
@@ -174,15 +178,9 @@ export default Vue.extend({
           //Error handling ->
           if (!!data.data.vendorLogin.error || !!data.errors) {
             var error = data.data.vendorLogin.error;
-            if (error.message == "NO_ACCOUNT") {
-              this.error.title = "No account found";
-              this.error.text =
-                "There is no account registered with the phone number. Please register a new account.";
-            }
-            if (error.message == "password is not valid") {
-              this.error.title = "Incorrect password";
-              this.error.text = "Please enter the correct password.";
-            }
+            var errorMessage = ErrorCodes.resolveErrorCode(error.message);
+            this.error.title = errorMessage.short;
+            this.error.text = errorMessage.long;
             this.isErrorDialogVisible = true;
             this.isBusy = false;
           }
@@ -198,8 +196,8 @@ export default Vue.extend({
   width: 100%;
   background-image: linear-gradient(
       to bottom,
-      rgba(3, 35, 65, 0.75),
-      rgba(2, 16, 48, 0.9)
+      rgba(10, 29, 92, 0.432),
+      rgba(0, 13, 43, 0.952)
     ),
     url("https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80");
 }

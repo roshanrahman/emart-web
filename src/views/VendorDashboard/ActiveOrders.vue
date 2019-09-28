@@ -42,49 +42,66 @@
 
         </template>
         <template v-slot:item.status="{ item }">
+
           <v-tooltip right>
             <template v-slot:activator="{ on }">
-              <v-chip
-                color="primary"
-                dark
-                v-on="on"
-              >{{ computedStatus(item.status).short }}</v-chip>
+              <v-row>
+                <v-card
+                  :color="item.status == 'RECEIVED_BY_STORE' ? 'warning' : item.status == 'PICKED_UP' ? 'green' : 'info'"
+                  dark
+                  v-on="on"
+                  class="px-2 py-1 ma-1"
+                  :outlined="true"
+                >
+                  <v-avatar
+                    left
+                    size="20"
+                    class="mr-2"
+                  >
+                    <v-progress-circular
+                      size="20"
+                      width="3"
+                      :value="item.status == 'PLACED_BY_CUSTOMER' ? 10 : item.status == 'RECEIVED_BY_STORE' ? 50 : item.status == 'PICKED_UP' ? 75 : 100"
+                    ></v-progress-circular>
+                  </v-avatar>
+                  <span> {{ computedStatus(item.status).short }}</span>
+                </v-card>
+              </v-row>
             </template>
             <span>{{ computedStatus(item.status).long }}</span>
           </v-tooltip>
 
         </template>
-        <template v-slot:item.transactionSuccess="{ item }">
-          <v-card></v-card>
+         <template v-slot:item.transactionSuccess="{ item }">
+          <v-row>
+            <v-card
+              dark
+              v-if="item.transactionSuccess"
+              color="success"
+              outlined=""
+              class="px-2"
+            >
+              <v-icon
+                small
+                left
+              >mdi-check</v-icon>
+              <span>Paid by customer</span>
+            </v-card>
+            <v-card
+              v-else
+              dark
+              outlined
+              class="px-2"
+              color="warning"
+            >
+              <v-icon
+                small
+                left
+              >mdi-timer-sand-empty</v-icon>
+              <span>Payment pending</span>
 
-          <v-chip
-            v-if="item.transactionSuccess"
-            label
-            small
-            color="success"
-            outlined
-          >
-            <v-icon
-              small
-              left
-            >mdi-check</v-icon>
-            <span>Paid by customer</span>
-          </v-chip>
-          <v-chip
-            v-else
-            label
-            small
-            color="warning"
-            outlined
-          >
-            <v-icon
-              small
-              left
-            >mdi-timer-sand-empty</v-icon>
-            <div class="d-inline-block text-truncate">Waiting for customer payment</div>
-
-          </v-chip>
-
+            </v-card>
+          </v-row>
         </template>
       </v-data-table>
     </v-row>
@@ -111,7 +128,8 @@
             >
               <v-list-item-avatar>
                 <v-avatar>
-                  <v-img :src="item.inventory.imageUrl"></v-img>
+                                    <v-img :src="JSON.parse(item.inventory.imageUrl)[0]"></v-img>
+
                 </v-avatar>
               </v-list-item-avatar>
               <v-list-item-content>
@@ -119,9 +137,7 @@
                 <v-list-item-title>{{ item.inventory.name }}</v-list-item-title>
 
               </v-list-item-content>
-              <v-list-item-avatar>
                 <h2 class="subtitle-1"> ₹ {{item.inventory.sellingPrice}} </h2>
-              </v-list-item-avatar>
             </v-list-item>
           </v-list>
         </v-card-text>

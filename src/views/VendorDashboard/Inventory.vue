@@ -32,7 +32,7 @@
             color="white"
             class="ma-2"
           >
-            <v-img :src="item.imageUrl"></v-img>
+            <v-img :src="JSON.parse(item.imageUrl)[0]"></v-img>
           </v-avatar>
         </template>
         <template v-slot:item.description="{ item }">

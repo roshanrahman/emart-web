@@ -119,25 +119,40 @@
           <b class="subtitle-2"> ₹ {{ item.totalPrice }} </b>
 
         </template>
+        <template v-slot:item.bill="{ item }">
+
+          <v-btn outlined text rounded primary small @click="showBill(item.id)">
+            Bill
+            <v-icon right>mdi-arrow-top-right</v-icon>
+          </v-btn>
+
+        </template>
         <template v-slot:item.status="{ item }">
 
           <v-tooltip right>
             <template v-slot:activator="{ on }">
-              <v-chip
-                :color="item.status == 'RECEIVED_BY_STORE' ? 'warning' : item.status == 'PICKED_UP' ? 'green' : 'info'"
-                dark
-                v-on="on"
-                :outlined="item.status != 'RECEIVED_BY_STORE' && item.status != 'PLACED_BY_CUSTOMER' && item.status != 'PICKED_UP'"
-              >
-                <v-avatar left>
-                  <v-progress-circular
-                    :value="item.status == 'PLACED_BY_CUSTOMER' ? 10 : item.status == 'RECEIVED_BY_STORE' ? 50 : item.status == 'PICKED_UP' ? 75 : 100"
-                    size="16"
-                    width="2"
-                  ></v-progress-circular>
-                </v-avatar>
-                {{ computedStatus(item.status).short }}
-              </v-chip>
+              <v-row>
+                <v-card
+                  :color="item.status == 'RECEIVED_BY_STORE' ? 'warning' : item.status == 'PICKED_UP' ? 'green' : 'info'"
+                  dark
+                  v-on="on"
+                  class="px-2 py-1 ma-1"
+                  :outlined="true"
+                >
+                  <v-avatar
+                    left
+                    size="20"
+                    class="mr-2"
+                  >
+                    <v-progress-circular
+                      size="20"
+                      width="3"
+                      :value="item.status == 'PLACED_BY_CUSTOMER' ? 10 : item.status == 'RECEIVED_BY_STORE' ? 50 : item.status == 'PICKED_UP' ? 75 : 100"
+                    ></v-progress-circular>
+                  </v-avatar>
+                  <span> {{ computedStatus(item.status).short }}</span>
+                </v-card>
+              </v-row>
             </template>
             <span>{{ computedStatus(item.status).long }}</span>
           </v-tooltip>
@@ -145,25 +160,25 @@
         </template>
         <template v-slot:item.transactionSuccess="{ item }">
           <v-row>
-            <v-chip
+            <v-card
+              dark
               v-if="item.transactionSuccess"
-              label
-              small
               color="success"
-              outlined
+              outlined=""
+              class="px-2"
             >
               <v-icon
                 small
                 left
               >mdi-check</v-icon>
               <span>Paid by customer</span>
-            </v-chip>
-            <v-chip
+            </v-card>
+            <v-card
               v-else
-              label
-              small
-              color="warning"
+              dark
               outlined
+              class="px-2"
+              color="warning"
             >
               <v-icon
                 small
@@ -171,7 +186,7 @@
               >mdi-timer-sand-empty</v-icon>
               <span>Payment pending</span>
 
-            </v-chip>
+            </v-card>
           </v-row>
         </template>
       </v-data-table>
@@ -205,7 +220,7 @@
             >
               <td>
                 <v-avatar size="64">
-                  <v-img :src="item.inventory.imageUrl"></v-img>
+                  <v-img :src="JSON.parse(item.inventory.imageUrl)[0]"></v-img>
                 </v-avatar>
               </td>
               <td>
@@ -374,6 +389,10 @@ export default Vue.extend({
 
   },
   methods: {
+    showBill(id) {
+ var win = window.open('http://cezhop.herokuapp.com/generateBill?orderId=' + id, '_blank');
+  win.focus();
+    },
     computedStatus: function (status) {
       if (status == '') {
         return { short: '', long: '' }
@@ -443,6 +462,10 @@ export default Vue.extend({
         {
           text: "Update Order Status",
           value: "updateStatus"
+        },
+        {
+          text: "Generate Bill",
+          value: "bill"
         }
       ],
       currentOrder: { status: '', cartItems: [], },

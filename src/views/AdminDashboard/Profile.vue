@@ -46,12 +46,34 @@
           v-model="emailInput"
         >
         </v-text-field>
+        <h1 class="subtitle-2 mb-4">Store Information</h1>
 
         <v-text-field
           :disabled="isEditingDisabled"
-          label="Change Password"
+          label="Name"
           filled
-          v-model="passwordInput"
+          v-model="nameInput"
+        >
+        </v-text-field>
+        <v-text-field
+          :disabled="isEditingDisabled"
+          label="Address Line"
+          filled
+          v-model="addressLineInput"
+        >
+        </v-text-field>
+        <v-text-field
+          :disabled="isEditingDisabled"
+          label="City"
+          filled
+          v-model="cityInput"
+        >
+        </v-text-field>
+        <v-text-field
+          :disabled="isEditingDisabled"
+          label="Phone Number (for customer support)"
+          filled
+          v-model="addressPhoneNumberInput"
         >
         </v-text-field>
         <v-slide-y-transition>
@@ -90,6 +112,9 @@ export default Vue.extend({
     this.nameInput = user.storeName;
     this.emailInput = user.email;
     this.phoneNumberInput = user.phoneNumber;
+    this.addressLineInput = user.address.addressLine;
+    this.cityInput = user.address.city;
+    this.addressPhoneNumberInput = user.address.phoneNumber;
   },
   computed: {
     loggedInUser: function () {
@@ -97,7 +122,10 @@ export default Vue.extend({
       this.nameInput = user.storeName;
       this.emailInput = user.email;
       this.phoneNumberInput = user.phoneNumber;
-      return user
+      this.addressLineInput = user.address.addressLine;
+      this.cityInput = user.address.city;
+      this.addressPhoneNumberInput = user.address.phoneNumber;
+      return user;
     }
   },
   components: {
@@ -121,12 +149,20 @@ export default Vue.extend({
       this.$apollo.mutate({
         mutation: updateVendorAccountMutation,
         variables: {
+          storeName: this.nameInput,
           phoneNumber: this.phoneNumberInput,
-          emailInput: this.emailInput,
-          passwordInput: this.passwordInput
+          email: this.emailInput,
+          pancardPhotoUrls: this.loggedInUser.pancardPhotoUrls,
+          shopPhotoUrl: this.loggedInUser.shopPhotoUrl,
+          address: {
+            addressLine: this.addressLineInput,
+            city: this.cityInput,
+            landmark: 'N/A',
+            phoneNumber: this.addressPhoneNumberInput
+          }
         }
       }).then((data) => {
-        console.log(data);
+        console.log("Received: ", data);
         if (!!data.data.updateVendorAccount.error == false) {
           LoginSessionHandler.setLogin(
             JSON.stringify(data.data.updateVendorAccount.user),
@@ -134,7 +170,7 @@ export default Vue.extend({
           );
         }
       }, (error) => {
-
+        console.log("Error in profile mutation: ", error);
       })
     }
   }

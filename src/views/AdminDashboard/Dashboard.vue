@@ -100,10 +100,10 @@
             color="primary"
             @click="routeTo('admin-vendor-requests')"
           >
-            <v-list-item-icon v-if="activeOrdersCount > 0">
+            <v-list-item-icon v-if="vendorsApprovedCount > 0">
 
               <v-badge overlap="">
-                <template v-slot:badge> {{ activeOrdersCount }}</template>
+                <template v-slot:badge> {{ vendorsApprovedCount }}</template>
                 <v-icon>mdi-account-multiple-plus</v-icon>
               </v-badge>
             </v-list-item-icon>
@@ -143,7 +143,7 @@
               <v-list-item-title>Your Profile</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item
+          <!--  <v-list-item
             value="admin-stats"
             color="primary"
             @click="routeTo('admin-stats')"
@@ -154,7 +154,7 @@
             <v-list-item-content>
               <v-list-item-title>Your Stats</v-list-item-title>
             </v-list-item-content>
-          </v-list-item>
+          </v-list-item> -->
         </v-list-item-group>
       </v-list>
       <template v-slot:append>
@@ -187,7 +187,24 @@
     <v-app-bar app>
       <v-app-bar-nav-icon @click="isDrawerOpen = !isDrawerOpen">
       </v-app-bar-nav-icon>
-      <v-toolbar-title>App Name</v-toolbar-title>
+      <v-toolbar-title>
+        <v-img
+          v-if="isDark"
+          src="@/assets/logo-white.png"
+          max-height="40"
+          contain
+          alt="Be Shoppi"
+          class="mt-2"
+        ></v-img>
+        <v-img
+          v-else
+          src="@/assets/logo-color.png"
+          max-height="40"
+          contain
+          alt="Be Shoppi"
+          class="mt-2"
+        ></v-img>
+      </v-toolbar-title>
     </v-app-bar>
     <router-view @changeRoute='routeTo'></router-view>
   </v-container>

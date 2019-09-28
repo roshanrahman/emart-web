@@ -9,6 +9,10 @@ export var createVendorMutation = gql`
     $pancardPhotoUrls: String
     $shopPhotoUrl: String
     $address: AddressType
+    $bankAccountName: String
+    $bankAccountIFSC: String
+    $bankAccountNumber: String
+    $vendorGSTNumber: String
   ) {
     createVendor(
       storeName: $storeName
@@ -18,11 +22,26 @@ export var createVendorMutation = gql`
       pancardPhotoUrls: $pancardPhotoUrls
       shopPhotoUrl: $shopPhotoUrl
       address: $address
+      bankAccountName: $bankAccountName
+      bankAccountIFSC: $bankAccountIFSC
+      bankAccountNumber: $bankAccountNumber
+      vendorGSTNumber: $vendorGSTNumber
     ) {
       user {
         id
         name
         phoneNumber
+        address
+        email
+        storeName
+        blocked
+        pancardPhotoUrls
+        shopPhotoUrl
+        admin
+        approved
+        bankAccountName
+        bankAccountIFSC
+        bankAccountNumber
       }
       error {
         path

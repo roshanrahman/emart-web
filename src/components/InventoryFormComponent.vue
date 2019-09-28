@@ -11,13 +11,13 @@
       >
         <v-col
           cols="12"
-          lg="6"
-          md="8"
+          lg="8"
+          md="12"
         >
           <v-row>
             <v-col
               cols="12"
-              lg="7"
+              lg="12"
             >
               <h1 class="subtitle-2 mb-4 grey--text">Item Name</h1>
 
@@ -31,13 +31,32 @@
             </v-col>
             <v-col
               cols="12"
-              lg="5"
+              lg="12"
             >
-              <h1 class="subtitle-2 mb-4 grey--text">Item Photo</h1>
-              <ImageUploadComponent
-                @imageChanged="setImage"
-                :imageURL="imageURLInput"
-              ></ImageUploadComponent>
+              <h1 class="subtitle-2 mb-4 grey--text">Item Photos</h1>
+              <v-row justify="space-around">
+                <ImageUploadComponent
+                  @imageChanged="setImageTo1"
+                  :imageURL="imageURLInput[0]"
+                ></ImageUploadComponent>
+                <ImageUploadComponent
+                  @imageChanged="setImageTo2"
+                  :imageURL="imageURLInput[1]"
+                ></ImageUploadComponent>
+                <ImageUploadComponent
+                  @imageChanged="setImageTo3"
+                  :imageURL="imageURLInput[2]"
+                ></ImageUploadComponent>
+                <ImageUploadComponent
+                  @imageChanged="setImageTo4"
+                  :imageURL="imageURLInput[3]"
+                ></ImageUploadComponent>
+                <ImageUploadComponent
+                  @imageChanged="setImageTo5"
+                  :imageURL="imageURLInput[4]"
+                ></ImageUploadComponent>
+              </v-row>
+
             </v-col>
           </v-row>
           <h1 class="subtitle-2 my-4  grey--text">Item Category</h1>
@@ -257,10 +276,22 @@ export default {
     resetValidation () {
       this.$refs.form.reset();
       this.selectedCategory = null;
-      this.imageURLInput = null;
+      this.imageURLInput = [null, null, null, null, null];
     },
-    setImage (url) {
-      this.imageURLInput = url;
+    setImageTo1 (url) {
+      this.imageURLInput[0] = url;
+    },
+    setImageTo2 (url) {
+      this.imageURLInput[1] = url;
+    },
+    setImageTo3 (url) {
+      this.imageURLInput[2] = url;
+    },
+    setImageTo4 (url) {
+      this.imageURLInput[3] = url;
+    },
+    setImageTo5 (url) {
+      this.imageURLInput[4] = url;
     },
     addNewCategory () {
       this.categories.push(this.newCategoryTextInput);
@@ -271,7 +302,7 @@ export default {
     },
     handleFormSubmit () {
       this.$refs.form.validate();
-      if (!!this.imageURLInput == false) {
+      if (!!this.imageURLInput.length < 1) {
         this.error.title = "Product photo not provided";
         this.error.text = "Please upload an image for the product photo."
         this.isErrorDialogVisible = true;
@@ -283,6 +314,11 @@ export default {
         this.isErrorDialogVisible = true;
         return;
       }
+      var correctImageUrls = [];
+      this.imageURLInput.forEach(element => {
+        if (!!element)
+          correctImageUrls.push(element);
+      });
       var inventoryObj = {
         name: this.nameInput,
         description: this.descriptionInput,
@@ -290,7 +326,7 @@ export default {
         sellingPrice: this.sellingPriceInput,
         category: this.selectedCategory,
         inStock: this.quantityInput,
-        imageUrl: this.imageURLInput
+        imageUrl: JSON.stringify(correctImageUrls)
       };
       this.$emit('submit', inventoryObj);
       this.$refs.form.reset();
@@ -309,7 +345,6 @@ export default {
     existingItem: function () {
       console.log('Prop changed!', this.existingItem);
       this.$forceUpdate();
-
     }
   },
   data () {
@@ -330,7 +365,7 @@ export default {
       originalPriceInput: !!this.existingItem ? this.existingItem.originalPrice : null,
       sellingPriceInput: !!this.existingItem ? this.existingItem.sellingPrice : null,
       quantityInput: !!this.existingItem ? this.existingItem.inStock : null,
-      imageURLInput: !!this.existingItem ? this.existingItem.imageUrl : '',
+      imageURLInput: !!this.existingItem ? JSON.parse(this.existingItem.imageUrl) : [null, null, null, null, null],
       isFormValid: false,
       selectedCategory: !!this.existingItem ? this.existingItem.category : '',
       error: {

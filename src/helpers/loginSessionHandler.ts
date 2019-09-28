@@ -7,6 +7,13 @@ export class LoginSessionHandler {
   phoneNumber;
   address;
   id;
+  pancardPhotoUrls;
+  shopPhotoUrl;
+  approved;
+  bankAccountName;
+  bankAccountIFSC;
+  bankAccountNumber;
+  vendorGSTNumber;
   constructor() {
     if (!!localStorage.getItem("loginInfo")) {
       var jsonString = localStorage.getItem("loginInfo");
@@ -19,9 +26,17 @@ export class LoginSessionHandler {
       this.phoneNumber = object.phoneNumber;
       this.address = JSON.parse(object.address);
       this.id = object.id;
+      this.pancardPhotoUrls = object.pancardPhotoUrls;
+      this.shopPhotoUrl = object.shopPhotoUrl;
+      this.approved = object.approved;
+      this.bankAccountName = object.bankAccountName;
+      this.bankAccountIFSC = object.bankAccountIFSC;
+      this.bankAccountNumber = object.bankAccountNumber;
+      this.vendorGSTNumber = object.vendorGSTNumber;
     }
   }
   static setLogin(jsonString, jwt) {
+    localStorage.removeItem("loginInfo");
     console.log("Going to store string", jsonString);
     localStorage.setItem("loginInfo", jsonString);
     localStorage.setItem("apollo-token", jwt);

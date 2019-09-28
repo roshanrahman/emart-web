@@ -10,8 +10,11 @@
       >
 
         <v-img
-          :src="inventoryItem.imageUrl"
+          v-for="url in JSON.parse(inventoryItem.imageUrl)"
+          :key="url"
+          :src="url"
           contain
+          class="mb-2"
           max-height="800"
         ></v-img>
 

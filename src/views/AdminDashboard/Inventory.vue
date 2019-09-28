@@ -7,7 +7,7 @@
     <v-row>
       <h1 class=" display-1">Inventory</h1>
       <v-spacer></v-spacer>
-      <!-- <v-btn
+      <v-btn
         rounded
         elevation="0"
         color="primary"
@@ -15,7 +15,7 @@
       >
         <v-icon left>mdi-plus</v-icon>
         Add new item
-      </v-btn> -->
+      </v-btn>
     </v-row>
 
     <v-row class="mt-8">
@@ -33,7 +33,7 @@
             color="white"
             class="ma-2"
           >
-            <v-img :src="item.imageUrl"></v-img>
+            <v-img :src="JSON.parse(item.imageUrl)[0]"></v-img>
           </v-avatar>
         </template>
         <template v-slot:item.description="{ item }">
@@ -330,6 +330,7 @@ export default Vue.extend({
         }
       }).then((result) => console.log('Mutation succeeded', result),
         (reason) => {
+          console.log("Error: ", reason);
           this.error.title = "Server returned error.";
           this.error.text = reason;
           this.isErrorDialogVisible = true;

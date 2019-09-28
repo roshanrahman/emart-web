@@ -106,7 +106,7 @@
               <v-list-item-title>Your Profile</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item
+          <!-- <v-list-item
             value="vendor-stats"
             color="primary"
             @click="routeTo('vendor-stats')"
@@ -117,7 +117,7 @@
             <v-list-item-content>
               <v-list-item-title>Your Stats</v-list-item-title>
             </v-list-item-content>
-          </v-list-item>
+          </v-list-item> -->
         </v-list-item-group>
       </v-list>
       <template v-slot:append>
@@ -150,7 +150,24 @@
     <v-app-bar app>
       <v-app-bar-nav-icon @click="isDrawerOpen = !isDrawerOpen">
       </v-app-bar-nav-icon>
-      <v-toolbar-title>App Name</v-toolbar-title>
+      <v-toolbar-title>
+        <v-img
+          v-if="isDark"
+          src="@/assets/logo-white.png"
+          max-height="40"
+          contain
+          alt="Be Shoppi"
+          class="mt-2"
+        ></v-img>
+        <v-img
+          v-else
+          src="@/assets/logo-color.png"
+          max-height="40"
+          contain
+          alt="Be Shoppi"
+          class="mt-2"
+        ></v-img>
+      </v-toolbar-title>
     </v-app-bar>
     <router-view @changeRoute='routeTo'></router-view>
   </v-container>

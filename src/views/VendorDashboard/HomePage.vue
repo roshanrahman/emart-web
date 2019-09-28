@@ -7,19 +7,19 @@
     <h1 class="text-center display-1">Welcome to App, <span class="primary--text">{{ loggedInUser.storeName }}</span></h1>
     <h2 class="text-center body-1 my-4">You are a registered vendor on App. Manage your inventory, check your orders and supercharge your business!</h2>
 
-    <v-row>
+    <v-row justify="center">
       <v-col
         cols="12"
         lg="6"
       >
         <RecommendedActionsComponent @emitRoute="emitRoute"></RecommendedActionsComponent>
       </v-col>
-      <v-col
+      <!-- <v-col
         cols="12"
         lg="6"
       >
         <QuickStatisticsComponent></QuickStatisticsComponent>
-      </v-col>
+      </v-col> -->
     </v-row>
 
   </v-card>

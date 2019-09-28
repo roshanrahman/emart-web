@@ -1,5 +1,6 @@
 <template>
   <v-container pa-0>
+
     <v-toolbar elevation="0">
       <v-spacer></v-spacer>
       <v-toolbar-title>
@@ -9,8 +10,9 @@
         >
           <v-img
             contain
-            max-height="40"
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYgAAACBCAMAAADt5d1oAAAAgVBMVEX///8AAAC7u7tfX1/R0dGxsbHo6Oj19fXb29v5+fn8/Pzw8PDr6+vj4+PU1NTe3t58fHydnZ2urq5ZWVmlpaWJiYmQkJDKysqYmJhnZ2dSUlJtbW2CgoISEhI+Pj5HR0cmJiYwMDAaGhoiIiJAQEAtLS10dHQNDQ0/Pz83NzfDw8OEqzYxAAANo0lEQVR4nO1d6XrqOgxs2QKBsO/QFrpx4f0f8AKBEC225CSmfIfMv9IwOBnbkiXZeXlRozEbzter6mg5qv6u58NZpP9qiYLQrqz/e6XY9+udv27aEyGavzMiXLGZdP+6gU+B1nhvUSHG27Tx1828P5rzQQp1z78W9UUVYoxmnlvycKjA+/f6W9FCKcMJ+4PXtjwcoBBVj78U/DrIcMJ7zWNrHg53E2LsKMMJi8Bfex4NdxIikk00C99G63FwHyEG2WQ4YhR6atKj4R5ChMvMOhzR9NKmh8MdhIh2eXR4fa34aNTDwb8Qs3wyHDH30KqHg3ch6sJT/ty+73/e7NdMi2/Ww8G3EBavdTmtNBP/tFMb9jemK58hLutZCKMO/RnjDjWGH8+qg2chDPPS0mx/G1Nyda/gRj0mvArB2+mq4JCiUVS6r7nR4GR4VzzYeer6Z8lO+BSC84WGqm+2kyXg0wT+PAoxojL819Z+eRh/4XnSEv6EYBymtcPXo9N4eqKchDchGAOhm5auaH0/SXAjhjchaIGAa/cOn0kHb0LQiel5pvtM8CREQHR4qu6dAZ6EINUag6KY/1X4EYJY6kVBxP8u/AixQjp8FsT7D8OLEGRAPEm8KA+8CIEthMtC7lnhQ4gWHhCFsP7j8CEEXkO4raifFD6EQMVkb4WQ/uvwIERUDogM8CDEHAlRBKcLgkav2ew1Wg/A0upEvUjH4ShEEHVrtW5kLQ5GM9M9XabesH/79d1yUsm0E+zI8p6bJThMl0ll3XIuJrj0QgSHya3GYjcamNYGbTQg7pb7r3G7YLZzxxqQQljCOq0yXV8oWrM0ki6tFaLC1K9O2NZBxtcvpzvIjHBsLFL71scbi2FpT3iK6nlHGjShyUhRCdGiNS4xlkxqH/Woibr9eYDtEsSbsrrfzrLTsYQGGU44lSzmEMLWvirJQiMTcY80xMH6AE/YKIpBFCyKUoaKlWHfzi5ETSjmHqPr0b9zOi8KtKriEzyifxeWUGTpdcCfeiEsA+0CuJcErSL22seZGU3F8zvhy2pvtSyfVpZIqKY+AT5xrRAhW4yKG5d279AAl7pQbtinAgBL0rwYlgw7EJRCBF86ulQ3QYEmPHEVDac9ksY1vhOL8ZZkI0OhEyJQjLQYNyWQg6Uo3WgP63oM4fLFcXOe4Rk67ng1sGTakaMSIlSOhxMS5wl5r4qUkHZ6jrFKf1XaBUPALgYc5iULi9ttXKESQmMfrthev4ROF1CcquF2B++pb3advnkG0zGKYaF1KypohJD9pTSuPRVVvCqKXR270u2LJAEVYzGvVyr1ueG8CeJOF8Ni6LVnlvHavMtcIUSN+16/EgVhKzpMPsm/LuMVhUIUZwc4CnF7BkyV8+skFdrqrZkLiGPIef7uLJyxSrEEY8M0rxCCGmpwTkmN1FS27iNEMtkxUzs2oyETm0HuA8OCa7AULB16xRTtTePtmSwE/XFsoobo//GSAXWw4qempJuR/4wY1Tukv+zgBcWwkJDoOw2ds6tuUQhiez7otIif4NmHRSVNilC+oxDXppOeYtiOTQ7FAcOGsBi2EttLF4nnyq9jmaCdKAS21L+KR7hgWqzIRjgKcYkiEhtrXK0RpyP1P8JiXK3ZWHCg07gxnFoSSQjcQEOkAq2ETtM36mKK4Gs2IXDvshTX4jGRCmdjFsshB3hMpITHfo05rkMMvyQEesLGhNEWXHbKPSDLoagcyCYE+tRaXItm+FQg0oXlG167vf0HTf7fehJRiC342JRlO2Ab9UICLoq8UCYbgeM61tOEsE+TBGSKYcHJYZtdxNWoghAols3GKYI5TVQMyVeXtluL4ShE3BjkEwh5TDQDJRNQMSxjw+cskK0RhIBGhTPUXVzwfcbmhYx2+72dkGkdAT/7EX4ihJcnYZJcLMkMhxbV9qO+kPUVhIBTDh1q9a3hKdWIByG7TWHDjvYPIDy7+cg8iol95EJcXHEUZRJz0jwLerTSUTrQ6AtCgA+xBWtYglB94hgUkJCAhOePBsxnNqCp+WLwi2FBhkYKc0L17ULAyQKu5omBTmHVJYyvH+LtSYC2MJ4/oJ+yEhhe8Di99I6FK8sWfOHiMUPTsbUzvKB+ZRcChkVSc14wMKeKdvOAeW6qIIcdcBqKmwiPdlLUucBRfHH0v1xZ4Nx0sZ2wU8iHfAHrahcC/N4tAdC0HKG7vI0bZCRyz03QKTnfKDKbijI8eJ+xL+fOAmehy2CHnUJOSYL7sQsBNLv6THXLGfeg5g95eblL/eAEcrbLyKVXkECvOt4pkJflsjMQsshygsCUXQjgj52XZB1Trd8R+zp02Hro/3lLzCBbg/6EZqskcm2YhmpYAoYFfSbXcYGftQsB/MWjEDNL2dSK1tBt4RU5zTWKbJ4/g56HLaSQQGRRVWAxLM7jChhRuxBgybwammsI3gZc4gcXReQbEtDvjl0baL8Vq3f8CEPKouovzEOPmM+sAEPILoTxwUOYXvKAcxnSitUKZFFj1wb25QyPMKQsWcdVg/nMiqKFmJhjW9i7yuM4oeEVO8NwoaOZVJCeDIumu3AsbeYzK8BcZheCVgZg7K1ONzbXedYSkOjS+Z17Ifu4imFBboBsrIH+diFw0BzjVyobw/UV2e01ikJc0huoZyoqFOA0FPf+ViEszu4rWIzYheDqVBJ8jR1FPyHrodJ4mX79abjAV2xbgPmqaiEslxcBbcGH8sYisM6yC8FV8lyv0LlApC4r4+l8KLD1y3+uOMUdRu0nRbIsuA8tAGsBuxDGotypdn8lrfPJdC4KTrYnJHB9qbDWkKdeJAuMJGzcSOxC8HXNDtv5uLKoDLtLcTtuCwbH0DO+PiqSBbVSuk94uV0IPDOf0Hd8kNTzch4TxNLcFvFoqSLOB2iK41nEHeE8S+jGAmcyITGE19IbhYFGYEpnHVfYRIf0W/JQelJoHqJKTA1iEfwmxJLkL5yqTNGkLQixNlztAsbiOy3s6P6b9NSBzJiwQww98MRzKIZl6MKCcv2CEGjaE4yD4d9bqkRV/w4tWp4I5h88e1q37+IqXSOLtccZWXBIx9YWPFFIdU3ocuvIH7N1u7yl0bqxbbrdAIWpsYNsaSI+LmddNAvq5W/m7hbiDKckBJpXbGd0nFebbMSDdb6qmjfzcrsNkK3H+3z+M5KReuqGmeU9Ewu2ZuZwMEn4S0Jg+c2VpZeADTso+PVIX4o81bkt9mS5hceMKYzSxp1w4Z/F9PJduv9IrAbHUQ5TkC+yXmEovGGSSbc75g+coLdGtr5t2NUm9d4iOws7Yuk+O8BCHLxvrl9yL0YUhSDUvMeTnn1GTE83vb96M2eXJZ2hoVhnw1xMuxdT8Uy7Ql9iYe5UZKF1j9SDYWdqeccQaeCKMWTIlDCDwvwm8d1q2E1JF3Tr5vefsXF0Zh/nFvkC2NE5IRRZfgph+YAuWI9PN8tCMD7PGP56SE3Ako5ISwDxfNMf1cWi+mGW4AzewHP7o3eT61lUwYHtBMRtE1hm2Vm2g+uwN7zX7VW1mZHrB7+Ha9dsH7giJ87pyP7m3gQmR4sthD66j9+j6oehEo4JQBTDYqj52o4WVUsdkmqftaF0Y78cLU37hlk3PMsRFWl8mr0s57dks07RH7GcoREilDOmCIbsVMPhKAmKD8tqvOX4YmC+2K2lPnLkwsK2KMj0kmLVERDM5mErzE6ppVZTgj2wyq7ejfg0LJwdWQxRPdfHdYbudBpSBKDjZJB5epIitm2HYftjDGAUw9LJMCaU5zW5KGE/NS80+7EWcC4zQkt9dItpuevGYqtmCzR2wmmjSoKOdnp/E0NIPcvGCh5bXfhdcJCvEFLSyiNgBBZ5Dp7CeVB/pp/heBaEkSZxNJPKdAA+lWeEHnkVU8KXeMxlMSzS2U/z7Kdcag6n0mZ8aqqjJE/YO72ly1KrHkP1rqlCWALDsiRGJc+5r3bq07cczs7uzDV20RYVZNG2mqCJonasOJaucQ7+OD0oKERyo6qTkA1xkgu760PrMoc9pbGo6PN4NwQDgzn7ccm3G1mcsvZNfu9zPMihEEmWBQphdCwik0UUqy9ZNOq//A2PBjneX92bEyP0zUd5vbMEQ5xHWF0nISiEJk2GMOuTBeiqkuOc41azMu9Xv7+ONnL3tR+tpsNa7n2Px+FWn66W+81mu1xM6t0sQ6swlu54Pdq+7T731XX6bE64JMh2y+3DoD/af31+7Ze/80oGMUvgHNNft+aJAYzBTr6+hCeAtIBq11kJLwAr5PJVid4gWk5gIso3kvlBONxK5hfa6hzOegkj4mN7hHAPXLzfp2HPheTYHmskBJZ72CLzJbKglTq2x/oyPxih8P12jWcDOrbH8nhR3V6m9xWWMAJnCowl76jYIf+hYiUgcH2cSQmUSlWnvkooQcpa2dkJnRJZ+kweQI4IoC9KpKlOVdqwhBOYyqgJlOJAKzyyBulLWMBVCi/HzXO+phVVuBxsaSG8wFTt8maq5yxdJk8QdhYQlGsIT3AroM16SkwJGXgDqBWKo3BKZIVDpXCZEPKKhnajRdZzxEoo0dIVWpeOq38odgxuMpxcVcIZDWlQlGb6XrDuPhDPvyhRIPgXMB0nJfYE7xIeER5+ccn7clDahr9BUKsPJv3V6nc9HR4UbwkpFv8DfAC2DE5WQOUAAAAASUVORK5CYII="
+            class="mt-2"
+            max-height="50"
+            src="@/assets/logo-black.png"
           ></v-img>
         </v-row>
 
@@ -25,16 +27,14 @@
       >
         <v-col
           cols="12"
-          lg="6"
           md="8"
         >
-
-          <h1 class="
-          headline text-center my-4 primary--text">New Account Registration</h1>
+          <div id="recaptcha-container"></div>
+          <h1 class="headline text-center my-4 primary--text">New Account Registration</h1>
           <p class="my-4 text-center body-1">Complete the registration form, submit documents and get approved by us. Once done, you can sign in and start your business.</p>
 
           <v-stepper
-            class="mt-6 elevation-0"
+            class="mt-8 elevation-0"
             v-model="currentStep"
           >
             <v-stepper-header class="elevation-0">
@@ -42,8 +42,9 @@
               <v-divider></v-divider>
               <v-stepper-step step="2">Store Details</v-stepper-step>
               <v-divider></v-divider>
-              <v-stepper-step step="3">Upload Documents</v-stepper-step>
-
+              <v-stepper-step step="3">Bank Details</v-stepper-step>
+              <v-divider></v-divider>
+              <v-stepper-step step="4">Upload Documents</v-stepper-step>
             </v-stepper-header>
             <v-divider></v-divider>
 
@@ -64,6 +65,8 @@
                       :rules="phoneNumberValidationRules"
                       required
                       v-model="formInputs.phoneNumberInput"
+                      persistent-hint=""
+                      hint="An OTP will sent to this number for verification"
                     ></v-text-field>
 
                     <v-text-field
@@ -109,15 +112,23 @@
 
                 </v-divider>
                 <v-row
-                  justify="end"
+                  justify="space-between"
                   class="ma-2"
                 >
+                  <v-btn
+                    class="my-4 mx-4"
+                    text
+                    outlined
+                    disabled
+                    @click="goToStep(1)"
+                  >Back</v-btn>
                   <v-btn
                     class="my-4"
                     elevation="0"
                     color="primary"
                     :disabled="!page1Complete"
-                    @click="goToStep(2)"
+                    :loading="$apollo.loading"
+                    @click="checkAndGoToStepTwo()"
                   >Continue
                   </v-btn>
                 </v-row>
@@ -165,13 +176,36 @@
                     ></v-text-field>
                   </v-form>
                 </v-col>
+                <h2 class="title mt-8">GST Number</h2>
+                <v-col
+                  class="pa-0"
+                  cols="12"
+                  lg="6"
+                >
+                  <v-form class="my-6">
+
+                    <v-text-field
+                      filled=""
+                      label="GST Number"
+                      v-model="formInputs.gstInput"
+                      :rules="GSTValidationRules"
+                    ></v-text-field>
+                  </v-form>
+                </v-col>
                 <v-divider>
 
                 </v-divider>
+
                 <v-row
-                  justify="end"
+                  justify="space-between"
                   class="ma-2"
                 >
+                  <v-btn
+                    class="my-4 mx-4"
+                    text
+                    outlined
+                    @click="goToStep(1)"
+                  >Back</v-btn>
                   <v-btn
                     class="my-4"
                     elevation="0"
@@ -184,6 +218,81 @@
               </v-stepper-content>
 
               <v-stepper-content step="3">
+                <h2 class="title">Bank Account Number</h2>
+                <h3 class="body-1">Please enter the bank A/C No. you'd like to use for transactions</h3>
+                <v-col
+                  class="pa-0"
+                  cols="12"
+                  lg="6"
+                >
+                  <v-form class="mt-6">
+                    <v-text-field
+                      filled=""
+                      label="Account Number"
+                      v-model="formInputs.bankAccountNumberInput"
+                      :rules="bankAccountNumberValidationRules"
+                    ></v-text-field>
+
+                  </v-form>
+                </v-col>
+                <v-divider class="my-4"></v-divider>
+                <h2 class="title mt-8">Account Holder Name</h2>
+                <v-col
+                  class="pa-0"
+                  cols="12"
+                  lg="6"
+                >
+                  <v-form class="my-6">
+
+                    <v-text-field
+                      filled=""
+                      label="A/C Holder Name"
+                      v-model="formInputs.bankAccountHolderInput"
+                      :rules="bankAccountHolderValidationRules"
+                    ></v-text-field>
+                  </v-form>
+                </v-col>
+                <h2 class="title mt-8">IFSC Code</h2>
+                <v-col
+                  class="pa-0"
+                  cols="12"
+                  lg="6"
+                >
+                  <v-form class="my-6">
+
+                    <v-text-field
+                      filled=""
+                      label="IFSC Code"
+                      v-model="formInputs.bankIFSCInput"
+                      :rules="bankIFSCValidationRules"
+                    ></v-text-field>
+                  </v-form>
+                </v-col>
+                <v-divider>
+
+                </v-divider>
+
+                <v-row
+                  justify="space-between"
+                  class="ma-2"
+                >
+                  <v-btn
+                    class="my-4 mx-4"
+                    text
+                    outlined
+                    @click="goToStep(2)"
+                  >Back</v-btn>
+                  <v-btn
+                    class="my-4"
+                    elevation="0"
+                    color="primary"
+                    :disabled="!page3Complete"
+                    @click="checkAndGoToStepFour()"
+                  >Continue
+                  </v-btn>
+                </v-row>
+              </v-stepper-content>
+              <v-stepper-content step="4">
                 <h2 class="title">PAN Card Front and Back</h2>
                 <h3 class="body-1">Submit scanned images of your PAN Card</h3>
                 <v-col
@@ -200,6 +309,8 @@
                       chips
                       v-model="formInputs.panImagesInput"
                       label="PAN Scanned Images"
+                      persistent-hint=""
+                      hint="You can choose multiple images when the dialog opens"
                     ></v-file-input>
 
                   </v-form>
@@ -227,16 +338,23 @@
                 <v-divider>
 
                 </v-divider>
+
                 <v-row
-                  justify="end"
+                  justify="space-between"
                   class="ma-2"
                 >
+                  <v-btn
+                    class="my-4 mx-4"
+                    text
+                    outlined
+                    @click="goToStep(3)"
+                  >Back</v-btn>
                   <v-btn
                     class="my-4"
                     elevation="0"
                     color="primary"
-                    :disabled="!page3Complete"
-                    @click="submitDetails()"
+                    :disabled="!page4Complete"
+                    @click="startOtpProcess()"
                   >Continue
                   </v-btn>
                 </v-row>
@@ -259,20 +377,20 @@
           justify="center"
           class="ma-0 pa-0 my-4"
         >
-          <v-card-title class="headline text-center primary--text">Registration Sent</v-card-title>
+          <v-card-title class="display-3 text-center primary--text">Registration Sent</v-card-title>
         </v-row>
         <v-row
           justify="center"
           class="ma-0 pa-0 my-4"
         >
           <v-icon
-            size="96"
+            size="200"
             class="text-center"
             color="success"
           >mdi-check</v-icon>
         </v-row>
         <v-card-text>
-          <p class="text-center"><b>Your registration has been sent for approval. We will verify the details you provided. </b></p>
+          <p class="text-center headline"><b>Your registration has been sent for approval. We will verify the details you provided. </b></p>
 
           <p class="text-center">You’ll be able to access your account once the administrator approves your request.
 
@@ -312,6 +430,53 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <v-dialog
+      v-model="isOTPDialogVisible"
+      max-width="550"
+      persistent=""
+    >
+      <v-card>
+        <v-card-title class="mb-4">
+          Verify phone number
+        </v-card-title>
+        <v-card-text>
+          <div v-if="isOtpSent">
+            <h1 class="body-1">OTP has been sent to your phone number <b>+91 {{ formInputs.phoneNumberInput }}</b></h1>
+            <v-text-field
+              label="OTP"
+              filled
+              single-line
+              persistent-hint
+              v-model="OTPInput"
+              class="my-4"
+              hint="Please enter the verification code here"
+            ></v-text-field>
+            <v-row justify="end">
+
+              <v-btn
+                color="primary"
+                class="mx-3"
+                @click="verifyOTP()"
+              >Verify</v-btn>
+            </v-row>
+          </div>
+          <h1
+            class="body-1"
+            v-else
+          >
+            <v-progress-circular
+              size="20"
+              indeterminate=""
+              width="2"
+              class="mr-2"
+            ></v-progress-circular>
+            Sending OTP to your number <b>+91{{ formInputs.phoneNumberInput }}</b>
+          </h1>
+
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
   </v-container>
 </template>
 
@@ -319,8 +484,12 @@
 import Vue from "vue";
 import firebase from "firebase";
 import { createVendorMutation } from "../../graphql/createVendor";
+import { validateVendorArgumentsMutation } from "../../graphql/validateVendorArguments";
+
+import gql from "graphql-tag";
 export default Vue.extend({
   name: "Register",
+
   computed: {
     page1Complete: function() {
       if (
@@ -337,13 +506,24 @@ export default Vue.extend({
       if (
         this.formInputs.storeNameInput != null &&
         this.formInputs.addressLineInput != null &&
-        this.formInputs.cityInput != null
+        this.formInputs.cityInput != null &&
+        this.formInputs.gstInput != null
       ) {
         return true;
       }
       return false;
     },
     page3Complete: function() {
+      if (
+        this.formInputs.bankAccountHolderInput != null &&
+        this.formInputs.bankAccountNumberInput != null &&
+        this.formInputs.bankIFSCInput != null
+      ) {
+        return true;
+      }
+      return false;
+    },
+    page4Complete: function() {
       if (
         this.formInputs.panImagesInput != null &&
         this.formInputs.shopImageInput != null
@@ -353,12 +533,121 @@ export default Vue.extend({
       return false;
     }
   },
+  mounted() {
+    //Initing recaptcha
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+      "recaptcha-container",
+      {
+        size: "invisible",
+        callback: function(response) {
+          //Recaptcha solved, allow signIn
+        },
+        "expired-callback": function() {
+          //Solve again
+        }
+      }
+    );
+    this.appVerifier = window.recaptchaVerifier;
+    console.log("Recaptcha is ready");
+  },
   methods: {
+    async checkAndGoToStepTwo() {
+      var vm = this;
+      //Check if phone and email are available
+      await this.$apollo
+        .mutate({
+          mutation: validateVendorArgumentsMutation,
+          variables: {
+            phoneNumber: this.formInputs.phoneNumberInput,
+            email: this.formInputs.emailAddressInput
+          }
+        })
+        .then(function(data) {
+          data = data.data.validateVendorArguments;
+          if (data.phoneNumber == false && data.email == false) {
+            vm.goToStep(2);
+          } else {
+            if (data.phoneNumber == true) {
+              alert(
+                "The phone number you provided already exists, please use a different phone number."
+              );
+            }
+            if (data.email == true) {
+              alert(
+                "The email address you provided already exists, please use a different email address"
+              );
+            }
+          }
+        });
+    },
+    async checkAndGoToStepFour() {
+      var vm = this;
+      //Check if phone and email are available
+      await this.$apollo
+        .mutate({
+          mutation: validateVendorArgumentsMutation,
+          variables: {
+            bankAccountNumber: this.formInputs.bankAccountNumberInput
+          }
+        })
+        .then(function(data) {
+          console.log("Validate returned: ", data);
+          data = data.data.validateVendorArguments;
+          if (data.bankAccountNumber == false) {
+            vm.goToStep(4);
+          } else {
+            if (data.bankAccountNumber == true) {
+              alert(
+                "The account number already exists. Please check and try again."
+              );
+            }
+          }
+        });
+    },
+    startOtpProcess() {
+      //Opening OTP Dialog
+      this.isOTPDialogVisible = true;
+      let vm = this;
+      var appVerifier = this.appVerifier;
+      var phoneNumber = "+91" + this.formInputs.phoneNumberInput;
+      firebase
+        .auth()
+        .signInWithPhoneNumber(phoneNumber, appVerifier)
+        .then(function(smsSentResult) {
+          window.confirmationResult = smsSentResult;
+          vm.isOtpSent = true;
+          console.log("OTP has been sent ", smsSentResult);
+        })
+        .catch(function(error) {
+          console.log("Something went wrong with OTP: " + error);
+        });
+    },
+    verifyOTP() {
+      let vm = this;
+      let otp = this.OTPInput;
+      window.confirmationResult
+        .confirm(otp)
+        .then(function(successResult) {
+          var user = successResult.user;
+          console.log("User from OTP: ", user);
+          //OTP Verification is successful
+          vm.isOTPDialogVisible = false;
+          vm.submitDetails();
+        })
+        .catch(function(error) {
+          //OTP incorrect or some error
+          console.log("OTP ERROR: ", error);
+          if (error.code == "auth/invalid-verification-code") {
+            alert(
+              "You entered an incorrect OTP, please enter the correct OTP."
+            );
+          }
+        });
+    },
     routeToLogin() {
       this.$router.replace("/");
     },
-    goToStep(n: number) {
-      console.log("It Works");
+    async goToStep(n: number) {
       this.currentStep = n;
     },
     checkIfPasswordsMatch() {
@@ -431,7 +720,11 @@ export default Vue.extend({
               landmark: "null",
               city: this.formInputs.cityInput,
               phoneNumber: this.formInputs.phoneNumberInput
-            }
+            },
+            bankAccountName: this.formInputs.bankAccountHolderInput,
+            bankAccountIFSC: this.formInputs.bankIFSCInput,
+            bankAccountNumber: this.formInputs.bankAccountNumberInput,
+            vendorGSTNumber: this.formInputs.gstInput
           }
         })
         .then(data => {
@@ -449,9 +742,15 @@ export default Vue.extend({
   },
   data: () => ({
     currentStep: 1,
+    appVerifier: "",
     submissionProgressMessage: "null",
+    isOtpSent: false,
     panPhotoUrls: [],
     shopPhotoUrl: null,
+    OTPInput: null,
+    isPhoneAvailable: false,
+    isEmailAvailable: false,
+    isBankAccountAvailable: false,
     formInputs: {
       phoneNumberInput: null,
       emailAddressInput: null,
@@ -461,7 +760,11 @@ export default Vue.extend({
       addressLineInput: null,
       shopImageInput: null,
       panImagesInput: null,
-      cityInput: null
+      cityInput: null,
+      gstInput: null,
+      bankAccountHolderInput: null,
+      bankAccountNumberInput: null,
+      bankIFSCInput: null
     },
     passwordsMatch: true,
     phoneNumberValidationRules: [
@@ -480,8 +783,15 @@ export default Vue.extend({
     storeNameValidationRules: [v => !!v || "Store name is required"],
     addressLineValidationRules: [v => !!v || "Address is required"],
     cityValidationRules: [v => !!v || "City is required"],
+    bankAccountNumberValidationRules: [v => !!v || "A/C Number is required"],
+    bankAccountHolderValidationRules: [
+      v => !!v || "A/C Holder Name is required"
+    ],
+    bankIFSCValidationRules: [v => !!v || "IFSC Code is required"],
+    GSTValidationRules: [v => !!v || "GST Number is required"],
     isSuccessDialogVisible: false,
-    isSubmitDialogVisible: false
+    isSubmitDialogVisible: false,
+    isOTPDialogVisible: false
   })
 });
 </script>

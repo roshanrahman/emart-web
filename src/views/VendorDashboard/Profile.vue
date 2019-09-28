@@ -71,6 +71,36 @@
           v-model="addressPhoneNumberInput"
         >
         </v-text-field>
+        <v-text-field
+          :disabled="isEditingDisabled"
+          label="GST Number"
+          filled
+          v-model="GSTInput"
+        >
+        </v-text-field>
+        <h1 class="subtitle-2 mb-4">Bank Account Details</h1>
+
+        <v-text-field
+          :disabled="isEditingDisabled"
+          label="A/C Number"
+          filled
+          v-model="bankAccountNumberInput"
+        >
+        </v-text-field>
+        <v-text-field
+          :disabled="isEditingDisabled"
+          label="A/C Holder Name"
+          filled
+          v-model="bankAccountNameInput"
+        >
+        </v-text-field>
+        <v-text-field
+          :disabled="isEditingDisabled"
+          label="A/C IFSC Code"
+          filled
+          v-model="bankAccountIFSCInput"
+        >
+        </v-text-field>
         <v-slide-y-transition>
           <v-row
             v-if="!isEditingDisabled"
@@ -110,18 +140,13 @@ export default Vue.extend({
     this.addressLineInput = user.address.addressLine;
     this.cityInput = user.address.city;
     this.addressPhoneNumberInput = user.address.phoneNumber;
+    this.GSTInput = user.vendorGSTNumber;
+    this.bankAccountNameInput = user.bankAccountName;
+    this.bankAccountIFSCInput = user.bankAccountIFSC;
+      this.bankAccountNumberInput = user.bankAccountNumber;
   },
   computed: {
-    loggedInUser: function () {
-      var user = new LoginSessionHandler()
-      this.nameInput = user.storeName;
-      this.emailInput = user.email;
-      this.phoneNumberInput = user.phoneNumber;
-      this.addressLineInput = user.address.addressLine;
-      this.cityInput = user.address.city;
-      this.addressPhoneNumberInput = user.address.phoneNumber;
-      return user
-    }
+   
   },
   components: {
 
@@ -134,7 +159,11 @@ export default Vue.extend({
       phoneNumberInput: '',
       addressLineInput: '',
       cityInput: '',
-      addressPhoneNumberInput: ''
+      addressPhoneNumberInput: '',
+      GSTInput: '',
+      bankAccountNameInput: '',
+      bankAccountIFSCInput: '',
+      bankAccountNumberInput: '',
     }
   },
   methods: {
@@ -146,13 +175,15 @@ export default Vue.extend({
           storeName: this.nameInput,
           phoneNumber: this.phoneNumberInput,
           email: this.emailInput,
-          pancardPhotoUrls: this.loggedInUser.pancardPhotoUrls,
-          shopPhotoUrl: this.loggedInUser.shopPhotoUrl,
           address: {
             addressLine: this.addressLineInput,
             city: this.cityInput,
             phoneNumber: this.addressPhoneNumberInput
-          }
+          },
+          vendorGSTNumber: this.GSTInput,
+          bankAccountName: this.bankAccountNameInput,
+          bankAccountNumber: this.bankAccountNumberInput,
+          bankAccountIFSC: this.bankAccountIFSCInput
         }
       }).then((data) => {
         console.log(data);

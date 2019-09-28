@@ -40,7 +40,11 @@
     >
       <v-card>
 
-        <v-img :src="currentImageURL">
+        <v-img
+          :src="currentImageURL"
+          max-width="150"
+          max-height="200"
+        >
           <template v-slot:placeholder>
             <v-row
               class="fill-height ma-0"
@@ -133,7 +137,7 @@ export default {
     },
     setImageToComponent (url) {
       this.currentImageURL = url;
-      this.$emit('imageChanged', url);
+      this.$emit('imageChanged', `${url}`);
     }
   },
   props: [
