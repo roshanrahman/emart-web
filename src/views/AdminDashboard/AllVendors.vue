@@ -50,16 +50,12 @@
           item
           }">
           <div v-if="item.blocked">
-            <v-chip
-              outlined
+
+            <v-icon
+              left
               color="grey"
-              label=""
-            >
-              <v-icon
-                left
-                color="grey"
-              >mdi-close-circle</v-icon>BLOCKED FROM APP
-            </v-chip>
+            >mdi-close-circle</v-icon><span class="grey--text">Blocked</span>
+
             <v-btn
               outlined
               color="primary"
@@ -71,16 +67,12 @@
             >Unblock</v-btn>
           </div>
           <div v-else>
-            <v-chip
-              outlined
+
+            <v-icon
+              left
               color="success"
-              label=""
-            >
-              <v-icon
-                left
-                color="success"
-              >mdi-checkbox-marked-circle</v-icon>ACTIVE
-            </v-chip>
+            >mdi-checkbox-marked-circle</v-icon><span class="success--text">ACTIVE</span>
+
             <v-btn
               outlined
               color="red"

@@ -15,6 +15,9 @@ export let getAllInventory = gql`
         category
         inStock
         imageUrl
+        date
+        averageRating
+        unAnswered
         vendor {
           id
           name

@@ -104,13 +104,13 @@
               dark
               outlined
               class="px-2"
-              color="warning"
+              color="error"
             >
               <v-icon
                 small
                 left
               >mdi-timer-sand-empty</v-icon>
-              <span>Payment pending</span>
+              <span>Payment incomplete</span>
 
             </v-card>
           </v-row>
@@ -148,9 +148,9 @@
                 <v-list-item-title>{{ item.inventory.name }}</v-list-item-title>
 
               </v-list-item-content>
-         
-                <h2 class="subtitle-1"> ₹ {{item.inventory.sellingPrice}} </h2>
-             
+
+              <h2 class="subtitle-1"> ₹ {{item.inventory.sellingPrice}} </h2>
+
             </v-list-item>
           </v-list>
         </v-card-text>

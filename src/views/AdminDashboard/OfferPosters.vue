@@ -5,26 +5,27 @@
     class="pa-12 ma-4"
   >
     <v-row>
-      <h1 class=" display-1">Inventory</h1>
+      <h1 class=" display-1">Offer Posters (in development)</h1>
       <v-spacer></v-spacer>
       <v-btn
         rounded
         elevation="0"
         color="primary"
-        @click="isAddInventoryDialogVisible = true; key = key + 1;"
+        @click="isAddPosterDialogVisible = true; key = key + 1;"
       >
         <v-icon left>mdi-plus</v-icon>
-        Add new item
+        Add new poster
       </v-btn>
     </v-row>
 
     <v-row class="mt-8">
       <v-data-table
-        :items="getVendorInventory.inventory"
+        :items="!!getPosters ? getPosters : []"
         :headers="headers"
         :loading="$apollo.loading"
         loading-text="Fetching data, please wait..."
         sort-by="name"
+        :items-per-page="100"
       >
         <template v-slot:item.image="{ item }">
           <v-avatar
@@ -32,19 +33,8 @@
             color="white"
             class="ma-2"
           >
-            <v-img :src="JSON.parse(item.imageUrl)[0]"></v-img>
+            <v-img :src="item.posterImage"></v-img>
           </v-avatar>
-        </template>
-        <template v-slot:item.averageRating="{ item }">
-
-          <v-chip small>
-            <v-icon
-              left
-              small
-            >mdi-star</v-icon>
-            <span class="subtitle-2">{{item.averageRating }}</span>
-          </v-chip>
-
         </template>
         <template v-slot:item.description="{ item }">
           <v-btn
@@ -58,11 +48,40 @@
         <template v-slot:item.sellingPrice="{ item }">
           <b>₹ {{item.sellingPrice }}</b>
         </template>
+        <template v-slot:item.averageRating="{ item }">
+
+          <v-chip small>
+            <v-icon
+              left
+              small
+            >mdi-star</v-icon>
+            <span class="subtitle-2">{{item.averageRating }}</span>
+          </v-chip>
+
+        </template>
         <template v-slot:item.originalPrice="{ item }">
           ₹ {{item.originalPrice }}
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template v-slot:item.vendor.storeName="{ item }">
+          {{item.vendor.storeName }}
+          <v-chip
+            small
+            v-if="item.vendor.id == loggedInUser.id"
+            color="primary"
+          >You</v-chip>
+        </template>
+        <template v-slot:item.items="{ item }">
           <v-btn
+            text
+            outlined
+            small
+            rounded
+            @click="currentItem = item; isItemDetailDialogVisible = true;"
+          >View items</v-btn>
+        </template>
+
+        <template v-slot:item.actions="{ item }">
+          <!-- <v-btn
             small
             outlined
             text
@@ -76,7 +95,7 @@
               size="16"
             >mdi-pencil</v-icon>
             Edit
-          </v-btn>
+          </v-btn> -->
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <v-btn
@@ -85,7 +104,7 @@
                 rounded
                 color="red darken-1"
                 v-on="on"
-                @click="currentItem = item; isDeleteInventoryDialogVisible = true;"
+                @click="currentItem = item; isDeletePosterDialogVisible = true;"
               >
                 <v-icon size="24">mdi-delete</v-icon>
 
@@ -99,7 +118,7 @@
     </v-row>
 
     <v-dialog
-      v-model="isAddInventoryDialogVisible"
+      v-model="isAddPosterDialogVisible"
       fullscreen
       hide-overlay
       transition="dialog-bottom-transition"
@@ -109,14 +128,14 @@
           color="primary"
           dark
         >
-          <v-toolbar-title>Add new item
+          <v-toolbar-title>Add new poster
 
           </v-toolbar-title>
           <div class="flex-grow-1"></div>
           <v-toolbar-items>
             <v-btn
               icon
-              @click="isAddInventoryDialogVisible = false;"
+              @click="isAddPosterDialogVisible = false;"
             >
               <v-icon>mdi-close</v-icon>
             </v-btn>
@@ -124,10 +143,10 @@
         </v-toolbar>
         <v-card-text class="pa-8">
 
-          <InventoryFormComponent
-            @submit="runAddInventoryMutation"
+          <AddPosterFormComponent
+            @submit="runAddPosterMutation"
             :key="key"
-          ></InventoryFormComponent>
+          ></AddPosterFormComponent>
 
         </v-card-text>
       </v-card>
@@ -222,10 +241,10 @@
     </v-dialog>
     <v-dialog
       max-width="400"
-      v-model="isDeleteInventoryDialogVisible"
+      v-model="isDeletePosterDialogVisible"
     >
       <v-card>
-        <v-card-title> Are you sure you want to delete {{ currentItem.name }}?</v-card-title>
+        <v-card-title> Are you sure you want to delete this poster?</v-card-title>
         <v-card-text> You cannot undo this operation. </v-card-text>
         <v-card-actions>
           <v-spacer>
@@ -234,21 +253,59 @@
           <v-btn
             text
             color="primary"
-            @click="isDeleteInventoryDialogVisible = false;"
+            @click="isDeletePosterDialogVisible = false;"
           >Cancel</v-btn>
           <v-btn
             elevation="0"
             outlined
             text
             color="red"
-            @click="runDeleteInventoryMutation()"
+            @click="runDeletePosterMutation()"
           >
             Delete
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog
+      v-model="isItemDetailDialogVisible"
+      max-width="600"
+    >
+      <v-card>
+        <v-card-title>
+          <v-flex>
+            Items in this poster
+          </v-flex>
+          <v-btn
+            text
+            color="primary"
+            @click="isItemDetailDialogVisible = false;"
+          >Close</v-btn>
+        </v-card-title>
+        <v-card-text>
+          <v-list>
+            <v-list-item
+              v-for="item in currentItem.inventories"
+              :key="item.id"
+            >
+              <v-list-item-avatar>
+                <v-avatar>
+                  <v-img :src="JSON.parse(item.imageUrl)[0]"></v-img>
+                </v-avatar>
+              </v-list-item-avatar>
+              <v-list-item-content>
 
+                <v-list-item-title>{{ item.name }}</v-list-item-title>
+
+              </v-list-item-content>
+
+              <h2 class="subtitle-1"> ₹ {{item.sellingPrice}} </h2>
+
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -256,17 +313,20 @@
 import Vue from "vue";
 
 import { LoginSessionHandler } from '../../helpers/loginSessionHandler';
-import { getVendorInventory } from "../../graphql/getVendorInventory";
+import { getAllInventory } from "../../graphql/getAllInventory";
+import { getPosters } from "../../graphql/getPosters";
 import InventoryFormComponent from "../../components/InventoryFormComponent";
+import AddPosterFormComponent from "../../components/AddPosterFormComponent";
 import InventoryDetailsComponent from "../../components/InventoryDetailsComponent";
-import { addNewInventoryMutation } from "../../graphql/addNewInventory";
+import { addPosterMutation } from "../../graphql/addPoster";
 import { updateInventoryMutation } from "../../graphql/updateInventory";
-import { deleteInventoryMutation } from "../../graphql/deleteInventory";
+import { deletePosterMutation } from "../../graphql/deletePoster";
 
 export default Vue.extend({
   components: {
     InventoryFormComponent,
-    InventoryDetailsComponent
+    InventoryDetailsComponent,
+    AddPosterFormComponent
   },
   computed: {
     loggedInUser: function () {
@@ -282,45 +342,27 @@ export default Vue.extend({
           value: 'image'
         },
         {
-          text: 'Name',
-          value: 'name'
+          text: 'Posted by',
+          value: 'vendor.storeName'
+        },
+
+        {
+          text: 'Items',
+          value: 'items'
         },
         {
-          text: 'Category',
-          value: 'category'
-        },
-        {
-          text: 'Description',
-          value: 'description'
-        },
-        {
-          text: 'Original Price',
-          value: 'originalPrice'
-        },
-        {
-          text: 'Selling Price',
-          value: 'sellingPrice'
-        },
-        {
-          text: 'Quantity in Stock',
-          value: 'inStock'
-        },
-        {
-          text: 'Average Rating',
-          value: 'averageRating'
-        },
-        {
-          text: 'Actions',
+          text: "Actions",
           value: 'actions'
         }
 
       ],
-      getVendorInventory: {},
-      isAddInventoryDialogVisible: false,
+      getAllInventory: {},
+      isAddPosterDialogVisible: false,
       isErrorDialogVisible: false,
       isEditInventoryDialogVisible: false,
-      isDeleteInventoryDialogVisible: false,
+      isDeletePosterDialogVisible: false,
       isShowInventoryDialogVisible: false,
+      isItemDetailDialogVisible: false,
       currentItem: {},
       key: 0,
       error: {
@@ -330,7 +372,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    async runAddInventoryMutation (item) {
+    async runAddPosterMutation (item) {
       console.log('Emitted from form', item);
       this.isAddInventoryDialogVisible = false;
       await this.$apollo.mutate({
@@ -340,6 +382,7 @@ export default Vue.extend({
         }
       }).then((result) => console.log('Mutation succeeded', result),
         (reason) => {
+          console.log("Error: ", reason);
           this.error.title = "Server returned error.";
           this.error.text = reason;
           this.isErrorDialogVisible = true;
@@ -364,12 +407,12 @@ export default Vue.extend({
         });
 
     },
-    async runDeleteInventoryMutation () {
-      this.isDeleteInventoryDialogVisible = false;
+    async runDeletePosterMutation () {
+      this.isDeletePosterDialogVisible = false;
       await this.$apollo.mutate({
-        mutation: deleteInventoryMutation,
+        mutation: deletePosterMutation,
         variables: {
-          inventoryId: this.currentItem.id,
+          posterId: this.currentItem.id,
         }
       }).then((result) => console.log('Mutation succeeded', result),
         (reason) => {
@@ -380,8 +423,12 @@ export default Vue.extend({
     }
   },
   apollo: {
-    getVendorInventory: {
-      query: getVendorInventory,
+    getPosters: {
+      query: getPosters,
+      pollInterval: 3
+    },
+    getAllInventory: {
+      query: getAllInventory,
 
       pollInterval: 3
     }

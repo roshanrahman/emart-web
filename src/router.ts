@@ -69,6 +69,11 @@ export default new Router({
           component: () => import("./views/AdminDashboard/ActiveOrders.vue")
         },
         {
+          path: "/admin-posters",
+          name: "admin-posters",
+          component: () => import("./views/AdminDashboard/OfferPosters.vue")
+        },
+        {
           path: "/admin-order-history",
           name: "admin-order-history",
           component: () => import("./views/AdminDashboard/OrderHistory.vue")

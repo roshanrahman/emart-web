@@ -174,6 +174,13 @@
                       v-model="formInputs.cityInput"
                       :rules="cityValidationRules"
                     ></v-text-field>
+
+                    <v-text-field
+                      filled=""
+                      label="Pin Code"
+                      v-model="formInputs.pincodeInput"
+                      :rules="pincodeValidationRules"
+                    ></v-text-field>
                   </v-form>
                 </v-col>
                 <h2 class="title mt-8">GST Number</h2>
@@ -707,24 +714,27 @@ export default Vue.extend({
       await this.$apollo
         .mutate({
           mutation: createVendorMutation,
-          variables: {
-            storeName: this.formInputs.storeNameInput,
-            phoneNumber: this.formInputs.phoneNumberInput,
-            email: this.formInputs.emailAddressInput,
-            password: this.formInputs.passwordInput,
-            pancardPhotoUrls: JSON.stringify(panPhotoUrls),
-            shopPhotoUrl: shopPhotoUrl,
-            address: {
-              name: this.formInputs.storeNameInput,
-              addressLine: this.formInputs.addressLineInput,
-              landmark: "null",
-              city: this.formInputs.cityInput,
-              phoneNumber: this.formInputs.phoneNumberInput
-            },
-            bankAccountName: this.formInputs.bankAccountHolderInput,
-            bankAccountIFSC: this.formInputs.bankIFSCInput,
-            bankAccountNumber: this.formInputs.bankAccountNumberInput,
-            vendorGSTNumber: this.formInputs.gstInput
+          variables() {
+            return {
+              storeName: this.formInputs.storeNameInput,
+              phoneNumber: this.formInputs.phoneNumberInput,
+              email: this.formInputs.emailAddressInput,
+              password: this.formInputs.passwordInput,
+              pancardPhotoUrls: JSON.stringify(panPhotoUrls),
+              shopPhotoUrl: shopPhotoUrl,
+              address: {
+                name: this.formInputs.storeNameInput,
+                addressLine: this.formInputs.addressLineInput,
+                pinCode: this.formInputs.pincodeInput,
+                landmark: "null",
+                city: this.formInputs.cityInput,
+                phoneNumber: this.formInputs.phoneNumberInput
+              },
+              bankAccountName: this.formInputs.bankAccountHolderInput,
+              bankAccountIFSC: this.formInputs.bankIFSCInput,
+              bankAccountNumber: this.formInputs.bankAccountNumberInput,
+              vendorGSTNumber: this.formInputs.gstInput
+            };
           }
         })
         .then(data => {
@@ -758,6 +768,7 @@ export default Vue.extend({
       confirmPasswordInput: null,
       storeNameInput: null,
       addressLineInput: null,
+      pincodeInput: null,
       shopImageInput: null,
       panImagesInput: null,
       cityInput: null,
@@ -783,6 +794,7 @@ export default Vue.extend({
     storeNameValidationRules: [v => !!v || "Store name is required"],
     addressLineValidationRules: [v => !!v || "Address is required"],
     cityValidationRules: [v => !!v || "City is required"],
+    pincodeValidationRules: [v => !!v || "Pin Code is required"],
     bankAccountNumberValidationRules: [v => !!v || "A/C Number is required"],
     bankAccountHolderValidationRules: [
       v => !!v || "A/C Holder Name is required"

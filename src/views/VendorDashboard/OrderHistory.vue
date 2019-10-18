@@ -39,7 +39,7 @@
           {{ computedDate(item.updatedDate) }}
 
         </template>
-         <template v-slot:item.status="{ item }">
+        <template v-slot:item.status="{ item }">
 
           <v-tooltip right>
             <template v-slot:activator="{ on }">
@@ -70,7 +70,7 @@
           </v-tooltip>
 
         </template>
-       <template v-slot:item.transactionSuccess="{ item }">
+        <template v-slot:item.transactionSuccess="{ item }">
           <v-row>
             <v-card
               dark
@@ -90,13 +90,13 @@
               dark
               outlined
               class="px-2"
-              color="warning"
+              color="error"
             >
               <v-icon
                 small
                 left
               >mdi-timer-sand-empty</v-icon>
-              <span>Payment pending</span>
+              <span>Payment incomplete</span>
 
             </v-card>
           </v-row>
@@ -126,7 +126,7 @@
             >
               <v-list-item-avatar>
                 <v-avatar>
-                                    <v-img :src="JSON.parse(item.inventory.imageUrl)[0]"></v-img>
+                  <v-img :src="JSON.parse(item.inventory.imageUrl)[0]"></v-img>
 
                 </v-avatar>
               </v-list-item-avatar>
@@ -135,9 +135,9 @@
                 <v-list-item-title>{{ item.inventory.name }}</v-list-item-title>
 
               </v-list-item-content>
-              
-                <h2 class="subtitle-1"> ₹ {{item.inventory.sellingPrice}} </h2>
-              
+
+              <h2 class="subtitle-1"> ₹ {{item.inventory.sellingPrice}} </h2>
+
             </v-list-item>
           </v-list>
         </v-card-text>

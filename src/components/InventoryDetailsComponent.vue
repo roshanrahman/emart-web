@@ -68,6 +68,33 @@
 
             </v-list-item-content>
           </v-list-item>
+          <v-divider class="my-4"></v-divider>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title class="title primary--text">Average Rating</v-list-item-title>
+              <v-list-item-title class="headline"> {{ inventoryItem.averageRating }} / 5 </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider class="my-4"></v-divider>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title class="title primary--text">Reviews by customers</v-list-item-title>
+              <ReviewsComponent
+                class="mt-4"
+                :reviewId="inventoryItem == {} ? 0 : inventoryItem.id"
+              ></ReviewsComponent>
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider class="my-4"></v-divider>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title class="title primary--text">Questions by customers</v-list-item-title>
+              <QuestionsComponent
+                class="mt-4"
+                :itemId="inventoryItem == {} ? 0 : inventoryItem.id"
+              ></QuestionsComponent>
+            </v-list-item-content>
+          </v-list-item>
         </v-list>
       </v-col>
     </v-row>
@@ -75,9 +102,15 @@
 </template>
 
 <script>
+import QuestionsComponent from "./QuestionsComponent";
+import ReviewsComponent from "./ReviewsComponent";
+
 export default {
   props: ['inventoryItem'],
-
+  components: {
+    QuestionsComponent,
+    ReviewsComponent
+  }
 }
 </script>
 

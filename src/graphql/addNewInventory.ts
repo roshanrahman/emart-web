@@ -31,6 +31,9 @@ export let addNewInventoryMutation = gql`
         category
         inStock
         imageUrl
+        date
+        averageRating
+        unAnswered
       }
     }
   }

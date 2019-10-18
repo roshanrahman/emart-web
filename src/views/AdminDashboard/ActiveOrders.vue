@@ -121,7 +121,14 @@
         </template>
         <template v-slot:item.bill="{ item }">
 
-          <v-btn outlined text rounded primary small @click="showBill(item.id)">
+          <v-btn
+            outlined
+            text
+            rounded
+            primary
+            small
+            @click="showBill(item.id)"
+          >
             Bill
             <v-icon right>mdi-arrow-top-right</v-icon>
           </v-btn>
@@ -178,13 +185,13 @@
               dark
               outlined
               class="px-2"
-              color="warning"
+              color="error"
             >
               <v-icon
                 small
                 left
               >mdi-timer-sand-empty</v-icon>
-              <span>Payment pending</span>
+              <span>Payment incomplete</span>
 
             </v-card>
           </v-row>
@@ -193,7 +200,7 @@
     </v-row>
     <v-dialog
       v-model="isItemDetailDialogVisible"
-      max-width="800"
+      max-width="1400"
     >
       <v-card>
         <v-card-title>
@@ -224,14 +231,22 @@
                 </v-avatar>
               </td>
               <td>
-                <v-list-item-title class="title">{{ item.inventory.name }}</v-list-item-title>
+                <v-list-item-title class="subtitle-1">
+
+                  {{ item.inventory.name }}
+
+                </v-list-item-title>
               </td>
               <td>
                 <h2 class="subtitle-1"> ₹ {{item.inventory.sellingPrice}} </h2>
               </td>
               <td>
                 <v-list-item-title>{{item.inventory.vendor.storeName}}</v-list-item-title>
-
+                <v-chip
+                  small
+                  v-if="item.inventory.vendor.id == loggedInUser.id"
+                  color="primary"
+                >You</v-chip>
               </td>
             </tr>
           </v-simple-table>
@@ -276,53 +291,14 @@
             <v-list-item v-if="currentOrder.status == 'PLACED_BY_CUSTOMER'">
 
               <v-list-item-content>
-                <v-list-item-subtitle class="my-2">Available Actions</v-list-item-subtitle>
-                <v-list-item-title class="primary--text subtitle-1">
-
-                  <v-btn
-                    color="primary"
-                    class="ml-2"
-                    @click="changeStatus('RECEIVED_BY_STORE')"
-                  >Accept order</v-btn>
-
-                  <v-tooltip top>
-                    <template v-slot:activator="{ on }">
-                      <v-btn
-                        color="red"
-                        text
-                        v-on="on"
-                        @dblclick="changeStatus('CANCELLED_BY_STORE')"
-                      >Reject</v-btn>
-                    </template>
-                    <span> Are you sure you want to reject this order? Double click the button if you want to reject order.</span>
-                  </v-tooltip>
-                </v-list-item-title>
+                Waiting for the vendor to receive or reject the order
               </v-list-item-content>
 
             </v-list-item>
             <v-list-item v-if="currentOrder.status == 'RECEIVED_BY_STORE'">
 
               <v-list-item-content>
-                <v-list-item-subtitle class="my-2">Available Actions</v-list-item-subtitle>
-                <v-list-item-title class="primary--text subtitle-1">
-                  <v-tooltip top>
-                    <template v-slot:activator="{ on }">
-                      <v-btn
-                        color="red"
-                        text
-                        v-on="on"
-                        @dblclick="changeStatus('CANCELLED_BY_STORE')"
-                      >Cancel</v-btn>
-                    </template>
-                    <span> Are you sure you want to cancel this order? Double click the button if you want to cancel order.</span>
-                  </v-tooltip>
-                  <v-btn
-                    color="primary"
-                    class="mr-2"
-                    @click="changeStatus('PICKED_UP')"
-                  >Mark as sent for delivery</v-btn>
-
-                </v-list-item-title>
+                Waiting for the vendor to update if the item has been packaged and picked up
               </v-list-item-content>
 
             </v-list-item>
@@ -389,9 +365,9 @@ export default Vue.extend({
 
   },
   methods: {
-    showBill(id) {
- var win = window.open('http://cezhop.herokuapp.com/generateBill?orderId=' + id, '_blank');
-  win.focus();
+    showBill (id) {
+      var win = window.open('http://cezhop.herokuapp.com/generateBill?orderId=' + id, '_blank');
+      win.focus();
     },
     computedStatus: function (status) {
       if (status == '') {
@@ -463,10 +439,6 @@ export default Vue.extend({
           text: "Update Order Status",
           value: "updateStatus"
         },
-        {
-          text: "Generate Bill",
-          value: "bill"
-        }
       ],
       currentOrder: { status: '', cartItems: [], },
 

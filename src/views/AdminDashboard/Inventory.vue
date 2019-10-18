@@ -48,8 +48,27 @@
         <template v-slot:item.sellingPrice="{ item }">
           <b>₹ {{item.sellingPrice }}</b>
         </template>
+        <template v-slot:item.averageRating="{ item }">
+
+          <v-chip small>
+            <v-icon
+              left
+              small
+            >mdi-star</v-icon>
+            <span class="subtitle-2">{{item.averageRating }}</span>
+          </v-chip>
+
+        </template>
         <template v-slot:item.originalPrice="{ item }">
           ₹ {{item.originalPrice }}
+        </template>
+        <template v-slot:item.vendor.storeName="{ item }">
+          {{item.vendor.storeName }}
+          <v-chip
+            small
+            v-if="item.vendor.id == loggedInUser.id"
+            color="primary"
+          >You</v-chip>
         </template>
         <template v-slot:item.actions="{ item }">
           <v-btn
@@ -275,10 +294,7 @@ export default Vue.extend({
           text: 'Name',
           value: 'name'
         },
-        {
-          text: 'Category',
-          value: 'category'
-        },
+
         {
           text: 'Sold by',
           value: 'vendor.storeName'
@@ -298,6 +314,10 @@ export default Vue.extend({
         {
           text: 'Quantity in Stock',
           value: 'inStock'
+        },
+        {
+          text: 'Average Rating',
+          value: 'averageRating'
         },
         {
           text: 'Actions',

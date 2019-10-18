@@ -91,6 +91,18 @@
               <v-list-item-title>Inventory</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <v-list-item
+            value="admin-posters"
+            color="primary"
+            @click="routeTo('admin-posters')"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-cart</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Offer Posters</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <v-divider class="my-4"></v-divider>
 
           <v-subheader class="mt-4 grey--text text--darken-1">VENDORS</v-subheader>

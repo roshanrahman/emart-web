@@ -15,6 +15,9 @@ export let deleteInventoryMutation = gql`
         category
         inStock
         imageUrl
+        date
+        averageRating
+        unAnswered
       }
     }
   }

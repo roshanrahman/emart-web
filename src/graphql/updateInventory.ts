@@ -33,6 +33,9 @@ export let updateInventoryMutation = gql`
         category
         inStock
         imageUrl
+        date
+        averageRating
+        unAnswered
       }
     }
   }
