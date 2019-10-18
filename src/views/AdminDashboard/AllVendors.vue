@@ -128,10 +128,20 @@
     </v-dialog>
     <v-dialog
       v-model="isBankDetailsDialogVisible"
-      max-width="400"
+      max-width="500"
     >
       <v-card>
-        <v-card-title>Bank Details for {{ currentVendor.storeName }} </v-card-title>
+        <v-card-title>
+          <v-row justify="space-between">
+            <span>Bank Details for {{ currentVendor.storeName }}</span>
+            <v-btn
+              icon
+              @click="copyTextToClipboard(`Vendor: ${currentVendor.storeName}\nA/C Number: ${currentVendor.bankAccountNumber}\nA/C Holder Name: ${currentVendor.bankAccountName}\nIFSC Code: ${currentVendor.bankAccountIFSC}`)"
+            >
+              <v-icon>mdi-content-copy</v-icon>
+            </v-btn>
+          </v-row>
+        </v-card-title>
         <v-card-text>
           <v-list two-line>
 
@@ -336,6 +346,35 @@ export default Vue.extend({
           block: false
         }
       }).then((successResult) => { }, (error) => { console.log('Disable Vendor failed', error) })
+    },
+    fallbackCopyTextToClipboard (text) {
+      var textArea = document.createElement("textarea");
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        var successful = document.execCommand('copy');
+        var msg = successful ? 'successful' : 'unsuccessful';
+        console.log('Fallback: Copying text command was ' + msg);
+      } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+      }
+
+      document.body.removeChild(textArea);
+    },
+    copyTextToClipboard (text) {
+      if (!navigator.clipboard) {
+        fallbackCopyTextToClipboard(text);
+        return;
+      }
+      navigator.clipboard.writeText(text).then(function () {
+        console.log('Async: Copying to clipboard was successful!');
+        alert('Bank details copied. Now you can paste anywhere');
+      }, function (err) {
+        console.error('Async: Could not copy text: ', err);
+      });
     }
   },
   components: {
