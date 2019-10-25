@@ -1,35 +1,37 @@
 <template>
-  <v-app>
-    <v-content>
-      <router-view></router-view>
-      <v-bottom-sheet
-        v-model="isOfflineDialogVisible"
-        persistent
-      >
-        <v-sheet>
-          <v-list>
-            <v-list-item>
-              <v-list-item-avatar>
-                <v-icon
-                  color="grey"
-                  size="36"
-                >mdi-cloud-off-outline</v-icon>
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title class="title red--text">
-                  Unable to connect to the server
-                </v-list-item-title>
+  <div style="background-color:white;">
+    <v-app>
+      <v-content>
+        <router-view></router-view>
+        <v-bottom-sheet
+          v-model="isOfflineDialogVisible"
+          persistent
+        >
+          <v-sheet>
+            <v-list class="ml-4">
+              <v-list-item>
+                <v-list-item-avatar>
+                  <v-icon
+                    color="grey"
+                    size="36"
+                  >mdi-cloud-off-outline</v-icon>
+                </v-list-item-avatar>
                 <v-list-item-content>
-                  <p>Looks like we're offline. Please check your internet connection. Functionality will be restored when a connection is available.</p>
+                  <v-list-item-title class="title red--text">
+                    Unable to connect to the server
+                  </v-list-item-title>
+                  <v-list-item-content>
+                    <p>Looks like we're offline. Please check your internet connection. Functionality will be restored when a connection is available.</p>
+                  </v-list-item-content>
                 </v-list-item-content>
-              </v-list-item-content>
 
-            </v-list-item>
-          </v-list>
-        </v-sheet>
-      </v-bottom-sheet>
-    </v-content>
-  </v-app>
+              </v-list-item>
+            </v-list>
+          </v-sheet>
+        </v-bottom-sheet>
+      </v-content>
+    </v-app>
+  </div>
 </template>
 
 <script lang="ts">
@@ -64,7 +66,7 @@ export default Vue.extend({
     }
   },
   data: () => ({
-    checkNetwork: 'connected'
+    checkNetwork: "connected"
   }),
   methods: {}
 });

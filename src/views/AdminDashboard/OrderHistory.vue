@@ -2,15 +2,38 @@
   <v-card
     outlined
     tile
-    class="pa-12 ma-4"
+    class="pa-12"
   >
-    <h1 class=" display-1">Order History</h1>
-    <v-row>
+    <v-row justify="space-between">
+      <h1 class=" display-1 primary--text mx-2"><b>Order History</b></h1>
+      <v-btn
+        icon
+        color="primary"
+        outlined
+        text
+        @click="isHelpDialogVisible = true;"
+      >
+        <v-icon>mdi-help-circle</v-icon>
+      </v-btn>
+    </v-row>
+    <h2 class=" body-1 mt-2">
+      View all orders on the app so far
+    </h2>
 
-      <h2 class=" body-1 mt-4 ml-4">
-        View all orders on the app so far
-      </h2>
+    <v-divider class="my-8"></v-divider>
+    <v-row align="center">
+      <v-btn
+        outlined
+        rounded
+        text
+        color="primary"
+        @click="isDownloadDataDialogVisible = true;"
+      >
+        <v-icon left>mdi-cloud-download</v-icon>
+        Download data
+      </v-btn>
       <v-spacer></v-spacer>
+
       <v-text-field
         label="Search"
         single-line
@@ -26,6 +49,7 @@
         :headers="headers"
         :loading="$apollo.loading"
         loading-text="Fetching data, please wait..."
+        no-data-text="No orders found"
         :items-per-page="100"
         :search="searchQuery"
       >
@@ -119,7 +143,7 @@
     </v-row>
     <v-dialog
       v-model="isItemDetailDialogVisible"
-      max-width="600"
+      max-width="900"
     >
       <v-card>
         <v-card-title>
@@ -134,25 +158,197 @@
         </v-card-title>
         <v-card-text>
           <v-list>
-            <v-list-item
+            <!-- <v-list-item
               v-for="item in currentOrder.cartItems"
               :key="item.id"
             >
               <v-list-item-avatar>
-                <v-avatar>
+                <v-avatar size="72">
                   <v-img :src="JSON.parse(item.inventory.imageUrl)[0]"></v-img>
                 </v-avatar>
               </v-list-item-avatar>
               <v-list-item-content>
 
-                <v-list-item-title>{{ item.inventory.name }}</v-list-item-title>
-
+                <v-list-item-title class="title">{{ item.inventory.name }}</v-list-item-title>
+                <v-list-item-subtitle><span class="primary--text">₹ {{item.inventory.sellingPrice}}</span> </v-list-item-subtitle>
               </v-list-item-content>
 
-              <h2 class="subtitle-1"> ₹ {{item.inventory.sellingPrice}} </h2>
+            </v-list-item> -->
+            <v-card
+              v-for="item in currentOrder.cartItems"
+              :key="item.id"
+              outlined
+              class="pa-4 mb-4"
+            >
+              <v-row>
+                <v-avatar
+                  size="72"
+                  class="mx-2"
+                >
+                  <v-img :src="JSON.parse(item.inventory.imageUrl)[0]"></v-img>
 
-            </v-list-item>
+                </v-avatar>
+                <v-col>
+                  <h1 class="title"> {{ item.inventory.name }}
+                  </h1>
+                  <v-list-item-subtitle><span class="subtitle-1 primary--text">₹ {{item.inventory.sellingPrice}}</span> </v-list-item-subtitle>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-list class="ml-4">
+                  <h1 class="subtitle-2">Sold by</h1>
+                  <h2 class="title">{{item.inventory.vendor.storeName }} ({{ item.inventory.vendor.phoneNumber }}) </h2>
+                </v-list>
+              </v-row>
+              <v-divider class="mt-2"></v-divider>
+              <v-spacer></v-spacer>
+              <v-card
+                class="mt-4 px-4"
+                elevation="0"
+              >
+                <v-row> <span class="title primary--text"> {{ computedStatus(item.itemStatus).short }}</span>
+                </v-row>
+                <v-row><span class="subtitle-1 grey--text"> {{ computedStatus(item.itemStatus).long }}</span></v-row>
+              </v-card>
+              <v-spacer></v-spacer>
+
+            </v-card>
           </v-list>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="isDownloadDataDialogVisible"
+      max-width="600"
+    >
+      <v-card class="pa-8">
+        <v-row justify="center">
+          <h1 class="headline mb-4 primary--text">Download your data</h1>
+          <h2 class="subtitle-2 text-center font-weight-regular grey--text">Download a copy of your order history as a CSV file. You can open the CSV in any spreadsheet software, like Excel.</h2>
+          <v-divider class="my-4"></v-divider>
+        </v-row>
+        <h2 class="subtitle-1 text-center mb-2"><b>Select the range of dates and click Download</b></h2>
+        <v-row
+          align="center"
+          justify="space-between"
+        >
+
+          <v-menu
+            v-model="startDateMenu"
+            :close-on-content-click="false"
+            :nudge-right="40"
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                v-model="startDate"
+                label="Start Date"
+                readonly
+                prepend-icon="mdi-calendar"
+                v-on="on"
+                class="ml-2"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              no-title
+              color="primary"
+              v-model="startDate"
+              @input="startDateMenu = false"
+            ></v-date-picker>
+          </v-menu>
+        </v-row>
+        <v-row
+          align="center"
+          justify="space-between"
+        >
+
+          <v-menu
+            v-model="endDateMenu"
+            :close-on-content-click="false"
+            :nudge-right="40"
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                v-model="endDate"
+                label="End Date"
+                readonly
+                prepend-icon="mdi-calendar"
+                v-on="on"
+                class="ml-2"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              no-title
+              color="primary"
+              v-model="endDate"
+              @input="endDateMenu = false"
+            ></v-date-picker>
+          </v-menu>
+        </v-row>
+        <v-row>
+          <v-divider class="my-4"></v-divider>
+
+        </v-row>
+        <v-row>
+          <span
+            class="red--text"
+            v-if="!isDateValid"
+          >This date range is not valid.</span>
+          <span
+            class="primary--text"
+            v-else
+          >
+            Selected date range (YYYY-MM-DD): {{ startDate }} to {{ endDate }}
+          </span>
+        </v-row>
+        <v-row>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            :disabled="!isDateValid"
+            @click="runDownloadDataMutation()"
+          >Download</v-btn>
+        </v-row>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="isHelpDialogVisible"
+      max-width="600"
+    >
+      <v-card>
+        <v-card-title>
+          <v-flex>
+            Help
+          </v-flex>
+          <v-btn
+            text
+            color="primary"
+            @click="isHelpDialogVisible = false;"
+          >Close</v-btn>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text class="mt-4">
+          <h1 class="title primary--text text-center">Order History</h1>
+          <h2 class="body-2 grey--text text-center mb-4">Allows you to view all the orders on the app so far</h2>
+          <h3>Available Functions: </h3>
+          <h4>Order History Table</h4>
+          <ul>
+            <li>Fetches all the orders done on the app so far.</li>
+            <li>You can sort by clicking on the field headings. Use the search field to filter the orders shown.</li>
+            <li>View the items in the order by clicking ‘View Items’</li>
+          </ul>
+          <h4>Download your data</h4>
+          <ul>
+            <li>Allows you to download a local copy of the order list.</li>
+            <li>Click the button and choose the date. By default, the range for the current month is selected. You can change to any date of your choice.</li>
+            <li>Click Download. A CSV File containing the records will start downloading. The CSV can be opened and processed in any spreadsheet software.</li>
+          </ul>
+
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -165,16 +361,43 @@ import Vue from "vue";
 import { LoginSessionHandler } from '../../helpers/loginSessionHandler';
 import { getAllOrders } from "../../graphql/getAllOrders";
 import { OrderStatuses } from '../../helpers/orderStatuses';
+import { downloadDataMutation } from "../../graphql/downloadDataMutation";
 import moment from "moment";
 
 export default Vue.extend({
+  mounted () {
+    var startDateObj = moment().startOf('month');
+    var endDateObj = moment().endOf('month');
+    this.startDate = startDateObj.format('YYYY-MM-DD');
+    this.endDate = endDateObj.format('YYYY-MM-DD');
+  },
   computed: {
     loggedInUser: function () {
       return new LoginSessionHandler()
     },
-
+    isDateValid: function () {
+      var startDateObj = moment(this.startDate);
+      var endDateObj = moment(this.endDate);
+      if (endDateObj.isBefore(startDateObj)) {
+        return false;
+      } else {
+        return true;
+      }
+    }
   },
   methods: {
+    download: function (filename, text) {
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+      element.setAttribute('download', filename);
+
+      element.style.display = 'none';
+      document.body.appendChild(element);
+
+      element.click();
+
+      document.body.removeChild(element);
+    },
     computedStatus: function (status) {
 
       return OrderStatuses.resolveOrderStatus(status);
@@ -183,7 +406,25 @@ export default Vue.extend({
       var epoch = parseInt(dateString);
       var date = new Date(epoch);
       return moment(date).format('DD/MM/YYYY h:mm:ss A');
+    },
+
+    async runDownloadDataMutation () {
+      await this.$apollo.mutate({
+        mutation: downloadDataMutation,
+        variables: {
+          startDate: this.startDate,
+          endDate: this.endDate
+        }
+      }).then((result) => {
+        console.log('Returned from mutation: ', result);
+        this.download(`OrderHistory from ${this.startDate} to ${this.endDate}.csv`, result.data.downloadData);
+        this.isDownloadDataDialogVisible = false;
+      }, (error) => {
+        console.error(error);
+        alert(error);
+      });
     }
+
   },
   components: {
 
@@ -191,7 +432,13 @@ export default Vue.extend({
 
   data () {
     return {
+      startDate: null,
+      endDate: null,
+      startDateMenu: false,
+      endDateMenu: false,
       isItemDetailDialogVisible: false,
+      isDownloadDataDialogVisible: false,
+      isHelpDialogVisible: false,
       currentOrder: {},
       getAllOrders: {},
       searchQuery: '',

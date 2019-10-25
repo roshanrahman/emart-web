@@ -31,11 +31,8 @@
 
             </v-col>
           </v-row>
-          <h1 class="subtitle-2 my-4  grey--text">Select items to display under this offer poster</h1>
-          <v-text-field
-            single-line
-            label="Filter items"
-          ></v-text-field>
+          <h1 class="subtitle-2 my-4  grey--text">Select items to display under this offer poster {{ selectedItems.length > 0 ? "(Selected " + selectedItems.length + " items)" : ""}}</h1>
+
           <v-list>
             <v-list-item-group
               multiple
@@ -54,7 +51,7 @@
                     </v-list-item-avatar>
                     <v-list-item-content>
                       <v-list-item-title> {{ item.name }}</v-list-item-title>
-                      <v-list-item-subtitle>₹ {{ item.sellingPrice }} </v-list-item-subtitle>
+                      <v-list-item-subtitle>{{ item.category }} · <span class="primary--text">₹ {{ item.sellingPrice }}</span> </v-list-item-subtitle>
                     </v-list-item-content>
 
                     <v-list-item-action>
@@ -145,19 +142,7 @@ export default {
       this.imageURLInput = [null, null, null, null, null];
     },
     setImageTo1 (url) {
-      this.imageURLInput[0] = url;
-    },
-    setImageTo2 (url) {
-      this.imageURLInput[1] = url;
-    },
-    setImageTo3 (url) {
-      this.imageURLInput[2] = url;
-    },
-    setImageTo4 (url) {
-      this.imageURLInput[3] = url;
-    },
-    setImageTo5 (url) {
-      this.imageURLInput[4] = url;
+      this.posterImageUrl = url;
     },
     addNewCategory () {
       this.categories.push(this.newCategoryTextInput);
@@ -167,50 +152,29 @@ export default {
       this.menu = false;
     },
     handleFormSubmit () {
-      this.$refs.form.validate();
-      if (!!this.imageURLInput.length < 1) {
-        this.error.title = "Product photo not provided";
-        this.error.text = "Please upload an image for the product photo."
+
+      if (this.selectedItems.length < 1) {
+        this.error.title = "Please choose items";
+        this.error.text = "Please choose the inventory items to feature under this poster."
         this.isErrorDialogVisible = true;
         return;
       }
-      if (!this.isFormValid) {
-        this.error.title = "Please provide the required details";
-        this.error.text = "The details are incomplete. Please fill the form."
+      if (!this.posterImageUrl) {
+        this.error.title = "Please upload poster image";
+        this.error.text = "Please upload a poster image to continue."
         this.isErrorDialogVisible = true;
         return;
       }
-      var correctImageUrls = [];
-      this.imageURLInput.forEach(element => {
-        if (!!element)
-          correctImageUrls.push(element);
+      var inventoryIds = [];
+      this.selectedItems.forEach(item => {
+        inventoryIds.push(item.id);
       });
-      var inventoryObj = {
-        name: this.nameInput,
-        description: this.descriptionInput,
-        originalPrice: this.originalPriceInput,
-        sellingPrice: this.sellingPriceInput,
-        category: this.selectedCategory,
-        inStock: this.quantityInput,
-        imageUrl: JSON.stringify(correctImageUrls)
+      var posterDetails = {
+        inventoryIds: inventoryIds,
+        posterImage: this.posterImageUrl
       };
-      this.$emit('submit', inventoryObj);
+      this.$emit('submit', posterDetails);
       this.$refs.form.reset();
-    }
-  },
-  props: ['existingItem'],
-  mounted () {
-    if (!!this.existingItem) {
-      if (this.categories.map((v) => v.toLowerCase()).indexOf(this.existingItem.category.toLowerCase()) == -1) {
-        this.categories.push(this.existingItem.category);
-        this.selectedCategory = this.existingItem.category;
-      }
-    }
-  },
-  watch: {
-    existingItem: function () {
-      console.log('Prop changed!', this.existingItem);
-      this.$forceUpdate();
     }
   },
   data () {
@@ -241,7 +205,8 @@ export default {
       categories: ['Mobile Phones', 'PC Parts', 'Laptops', 'Laptop Accessories', 'Mobile Accessories'],
       menu: false,
       newCategoryTextInput: '',
-      selectedItems: []
+      selectedItems: [],
+      posterImageUrl: null
     }
   }
 }

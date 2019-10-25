@@ -2,23 +2,38 @@
   <v-card
     outlined
     tile
-    class="pa-12 ma-4"
+    class="pa-12"
   >
-    <v-row>
-      <h1 class=" display-1">Profile</h1>
-      <v-spacer></v-spacer>
+    <v-row justify="space-between">
+      <h1 class=" display-1 primary--text mx-2"><b>Your Profile</b></h1>
       <v-btn
-        rounded
-        elevation="0"
+        icon
         color="primary"
         outlined
         text
+        @click="isHelpDialogVisible = true;"
+      >
+        <v-icon>mdi-help-circle</v-icon>
+      </v-btn>
+    </v-row>
+    <h2 class=" body-1 mt-2">
+      View and edit your profile details
+    </h2>
+
+    <v-divider class="my-8"></v-divider>
+    <v-row align="center">
+      <v-btn
+        outlined
+        rounded
+        text
+        color="primary"
         v-if="isEditingDisabled"
         @click="isEditingDisabled = false;"
       >
         <v-icon left>mdi-pencil</v-icon>
         Edit details
       </v-btn>
+
     </v-row>
 
     <v-row class="mt-8">
@@ -62,6 +77,13 @@
           label="City"
           filled
           v-model="cityInput"
+        >
+        </v-text-field>
+        <v-text-field
+          :disabled="isEditingDisabled"
+          label="Pin Code"
+          filled
+          v-model="pincodeInput"
         >
         </v-text-field>
         <v-text-field
@@ -122,7 +144,35 @@
         </v-slide-y-transition>
       </v-col>
     </v-row>
+    <v-dialog
+      v-model="isHelpDialogVisible"
+      max-width="600"
+    >
+      <v-card>
+        <v-card-title>
+          <v-flex>
+            Help
+          </v-flex>
+          <v-btn
+            text
+            color="primary"
+            @click="isHelpDialogVisible = false;"
+          >Close</v-btn>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text class="mt-4">
+          <h1 class="title primary--text text-center">Profile</h1>
+          <h2 class="body-2 grey--text text-center mb-4">Allows you to view and edit your profile details</h2>
+          <h3>Available Functions: </h3>
+          <h4>Edit profile details</h4>
+          <ul>
+            <li>Click 'Edit Details' to edit your details.</li>
+            <li>Once the details have been entered, click Save Changes to confirm.</li>
+          </ul>
 
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -139,26 +189,29 @@ export default Vue.extend({
     this.phoneNumberInput = user.phoneNumber;
     this.addressLineInput = user.address.addressLine;
     this.cityInput = user.address.city;
+    this.pincodeInput = user.address.pinCode;
     this.addressPhoneNumberInput = user.address.phoneNumber;
     this.GSTInput = user.vendorGSTNumber;
     this.bankAccountNameInput = user.bankAccountName;
     this.bankAccountIFSCInput = user.bankAccountIFSC;
-      this.bankAccountNumberInput = user.bankAccountNumber;
+    this.bankAccountNumberInput = user.bankAccountNumber;
   },
   computed: {
-   
+
   },
   components: {
 
   },
   data () {
     return {
+      isHelpDialogVisible: false,
       isEditingDisabled: true,
       nameInput: '',
       emailInput: '',
       phoneNumberInput: '',
       addressLineInput: '',
       cityInput: '',
+      pincodeInput: '',
       addressPhoneNumberInput: '',
       GSTInput: '',
       bankAccountNameInput: '',
@@ -178,6 +231,7 @@ export default Vue.extend({
           address: {
             addressLine: this.addressLineInput,
             city: this.cityInput,
+            pinCode: this.pincodeInput,
             phoneNumber: this.addressPhoneNumberInput
           },
           vendorGSTNumber: this.GSTInput,

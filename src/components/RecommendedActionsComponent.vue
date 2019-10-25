@@ -11,7 +11,7 @@
           <v-icon class="grey lighten-1 white--text">mdi-cart</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title class="primary--text">Add items to your inventory</v-list-item-title>
+          <v-list-item-title class="primary--text">Manage your inventory</v-list-item-title>
           <v-list-item-subtitle>Fill up the inventory by adding items for sale</v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action>
@@ -30,7 +30,18 @@
           <v-icon>mdi-arrow-right</v-icon>
         </v-list-item-action>
       </v-list-item>
-
+      <v-list-item @click="changeRoute('vendor-stats');">
+        <v-list-item-avatar class="d-none d-lg-block">
+          <v-icon class="grey lighten-1 white--text">mdi-chart-line</v-icon>
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title class="primary--text">View your statistics</v-list-item-title>
+          <v-list-item-subtitle>Take a look at your statistics</v-list-item-subtitle>
+        </v-list-item-content>
+        <v-list-item-action>
+          <v-icon>mdi-arrow-right</v-icon>
+        </v-list-item-action>
+      </v-list-item>
     </v-list>
 
   </v-card>

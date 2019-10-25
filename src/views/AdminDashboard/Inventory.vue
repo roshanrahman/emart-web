@@ -2,20 +2,45 @@
   <v-card
     outlined
     tile
-    class="pa-12 ma-4"
+    class="pa-12"
   >
-    <v-row>
-      <h1 class=" display-1">Inventory</h1>
-      <v-spacer></v-spacer>
+    <v-row justify="space-between">
+      <h1 class=" display-1 primary--text mx-2"><b>Inventory</b></h1>
       <v-btn
+        icon
+        color="primary"
+        outlined
+        text
+        @click="isHelpDialogVisible = true;"
+      >
+        <v-icon>mdi-help-circle</v-icon>
+      </v-btn>
+    </v-row>
+    <h2 class=" body-1 mt-2">
+      View all products being sold on the platform, including yours.
+    </h2>
+
+    <v-divider class="my-8"></v-divider>
+    <v-row align="center">
+      <v-btn
+        outlined
         rounded
-        elevation="0"
+        text
         color="primary"
         @click="isAddInventoryDialogVisible = true; key = key + 1;"
       >
         <v-icon left>mdi-plus</v-icon>
         Add new item
       </v-btn>
+      <v-spacer></v-spacer>
+
+      <v-text-field
+        label="Search"
+        single-line
+        v-model="searchQuery"
+        append-icon="mdi-magnify"
+      ></v-text-field>
+
     </v-row>
 
     <v-row class="mt-8">
@@ -23,9 +48,11 @@
         :items="!!getAllInventory.inventory ? getAllInventory.inventory : []"
         :headers="headers"
         :loading="$apollo.loading"
+        no-data-text="No items found"
         loading-text="Fetching data, please wait..."
         sort-by="name"
         :items-per-page="100"
+        :search="searchQuery"
       >
         <template v-slot:item.image="{ item }">
           <v-avatar
@@ -201,7 +228,6 @@
           </v-toolbar-items>
         </v-toolbar>
         <v-card-text class="pa-8">
-
           <InventoryDetailsComponent
             :inventoryItem="currentItem"
             :key="currentItem.id"
@@ -257,7 +283,47 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
+    <v-dialog
+      v-model="isHelpDialogVisible"
+      max-width="600"
+    >
+      <v-card>
+        <v-card-title>
+          <v-flex>
+            Help
+          </v-flex>
+          <v-btn
+            text
+            color="primary"
+            @click="isHelpDialogVisible = false;"
+          >Close</v-btn>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text class="mt-4">
+          <h1 class="title primary--text text-center">Inventory</h1>
+          <h2 class="body-2 grey--text text-center mb-4">Allows you to view and manage the products on sale on the platform</h2>
+          <h3>Available Functions: </h3>
+          <h4>Inventory List Table</h4>
+          <ul>
+            <li>Fetches all the items for sale by all the vendors.</li>
+            <li>You can sort by clicking on the field headings.</li>
+          </ul>
+          <h4>Add new item</h4>
+          <ul>
+            <li>Click 'Add New Item' to open up the new item dialog.</li>
+            <li>Enter the details, upload images, and click Submit to add your item.</li>
+          </ul>
+          <h4>View Details</h4>
+          <ul>
+            <li>Click 'View Details' to open up all the details about the item.</li>
+          </ul>
+          <h4>Respond to customer questions, and view reviews</h4>
+          <ul>
+            <li>Click 'View Details' to open up all the details about the item, and scroll to the questions/reviews section.</li>
+          </ul>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -300,7 +366,7 @@ export default Vue.extend({
           value: 'vendor.storeName'
         },
         {
-          text: 'Description',
+          text: 'Details',
           value: 'description'
         },
         {
@@ -328,10 +394,12 @@ export default Vue.extend({
       getAllInventory: {},
       isAddInventoryDialogVisible: false,
       isErrorDialogVisible: false,
+      isHelpDialogVisible: false,
       isEditInventoryDialogVisible: false,
       isDeleteInventoryDialogVisible: false,
       isShowInventoryDialogVisible: false,
       currentItem: {},
+      searchQuery: '',
       key: 0,
       error: {
         title: "",

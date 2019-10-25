@@ -1,26 +1,39 @@
 <template>
-  <v-card
-    class="pa-4"
-    outlined
-  >
-    <h1
-      class="title grey--text text-center"
+  <div>
+    <v-card
+      class="pa-4 my-4"
+      outlined
+      style="border-radius:8px;"
       v-if="getReviews.reviews == 0"
-    >No reviews yet</h1>
-    <v-list>
-      <v-list-item
-        v-for="review in getReviews.reviews"
-        :key="review.id"
+    >
+      <h2 class="title grey--text text-center">No reviews yet</h2>
+    </v-card>
+    <v-card
+      v-for="review in getReviews.reviews"
+      :key="review.id"
+      class="pa-4 my-4"
+      outlined
+      style="border-radius:8px;"
+    >
+      <v-row
+        align="center"
+        class="ml-2"
       >
-        <v-list-item-content>
-          <h1 class="title"> {{ review.rating }} / 5</h1>
-          <h2 class="subtitle-1"> {{ review.text }} </h2>
-          <v-divider class="mt-3"></v-divider>
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
+        <v-rating
+          :value="review.rating"
+          readonly
+          dense
+          color="primary"
+          background-color="grey"
+        ></v-rating>
+        <h2 class="title mx-4 primary--text"> {{ review.rating }}/5</h2>
+      </v-row>
+      <v-row class="ml-2">
+        <h2 class="subtitle-1 mt-2"> {{ review.text }} </h2>
+      </v-row>
+    </v-card>
 
-  </v-card>
+  </div>
 </template>
 
 <script>

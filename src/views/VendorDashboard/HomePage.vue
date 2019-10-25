@@ -2,10 +2,17 @@
   <v-card
     outlined
     tile
-    class="pa-12 ma-4"
+    class="pa-12"
   >
-    <h1 class="text-center display-1">Welcome to App, <span class="primary--text">{{ loggedInUser.storeName }}</span></h1>
-    <h2 class="text-center body-1 my-4">You are a registered vendor on App. Manage your inventory, check your orders and supercharge your business!</h2>
+    <v-row justify="space-between">
+      <h1 class=" display-1 mx-2 text-center"><b>Welcome to Be Shoppi, <span class="primary--text">{{ loggedInUser.storeName }}</span></b></h1>
+
+    </v-row>
+    <h2 class=" body-1 mt-2">
+      You are a registered vendor on Be Shoppi. Manage your inventory, check your orders and supercharge your business!
+    </h2>
+
+    <v-divider class="my-8"></v-divider>
 
     <v-row justify="center">
       <v-col

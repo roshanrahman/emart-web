@@ -58,7 +58,32 @@
             <v-list-item-content>
               <v-list-item-title>
 
-                Active Orders
+                Your Active Orders
+
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item
+            value="admin-all-active-orders"
+            color="primary"
+            @click="routeTo('admin-all-active-orders')"
+          >
+            <v-list-item-icon v-if="allActiveOrdersCount > 0">
+
+              <v-badge overlap="">
+                <template v-slot:badge> {{ allActiveOrdersCount }}</template>
+                <v-icon>mdi-arrow-down-box</v-icon>
+              </v-badge>
+            </v-list-item-icon>
+            <v-list-item-icon v-else>
+
+              <v-icon>mdi-arrow-down-box</v-icon>
+
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>
+
+                All Active Orders
 
               </v-list-item-title>
             </v-list-item-content>
@@ -97,7 +122,7 @@
             @click="routeTo('admin-posters')"
           >
             <v-list-item-icon>
-              <v-icon>mdi-cart</v-icon>
+              <v-icon>mdi-gift</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title>Offer Posters</v-list-item-title>
@@ -155,7 +180,7 @@
               <v-list-item-title>Your Profile</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <!--  <v-list-item
+          <v-list-item
             value="admin-stats"
             color="primary"
             @click="routeTo('admin-stats')"
@@ -166,7 +191,7 @@
             <v-list-item-content>
               <v-list-item-title>Your Stats</v-list-item-title>
             </v-list-item-content>
-          </v-list-item> -->
+          </v-list-item>
         </v-list-item-group>
       </v-list>
       <template v-slot:append>
@@ -228,14 +253,32 @@ import HomePage from "./HomePage.vue";
 import { LoginSessionHandler } from '../../helpers/loginSessionHandler';
 import { getAllOrders } from "../../graphql/getAllOrders";
 import { getAllVendors } from "../../graphql/getAllVendors";
+import { getVendorOrders } from "../../graphql/getVendorOrders.ts";
 
 export default Vue.extend({
   computed: {
     loggedInUser: function () {
       return new LoginSessionHandler()
     },
-    activeOrdersCount: function () {
+    allActiveOrdersCount: function () {
       var ordersList = this.getAllOrders.orders;
+      if (!!ordersList == false) {
+        return 0;
+      }
+      console.log(ordersList);
+      var count = 0;
+      ordersList.forEach(order => {
+        if (order.status == "PLACED_BY_CUSTOMER" || order.status == 'RECEIVED_BY_STORE' || order.status == 'PICKED_UP') {
+          count += 1;
+        }
+      });
+      return count;
+    },
+    activeOrdersCount: function () {
+      if (!!this.getVendorOrders == false) {
+        return 0;
+      }
+      var ordersList = this.getVendorOrders.orders;
       if (!!ordersList == false) {
         return 0;
       }
@@ -265,6 +308,10 @@ export default Vue.extend({
   apollo: {
     getAllOrders: {
       query: getAllOrders,
+      pollInterval: 3
+    },
+    getVendorOrders: {
+      query: getVendorOrders,
       pollInterval: 3
     },
     getAllVendors: {

@@ -1,63 +1,95 @@
 <template>
-  <v-card
-    class="pa-4"
-    outlined
-  >
-    <h1
-      class="title grey--text text-center"
+  <v-card elevation="0">
+    <v-card
+      class="pa-4 my-4"
+      outlined
+      style="border-radius:8px;"
       v-if="getQA.length == 0"
-    >No questions yet</h1>
-    <v-list>
-      <v-list-item
-        v-for="question in getQA"
-        :key="question.id"
+    >
+      <h2 class="title grey--text text-center">No questions yet</h2>
+    </v-card>
+    <v-card
+      class="my-4"
+      outlined
+      style="border-radius:8px;"
+      v-for="question in getQA"
+      :key="question.id"
+    >
+      <v-col
+        cols='12'
+        class="pa-4 mx-4"
       >
-        <v-list-item-content>
-          <v-row justify="space-between">
-            <h1 class="title primary--text">{{ question.questionText }} </h1>
-            <v-btn
-              icon
-              color="red"
-              outlined=""
-              text
-              small
-              class="mr-4"
-              @click="isDeleteQuestionDialogVisible = true; currentQuestion = question"
-            >
-              <v-icon>mdi-delete</v-icon>
-            </v-btn>
-          </v-row>
-          <v-row
-            v-if="question.answerText == '' || question.answerText == null"
-            justify="start"
-            align="center"
-            class="ma-4"
-          >
-            <span class="grey--text">No answer yet</span>
-            <v-btn
-              class="mx-4"
-              color="primary"
-              @click="isAnswerQuestionDialogVisible = true; currentQuestion = question;"
-            >Add an answer</v-btn>
-          </v-row>
-          <v-row
-            v-else
-            justify="start"
-            align="center"
-            class="ma-4"
-          >
-            <h2 class="subtitle-1"> {{ question.answerText }} </h2>
-          </v-row>
-          <v-divider></v-divider>
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
+        <h2 class="subtitle-1"><b> {{ question.questionText }}</b></h2>
+        <h2
+          class="subtitle-1 primary--text"
+          v-if="!!question.answerText"
+        > {{ question.answerText }} </h2>
+        <h2
+          class="subtitle-1 grey--text text-center"
+          v-else
+        > This question is unanswered</h2>
+      </v-col>
+
+      <v-divider></v-divider>
+      <v-row
+        align="center"
+        justify="space-between"
+      >
+        <v-btn
+          class="ma-4"
+          color="primary"
+          rounded
+          elevation="0"
+          @click="isAnswerQuestionDialogVisible = true; currentQuestion = question; answerInput = '';"
+          v-if="item.vendor.id == loggedInUser.id && !!question.answerText == false"
+        >
+          <v-icon
+            left
+            small
+          >mdi-plus</v-icon>
+          Add an answer
+        </v-btn>
+        <v-btn
+          class="ma-4"
+          color="primary"
+          rounded
+          outlined
+          text
+          elevation="0"
+          @click="isAnswerQuestionDialogVisible = true; currentQuestion = question; answerInput = question.answerText;"
+          v-if="item.vendor.id == loggedInUser.id  && !!question.answerText"
+        >
+          <v-icon
+            left
+            small
+          >mdi-pencil</v-icon>
+          Edit answer
+        </v-btn>
+        <v-btn
+          v-else
+          disabled
+          text
+          class="ma-4"
+        >Only the vendor of this item can answer questions</v-btn>
+
+        <v-btn
+          color="red"
+          text
+          small
+          class="mr-4"
+          @click="isDeleteQuestionDialogVisible = true; currentQuestion = question"
+        >
+          <v-icon>mdi-delete</v-icon>Delete question
+        </v-btn>
+      </v-row>
+    </v-card>
+
     <v-dialog
       max-width="600"
       v-model="isAnswerQuestionDialogVisible"
     >
       <v-card>
-        <v-card-title> Provide an answer to the question</v-card-title>
+        <v-card-title> Provide an answer to the question. If you are editing an existing answer, the existing answer will be overwritten.</v-card-title>
         <v-card-text>The question asks: {{ currentQuestion.questionText }} </v-card-text>
         <v-textarea
           filled
@@ -138,16 +170,21 @@
 import { getQA } from "../graphql/getQA";
 import { deleteQuestionMutation } from "../graphql/deleteQuestion";
 import { answerQuestionMutation } from "../graphql/answerQuestion";
-
+import { LoginSessionHandler } from "../helpers/loginSessionHandler";
 
 export default {
-  props: ['itemId'],
+  computed: {
+    loggedInUser: function () {
+      return new LoginSessionHandler()
+    }
+  },
+  props: ['item'],
   apollo: {
     getQA: {
       query: getQA,
       variables () {
         return {
-          inventoryId: this.itemId
+          inventoryId: this.item.id
         }
       },
       pollInterval: 3
@@ -186,10 +223,13 @@ export default {
   },
   data () {
     return {
-      itemId: 0,
+      item: {
+        id: 0
+      },
       isDeleteQuestionDialogVisible: false,
       isAnswerQuestionDialogVisible: false,
       isErrorDialogVisible: false,
+      getQA: [],
       currentQuestion: {},
       error: {
         title: "",

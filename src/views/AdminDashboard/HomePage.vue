@@ -2,10 +2,17 @@
   <v-card
     outlined
     tile
-    class="pa-12 ma-4"
+    class="pa-12"
   >
-    <h1 class="text-center display-1">Welcome <span class="primary--text">Administrator</span></h1>
-    <h2 class="text-center body-1 my-4">Take a look at incoming orders, manage inventory, and spearhead your business!</h2>
+    <v-row justify="space-between">
+      <h1 class=" display-1 mx-2 text-center"><b>Welcome <span class="primary--text">Administrator</span></b></h1>
+
+    </v-row>
+    <h2 class=" body-1 mt-2">
+      Take a look at incoming orders, manage inventory, and spearhead your business!
+    </h2>
+
+    <v-divider class="my-8"></v-divider>
 
     <v-row justify="center">
       <v-col

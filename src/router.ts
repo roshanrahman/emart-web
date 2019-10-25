@@ -50,6 +50,11 @@ export default new Router({
           path: "/vendor-stats",
           name: "vendor-stats",
           component: () => import("./views/VendorDashboard/Stats.vue")
+        },
+        {
+          path: "/vendor-posters",
+          name: "vendor-posters",
+          component: () => import("./views/VendorDashboard/OfferPosters.vue")
         }
       ]
     },
@@ -67,6 +72,11 @@ export default new Router({
           path: "/admin-active-orders",
           name: "admin-active-orders",
           component: () => import("./views/AdminDashboard/ActiveOrders.vue")
+        },
+        {
+          path: "/admin-all-active-orders",
+          name: "admin-all-active-orders",
+          component: () => import("./views/AdminDashboard/AllActiveOrders.vue")
         },
         {
           path: "/admin-posters",

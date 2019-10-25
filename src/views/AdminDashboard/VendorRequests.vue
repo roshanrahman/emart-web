@@ -2,79 +2,139 @@
   <v-card
     outlined
     tile
-    class="pa-12 ma-4"
+    class="pa-12"
   >
-    <h1 class=" display-1">New Vendor Requests</h1>
-    <h2 class=" body-1 my-4">View requests by vendors interested to join your app</h2>
+    <v-row justify="space-between">
+      <h1 class=" display-1 primary--text mx-2"><b>New Vendor Requests</b></h1>
+      <v-btn
+        icon
+        color="primary"
+        outlined
+        text
+        @click="isHelpDialogVisible = true;"
+      >
+        <v-icon>mdi-help-circle</v-icon>
+      </v-btn>
+    </v-row>
+    <h2 class=" body-1 mt-2">
+      Manage requests by vendors interested to join your app
+    </h2>
+
+    <v-divider class="my-8"></v-divider>
 
     <v-row class="mt-8">
-      <v-data-table
-        :items="unapprovedVendors"
-        :headers="headers"
-        :loading="$apollo.loading"
-        loading-text="Fetching data, please wait..."
-        no-data-text="No new requests"
-        :items-per-page="100"
-      >
-        <template v-slot:item.address="{
+      <v-col cols="12">
+        <v-data-table
+          :items="unapprovedVendors"
+          :headers="headers"
+          :loading="$apollo.loading"
+          loading-text="Fetching data, please wait..."
+          no-data-text="No new requests"
+          :items-per-page="100"
+        >
+          <template v-slot:item.address="{
           item
           }">
-          {{ !!item.address ? JSON.parse(item.address ).addressLine : 'N/A'}}, {{ !!item.address ? JSON.parse(item.address ).city : 'N/A'}}
-        </template>
-        <template v-slot:item.shopPhoto="{
+            {{ !!item.address ? JSON.parse(item.address ).addressLine : 'N/A'}}, {{ !!item.address ? JSON.parse(item.address ).city : 'N/A'}}
+          </template>
+          <template v-slot:item.shopPhoto="{
           item
           }">
-          <v-btn
-            outlined
-            text
-            small
-            color="primary"
-            rounded
-            @click="isShopDialogVisible = true; currentVendor = item;"
-          >View Photo</v-btn>
-        </template>
-        <template v-slot:item.panCard="{
+            <v-btn
+              outlined
+              text
+              small
+              color="primary"
+              rounded
+              @click="isShopDialogVisible = true; currentVendor = item;"
+            >View Photo</v-btn>
+          </template>
+          <template v-slot:item.panCard="{
           item
           }">
-          <v-btn
-            outlined
-            text
-            small
-            color="primary"
-            rounded
-            @click="isPanCardDialogVisible = true; currentVendor = item;"
-          >View Photos</v-btn>
-        </template>
-        <template v-slot:item.approve="{
+            <v-btn
+              outlined
+              text
+              small
+              color="primary"
+              rounded
+              @click="isPanCardDialogVisible = true; currentVendor = item;"
+            >View Photos</v-btn>
+          </template>
+          <template v-slot:item.vendorDetails="{
           item
           }">
-
-          <v-btn
-            outlined
-            color="success"
-            small
-            class="ml-4"
-            text
-            rounded
-            @click="currentVendor = item; isBlockVendorDialogVisible = true;"
-          >Approve</v-btn>
-        </template>
-        <template v-slot:item.bankDetails="{
+            <v-btn
+              small
+              color="primary"
+              rounded
+              @click="checkIfValidDetails(item); isVendorDetailsDialogVisible = true; currentVendor = item;"
+            >View Details</v-btn>
+          </template>
+          <template v-slot:item.approve="{
           item
           }">
 
-          <v-btn
-            outlined
-            color="primary"
-            small
-            class="ml-4"
-            text
-            rounded
-            @click="currentVendor = item; isBankDetailsDialogVisible = true;"
-          >View Details</v-btn>
-        </template>
-      </v-data-table>
+            <v-btn
+              outlined
+              color="success"
+              small
+              class="ml-4"
+              text
+              rounded
+              @click="currentVendor = item; isBlockVendorDialogVisible = true;"
+            >Approve</v-btn>
+          </template>
+          <template v-slot:item.bankDetails="{
+          item
+          }">
+
+            <v-btn
+              outlined
+              color="primary"
+              small
+              class="ml-4"
+              text
+              rounded
+              @click="currentVendor = item; isBankDetailsDialogVisible = true;"
+            >View Details</v-btn>
+          </template>
+        </v-data-table>
+      </v-col>
     </v-row>
+    <v-dialog
+      v-model="isVendorDetailsDialogVisible"
+      fullscreen=""
+    >
+      <v-card>
+        <v-toolbar
+          color="primary"
+          dark
+        >
+          <v-toolbar-title>Details for {{ currentVendor.storeName }}
+
+          </v-toolbar-title>
+          <div class="flex-grow-1"></div>
+          <v-toolbar-items>
+            <v-btn
+              icon
+              @click="isVendorDetailsDialogVisible = false;"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <v-row justify="center">
+          <v-col
+            cols="12"
+            md="8"
+            lg="6"
+          >
+            <VendorDetailsComponent :vendor="currentVendor"></VendorDetailsComponent>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-dialog>
     <v-dialog
       v-model="isBankDetailsDialogVisible"
       max-width="400"
@@ -229,6 +289,38 @@
         </v-img>
       </v-card>
     </v-dialog>
+    <v-dialog
+      v-model="isHelpDialogVisible"
+      max-width="600"
+    >
+      <v-card>
+        <v-card-title>
+          <v-flex>
+            Help
+          </v-flex>
+          <v-btn
+            text
+            color="primary"
+            @click="isHelpDialogVisible = false;"
+          >Close</v-btn>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text class="mt-4">
+          <h1 class="title primary--text text-center">New Vendor Requests</h1>
+          <h2 class="body-2 grey--text text-center mb-4">Allows you to view all the requests of new vendors interested to join the platform</h2>
+          <h3>Available Functions: </h3>
+          <h4>View details</h4>
+          <ul>
+            <li>Click 'View Details' to open up all the details about a vendor, including shop and PAN card photos.</li>
+          </ul>
+          <h4>Approve Vendor</h4>
+          <ul>
+            <li>If all the details are satisfactory, you can approve the vendor. The vendor's account will become immediately accessible.</li>
+            <li>Contact the vendor if details are not satisfactory, and ignore until approved details are presented.</li>
+          </ul>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -240,6 +332,8 @@ import { getAllVendors } from "../../graphql/getAllVendors";
 import { disableVendorAccountMutation } from "../../graphql/disableVendorAccountMutation";
 import { updateVendorAccountMutation } from "../../graphql/updateVendorAccount";
 import { OrderStatuses } from '../../helpers/orderStatuses';
+import VendorDetailsComponent from "../../components/VendorDetailsComponent";
+
 import moment from "moment";
 
 export default Vue.extend({
@@ -258,6 +352,16 @@ export default Vue.extend({
 
   },
   methods: {
+    checkIfValidDetails: function (vendor) {
+      try {
+        var a = JSON.parse(vendor.address);
+        var b = JSON.parse(vendor.pancardPhotoUrls);
+      } catch (error) {
+        console.error(error);
+        alert('Error occured while processing the details. The details provided by the vendor are not correctly formatted. Please ask vendor to submit their application again.')
+      }
+
+    },
     computedStatus: function (status) {
 
       return OrderStatuses.resolveOrderStatus(status);
@@ -291,17 +395,19 @@ export default Vue.extend({
     }
   },
   components: {
-
+    VendorDetailsComponent
   },
 
   data () {
     return {
+      isVendorDetailsDialogVisible: false,
       isItemDetailDialogVisible: false,
       isBlockVendorDialogVisible: false,
       isBankDetailsDialogVisible: false,
       isUnblockVendorDialogVisible: false,
       isShopDialogVisible: false,
       isPanCardDialogVisible: false,
+      isHelpDialogVisible: false,
       currentVendor: {},
       getAllVendors: [],
       headers: [
@@ -326,17 +432,10 @@ export default Vue.extend({
           value: "vendorGSTNumber"
         },
         {
-          text: "Store Photo",
-          value: "shopPhoto"
+          text: "Details",
+          value: "vendorDetails"
         },
-        {
-          text: "PAN Card Photos",
-          value: "panCard"
-        },
-        {
-          text: "Bank Account Details",
-          value: "bankDetails"
-        },
+
         {
           text: "Approval Status",
           value: "approve"

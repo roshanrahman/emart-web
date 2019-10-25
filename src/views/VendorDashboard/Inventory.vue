@@ -2,27 +2,32 @@
   <v-card
     outlined
     tile
-    class="pa-12 ma-4"
+    class="pa-12"
   >
-    <v-row>
-      <h1 class=" display-1">Inventory</h1>
-      <v-spacer></v-spacer>
+    <v-row justify="space-between">
+      <h1 class=" display-1 primary--text mx-2"><b>Inventory</b></h1>
       <v-btn
-        rounded
-        elevation="0"
+        icon
         color="primary"
-        @click="isAddInventoryDialogVisible = true; key = key + 1;"
+        outlined
+        text
+        @click="isHelpDialogVisible = true;"
       >
-        <v-icon left>mdi-plus</v-icon>
-        Add new item
+        <v-icon>mdi-help-circle</v-icon>
       </v-btn>
     </v-row>
+    <h2 class=" body-1 mt-2">
+      View and manage your products on the platform
+    </h2>
+
+    <v-divider class="my-8"></v-divider>
 
     <v-row class="mt-8">
       <v-data-table
         :items="getVendorInventory.inventory"
         :headers="headers"
         :loading="$apollo.loading"
+        no-data-text="No items found"
         loading-text="Fetching data, please wait..."
         sort-by="name"
       >
@@ -248,7 +253,47 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
+    <v-dialog
+      v-model="isHelpDialogVisible"
+      max-width="600"
+    >
+      <v-card>
+        <v-card-title>
+          <v-flex>
+            Help
+          </v-flex>
+          <v-btn
+            text
+            color="primary"
+            @click="isHelpDialogVisible = false;"
+          >Close</v-btn>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text class="mt-4">
+          <h1 class="title primary--text text-center">Inventory</h1>
+          <h2 class="body-2 grey--text text-center mb-4">Allows you to view and manage your products on sale on the platform</h2>
+          <h3>Available Functions: </h3>
+          <h4>Inventory List Table</h4>
+          <ul>
+            <li>Fetches all the items for sale put up by you.</li>
+            <li>You can sort by clicking on the field headings.</li>
+          </ul>
+          <h4>Add new item</h4>
+          <ul>
+            <li>Click 'Add New Item' to open up the new item dialog.</li>
+            <li>Enter the details, upload images, and click Submit to add your item.</li>
+          </ul>
+          <h4>View Details</h4>
+          <ul>
+            <li>Click 'View Details' to open up all the details about the item.</li>
+          </ul>
+          <h4>Respond to customer questions, and view reviews</h4>
+          <ul>
+            <li>Click 'View Details' to open up all the details about the item, and scroll to the questions/reviews section.</li>
+          </ul>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -320,6 +365,7 @@ export default Vue.extend({
       isErrorDialogVisible: false,
       isEditInventoryDialogVisible: false,
       isDeleteInventoryDialogVisible: false,
+      isHelpDialogVisible: false,
       isShowInventoryDialogVisible: false,
       currentItem: {},
       key: 0,

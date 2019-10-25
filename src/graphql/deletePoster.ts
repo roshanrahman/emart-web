@@ -12,9 +12,6 @@ export let deletePosterMutation = gql`
           id
         }
         posterImage
-        vendor {
-          id
-        }
       }
     }
   }

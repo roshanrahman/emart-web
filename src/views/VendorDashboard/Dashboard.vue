@@ -91,6 +91,18 @@
               <v-list-item-title>Your Inventory</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <v-list-item
+            value="vendor-posters"
+            color="primary"
+            @click="routeTo('vendor-posters')"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-gift</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Offer Posters</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <v-divider class="my-4"></v-divider>
 
           <v-subheader class="mt-4 grey--text text--darken-1">PROFILE</v-subheader>
@@ -104,6 +116,18 @@
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title>Your Profile</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item
+            value="vendor-stats"
+            @click="routeTo('vendor-stats')"
+            color="primary"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-chart-line</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Your Stats</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <!-- <v-list-item

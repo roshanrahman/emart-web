@@ -17,28 +17,14 @@
       </v-btn>
     </v-row>
     <h2 class=" body-1 mt-2">
-      View all offer posters/featured products on the platform
+      Manage your offer posters/featured products on the platform
     </h2>
 
     <v-divider class="my-8"></v-divider>
-    <v-row align="center">
-
-      <v-btn
-        outlined
-        rounded
-        text
-        color="primary"
-        @click="isAddPosterDialogVisible = true; key = key + 1;"
-      >
-        <v-icon left>mdi-plus</v-icon>
-        Add new poster
-      </v-btn>
-
-    </v-row>
 
     <v-row class="mt-8">
       <v-data-table
-        :items="!!getPosters ? getPosters : []"
+        :items="!!getPosters ? onlyVendorPosters : []"
         :headers="headers"
         :loading="$apollo.loading"
         loading-text="Fetching data, please wait..."
@@ -343,11 +329,11 @@
         <v-divider></v-divider>
         <v-card-text class="mt-4">
           <h1 class="title primary--text text-center">Offer Posters</h1>
-          <h2 class="body-2 grey--text text-center mb-4">Allows you to view and manage the offer posters put up by all the vendors</h2>
+          <h2 class="body-2 grey--text text-center mb-4">Allows you to view and manage the offer posters put up by you.</h2>
           <h3>Available Functions: </h3>
           <h4>Offer Posters Table</h4>
           <ul>
-            <li>Fetches all the offer posters uploaded by all the vendors.</li>
+            <li>Fetches all the offer posters uploaded by you.</li>
             <li>You can sort by clicking on the field headings.</li>
           </ul>
           <h4>Delete Poster</h4>
@@ -383,6 +369,15 @@ export default Vue.extend({
   computed: {
     loggedInUser: function () {
       return new LoginSessionHandler()
+    },
+    onlyVendorPosters: function () {
+      if (!!this.getPosters == false) {
+        return [];
+      }
+      var l = [];
+      return this.getPosters.filter((poster) => {
+        return poster.vendor.id == this.loggedInUser.id;
+      });
     }
   },
 
@@ -392,10 +387,6 @@ export default Vue.extend({
         {
           text: 'Image',
           value: 'image'
-        },
-        {
-          text: 'Posted by',
-          value: 'vendor.storeName'
         },
 
         {
@@ -411,11 +402,11 @@ export default Vue.extend({
       getAllInventory: {},
       isAddPosterDialogVisible: false,
       isErrorDialogVisible: false,
-      isHelpDialogVisible: false,
       isEditInventoryDialogVisible: false,
       isDeletePosterDialogVisible: false,
       isShowInventoryDialogVisible: false,
       isItemDetailDialogVisible: false,
+      isHelpDialogVisible: false,
       currentItem: {},
       key: 0,
       error: {

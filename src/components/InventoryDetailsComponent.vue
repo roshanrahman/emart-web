@@ -3,101 +3,144 @@
     class="mx-auto pa-4"
     elevation="0"
   >
-    <v-row>
-      <v-col
-        cols="12"
-        md="4"
-      >
-
-        <v-img
+    <v-card
+      class="pa-4 my-4"
+      outlined
+      style="border-radius:8px;"
+    >
+      <h3 class="subtitle-2 grey--text">Product Name</h3>
+      <h1 class="title"> {{ inventoryItem.name }}</h1>
+    </v-card>
+    <v-card
+      class="pa-4 my-4"
+      outlined
+      style="border-radius:8px;"
+    >
+      <h3 class="subtitle-2 grey--text">Category</h3>
+      <h1 class="title"> {{ inventoryItem.category }}</h1>
+    </v-card>
+    <v-card
+      class="pa-4 my-4"
+      outlined
+      style="border-radius:8px;"
+    >
+      <h3 class="subtitle-2 grey--text">Images</h3>
+      <v-row>
+        <v-card
           v-for="url in JSON.parse(inventoryItem.imageUrl)"
           :key="url"
-          :src="url"
-          contain
-          class="mb-2"
-          max-height="800"
-        ></v-img>
+          class="ma-4 pa-4"
+          outlined
+        >
+          <a
+            :href="url"
+            target="_blank"
+          >
+            <v-img
+              :src="url"
+              max-height="400"
+              width="400"
+              contain
+            ></v-img>
+          </a>
+          <v-row
+            justify="center"
+            class="mt-4"
+          >
+            <a
+              :href="url"
+              target="_blank"
+            >View full image<v-icon
+                small
+                right
+              >mdi-open-in-new</v-icon></a>
+          </v-row>
+        </v-card>
+      </v-row>
+    </v-card>
+    <v-card
+      class="pa-4 my-4"
+      outlined
+      style="border-radius:8px;"
+    >
+      <h3 class="subtitle-2 grey--text">Pricing</h3>
+      <h1 class="title">₹ {{ inventoryItem.sellingPrice }}</h1>
+      <h1 class="title striked grey--text">₹ {{ inventoryItem.originalPrice }}</h1>
 
-      </v-col>
-      <v-col
-        cols="12"
-        md="8"
-      >
-        <v-list two-line>
+    </v-card>
+    <v-card
+      class="pa-4 my-4"
+      outlined
+      style="border-radius:8px;"
+    >
+      <h3 class="subtitle-2 grey--text">Quantity in stock</h3>
+      <h1 class="title">{{ inventoryItem.inStock }}</h1>
 
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-subtitle> Name </v-list-item-subtitle>
-              <v-list-item-title class="headline">{{ inventoryItem.name }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-subtitle> Category </v-list-item-subtitle>
-              <v-list-item-title class="headline">{{ inventoryItem.category }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-subtitle> Description </v-list-item-subtitle>
-              <h1 class="title">{{ inventoryItem.description }}</h1>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-subtitle> Pricing </v-list-item-subtitle>
-              <v-list-item-title>
-                <h1 class="headline primary--text">₹ {{ inventoryItem.sellingPrice }}</h1>
-                <h1 class="striked subtitle-1">₹ {{ inventoryItem.originalPrice }}</h1>
+    </v-card>
+    <v-card
+      class="pa-4 my-4"
+      outlined
+      style="border-radius:8px;"
+    >
+      <h3 class="subtitle-2 grey--text">Sold by</h3>
+      <h1 class="title">{{ inventoryItem.vendor.storeName }} ({{ inventoryItem.vendor.phoneNumber}})</h1>
+      <h1 class="title grey--text">{{ JSON.parse(inventoryItem.vendor.address).addressLine }}, {{ JSON.parse(inventoryItem.vendor.address).city }}</h1>
 
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-subtitle> Quantity in Stock </v-list-item-subtitle>
-              <v-list-item-title class="headline">{{ inventoryItem.inStock }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-divider class="my-4"></v-divider>
-          <v-list-item v-if="!!inventoryItem.vendor">
-            <v-list-item-content>
-              <v-list-item-subtitle> Sold by </v-list-item-subtitle>
-              <v-list-item-title class="headline">{{ inventoryItem.vendor.storeName }}</v-list-item-title>
-              <h1 class="subtitle-1">{{ JSON.parse(inventoryItem.vendor.address).addressLine }}, {{ JSON.parse(inventoryItem.vendor.address).city }}</h1>
+    </v-card>
+    <v-card
+      class="pa-4 my-4"
+      outlined
+      style="border-radius:8px;"
+    >
+      <h3 class="subtitle-2 grey--text">Description</h3>
+      <p>
+        {{inventoryItem.description}}
+      </p>
+    </v-card>
+    <v-card
+      class="pa-4 my-4"
+      outlined
+      style="border-radius:8px;"
+    >
+      <h3 class="subtitle-2 grey--text">Average Rating</h3>
+      <v-row class="pa-2">
 
-            </v-list-item-content>
-          </v-list-item>
-          <v-divider class="my-4"></v-divider>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title class="title primary--text">Average Rating</v-list-item-title>
-              <v-list-item-title class="headline"> {{ inventoryItem.averageRating }} / 5 </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-divider class="my-4"></v-divider>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title class="title primary--text">Reviews by customers</v-list-item-title>
-              <ReviewsComponent
-                class="mt-4"
-                :reviewId="inventoryItem == {} ? 0 : inventoryItem.id"
-              ></ReviewsComponent>
-            </v-list-item-content>
-          </v-list-item>
-          <v-divider class="my-4"></v-divider>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title class="title primary--text">Questions by customers</v-list-item-title>
-              <QuestionsComponent
-                class="mt-4"
-                :itemId="inventoryItem == {} ? 0 : inventoryItem.id"
-              ></QuestionsComponent>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-col>
-    </v-row>
+        <v-rating
+          :value="inventoryItem.averageRating"
+          readonly
+          color="primary"
+          dense=""
+          large=""
+        ></v-rating>
+        <h1 class="display-1 primary--text mx-6"> {{inventoryItem.averageRating }}/5</h1>
+
+      </v-row>
+    </v-card>
+    <v-divider class="mt-8"></v-divider>
+    <v-card
+      class="pa-4 my-4"
+      elevation="0"
+      style="border-radius:8px;"
+    >
+      <h3 class="title primary--text">Reviews by customers</h3>
+      <ReviewsComponent
+        class="mt-4"
+        :reviewId="inventoryItem == {} ? 0 : inventoryItem.id"
+      ></ReviewsComponent>
+    </v-card>
+    <v-divider class="mt-8"></v-divider>
+    <v-card
+      class="pa-4 my-4"
+      elevation="0"
+      style="border-radius:8px;"
+    >
+      <h3 class="title primary--text">Questions by customers</h3>
+      <QuestionsComponent
+        class="mt-4"
+        :item="inventoryItem == {} ? 0 : inventoryItem"
+      ></QuestionsComponent>
+    </v-card>
+
   </v-card>
 </template>
 
@@ -106,6 +149,18 @@ import QuestionsComponent from "./QuestionsComponent";
 import ReviewsComponent from "./ReviewsComponent";
 
 export default {
+  mounted () {
+    try {
+      var a = JSON.parse(this.inventoryItem.vendor.address);
+      var b = JSON.parse(this.inventoryItem.imageUrl);
+      if (!!this.inventoryItem.vendor.storeName == false) {
+        throw 'e';
+      }
+    } catch (error) {
+      console.error(error);
+      alert('The details of this item are incorrectly formatted and causing error. This could be due to empty fields, or incorrect inputs in the item details or the vendor details. Please ask the vendor to check if their profile data and item details are correct.')
+    }
+  },
   props: ['inventoryItem'],
   components: {
     QuestionsComponent,

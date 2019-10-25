@@ -2,17 +2,32 @@
   <v-card
     outlined
     tile
-    class="pa-12 ma-4"
+    class="pa-12"
   >
-    <h1 class=" display-1">Vendors</h1>
-    <h2 class=" body-1 my-4">View all registered vendors</h2>
+    <v-row justify="space-between">
+      <h1 class=" display-1 primary--text mx-2"><b>Vendors</b></h1>
+      <v-btn
+        icon
+        color="primary"
+        outlined
+        text
+        @click="isHelpDialogVisible = true;"
+      >
+        <v-icon>mdi-help-circle</v-icon>
+      </v-btn>
+    </v-row>
+    <h2 class=" body-1 mt-2">
+      View all registered vendors currently operating on the platform
+    </h2>
 
+    <v-divider class="my-8"></v-divider>
     <v-row class="mt-8">
       <v-data-table
         :items="approvedVendors"
         :headers="headers"
         :loading="$apollo.loading"
         loading-text="Fetching data, please wait..."
+        no-data-text="No vendors"
         :items-per-page="100"
       >
         <template v-slot:item.address="{
@@ -71,7 +86,7 @@
             <v-icon
               left
               color="success"
-            >mdi-checkbox-marked-circle</v-icon><span class="success--text">ACTIVE</span>
+            >mdi-checkbox-marked-circle</v-icon><span class="success--text">Active</span>
 
             <v-btn
               outlined
@@ -89,13 +104,21 @@
           }">
 
           <v-btn
-            outlined
             color="primary"
             small
             class="ml-4"
-            text
             rounded
             @click="currentVendor = item; isBankDetailsDialogVisible = true;"
+          >View Details</v-btn>
+        </template>
+        <template v-slot:item.vendorDetails="{
+          item
+          }">
+          <v-btn
+            small
+            color="primary"
+            rounded
+            @click="checkIfValidDetails(item); isVendorDetailsDialogVisible = true; currentVendor = item;"
           >View Details</v-btn>
         </template>
       </v-data-table>
@@ -290,6 +313,71 @@
         </v-img>
       </v-card>
     </v-dialog>
+    <v-dialog
+      v-model="isHelpDialogVisible"
+      max-width="600"
+    >
+      <v-card>
+        <v-card-title>
+          <v-flex>
+            Help
+          </v-flex>
+          <v-btn
+            text
+            color="primary"
+            @click="isHelpDialogVisible = false;"
+          >Close</v-btn>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text class="mt-4">
+          <h1 class="title primary--text text-center">All Vendors</h1>
+          <h2 class="body-2 grey--text text-center mb-4">Allows you to view and manage all the vendors operating on the platform</h2>
+          <h3>Available Functions: </h3>
+          <h4>View details</h4>
+          <ul>
+            <li>Click 'View Details' to open up all the details about a vendor, including shop and PAN card photos.</li>
+          </ul>
+          <h4>Block/Unblock Vendor</h4>
+          <ul>
+            <li>Blocking is a way to temporarily stop the vendor from operating on the platform.</li>
+            <li>Use the buttons to block or unblock the vendors. They will be informed of this status when they attempt to log in to the platform.</li>
+          </ul>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="isVendorDetailsDialogVisible"
+      fullscreen=""
+    >
+      <v-card>
+        <v-toolbar
+          color="primary"
+          dark
+        >
+          <v-toolbar-title>Details for {{ currentVendor.storeName }}
+
+          </v-toolbar-title>
+          <div class="flex-grow-1"></div>
+          <v-toolbar-items>
+            <v-btn
+              icon
+              @click="isVendorDetailsDialogVisible = false;"
+            >
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <v-row justify="center">
+          <v-col
+            cols="12"
+            md="8"
+            lg="6"
+          >
+            <VendorDetailsComponent :vendor="currentVendor"></VendorDetailsComponent>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -299,11 +387,14 @@ import Vue from "vue";
 import { LoginSessionHandler } from '../../helpers/loginSessionHandler';
 import { getAllVendors } from "../../graphql/getAllVendors";
 import { disableVendorAccountMutation } from "../../graphql/disableVendorAccountMutation";
-
+import VendorDetailsComponent from "../../components/VendorDetailsComponent";
 import { OrderStatuses } from '../../helpers/orderStatuses';
 import moment from "moment";
 
 export default Vue.extend({
+  components: {
+    VendorDetailsComponent
+  },
   computed: {
     loggedInUser: function () {
       return new LoginSessionHandler()
@@ -318,6 +409,16 @@ export default Vue.extend({
     }
   },
   methods: {
+    checkIfValidDetails: function (vendor) {
+      try {
+        var a = JSON.parse(vendor.address);
+        var b = JSON.parse(vendor.pancardPhotoUrls);
+      } catch (error) {
+        console.error(error);
+        alert('Error occured while processing the details. The details provided by the vendor are not correctly formatted. Please ask vendor to submit their application again.')
+      }
+
+    },
     computedStatus: function (status) {
 
       return OrderStatuses.resolveOrderStatus(status);
@@ -377,18 +478,16 @@ export default Vue.extend({
       });
     }
   },
-  components: {
-
-  },
-
   data () {
     return {
       isItemDetailDialogVisible: false,
       isBlockVendorDialogVisible: false,
       isUnblockVendorDialogVisible: false,
+      isVendorDetailsDialogVisible: false,
       isBankDetailsDialogVisible: false,
       isShopDialogVisible: false,
       isPanCardDialogVisible: false,
+      isHelpDialogVisible: false,
       currentVendor: {},
       getAllVendors: [],
       headers: [
@@ -412,17 +511,10 @@ export default Vue.extend({
           text: "GST Number",
           value: "vendorGSTNumber"
         },
+
         {
-          text: "Store Photo",
-          value: "shopPhoto"
-        },
-        {
-          text: "PAN Card Photos",
-          value: "panCard"
-        },
-        {
-          text: "Bank Details",
-          value: "bankDetails"
+          text: "Details",
+          value: "vendorDetails"
         },
         {
           text: "Blocked Status",

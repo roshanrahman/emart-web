@@ -19,6 +19,7 @@ export let getAllOrders = gql`
         }
         cartItems {
           id
+          itemStatus
           inventory {
             id
             name

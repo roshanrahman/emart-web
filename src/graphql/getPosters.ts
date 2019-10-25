@@ -3,6 +3,7 @@ import gql from "graphql-tag";
 export let getPosters = gql`
   query {
     getPosters {
+      id
       posterImage
       vendor {
         id

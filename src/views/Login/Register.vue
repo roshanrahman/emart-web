@@ -92,6 +92,7 @@
                       label="Password"
                       type="password"
                       required
+                      hint="At least 8 characters are required"
                       :rules="passwordValidationRules"
                       v-model="formInputs.passwordInput"
                     ></v-text-field>
@@ -316,8 +317,7 @@
                       chips
                       v-model="formInputs.panImagesInput"
                       label="PAN Scanned Images"
-                      persistent-hint=""
-                      hint="You can choose multiple images when the dialog opens"
+                      persistent-hint="Upload both front and back of your PAN Card. Select multiple items when the dialog opens."
                     ></v-file-input>
 
                   </v-form>
@@ -463,7 +463,8 @@
               <v-btn
                 color="primary"
                 class="mx-3"
-                @click="verifyOTP()"
+                :loading="isVerifying"
+                @click="verifyOTP(); isVerifying = true;"
               >Verify</v-btn>
             </v-row>
           </div>
@@ -502,7 +503,9 @@ export default Vue.extend({
       if (
         this.formInputs.phoneNumberInput != null &&
         this.formInputs.emailAddressInput != null &&
+        /.+@.+/.test(this.formInputs.emailAddressInput) != false &&
         this.formInputs.passwordInput != null &&
+        this.formInputs.passwordInput.length >= 8 &&
         this.formInputs.confirmPasswordInput == this.formInputs.passwordInput
       ) {
         return true;
@@ -513,6 +516,7 @@ export default Vue.extend({
       if (
         this.formInputs.storeNameInput != null &&
         this.formInputs.addressLineInput != null &&
+        this.formInputs.pincodeInput != null &&
         this.formInputs.cityInput != null &&
         this.formInputs.gstInput != null
       ) {
@@ -640,6 +644,7 @@ export default Vue.extend({
           //OTP Verification is successful
           vm.isOTPDialogVisible = false;
           vm.submitDetails();
+          vm.isVerifying = false;
         })
         .catch(function(error) {
           //OTP incorrect or some error
@@ -649,6 +654,7 @@ export default Vue.extend({
               "You entered an incorrect OTP, please enter the correct OTP."
             );
           }
+          vm.isVerifying = false;
         });
     },
     routeToLogin() {
@@ -714,40 +720,44 @@ export default Vue.extend({
       await this.$apollo
         .mutate({
           mutation: createVendorMutation,
-          variables() {
-            return {
-              storeName: this.formInputs.storeNameInput,
+          variables: {
+            storeName: this.formInputs.storeNameInput,
+            phoneNumber: this.formInputs.phoneNumberInput,
+            email: this.formInputs.emailAddressInput,
+            password: this.formInputs.passwordInput,
+            pancardPhotoUrls: JSON.stringify(panPhotoUrls),
+            shopPhotoUrl: shopPhotoUrl,
+            address: {
+              name: this.formInputs.storeNameInput,
+              addressLine: this.formInputs.addressLineInput,
+              landmark: "null",
+              city: this.formInputs.cityInput,
               phoneNumber: this.formInputs.phoneNumberInput,
-              email: this.formInputs.emailAddressInput,
-              password: this.formInputs.passwordInput,
-              pancardPhotoUrls: JSON.stringify(panPhotoUrls),
-              shopPhotoUrl: shopPhotoUrl,
-              address: {
-                name: this.formInputs.storeNameInput,
-                addressLine: this.formInputs.addressLineInput,
-                pinCode: this.formInputs.pincodeInput,
-                landmark: "null",
-                city: this.formInputs.cityInput,
-                phoneNumber: this.formInputs.phoneNumberInput
-              },
-              bankAccountName: this.formInputs.bankAccountHolderInput,
-              bankAccountIFSC: this.formInputs.bankIFSCInput,
-              bankAccountNumber: this.formInputs.bankAccountNumberInput,
-              vendorGSTNumber: this.formInputs.gstInput
-            };
+              pinCode: this.formInputs.pincodeInput
+            },
+            bankAccountName: this.formInputs.bankAccountHolderInput,
+            bankAccountIFSC: this.formInputs.bankIFSCInput,
+            bankAccountNumber: this.formInputs.bankAccountNumberInput,
+            vendorGSTNumber: this.formInputs.gstInput
           }
         })
-        .then(data => {
-          console.log("Returned from mutation: ", data);
-          if (data.errors == null) {
-            localStorage.setItem(
-              "apollo-token",
-              data.data.createVendor.jwtToken
-            );
-            this.isSubmitDialogVisible = false;
-            this.isSuccessDialogVisible = true;
+        .then(
+          data => {
+            console.log("Returned from mutation: ", data);
+            if (data.errors == null) {
+              localStorage.setItem(
+                "apollo-token",
+                data.data.createVendor.jwtToken
+              );
+              this.isSubmitDialogVisible = false;
+              this.isSuccessDialogVisible = true;
+            }
+          },
+          error => {
+            console.error("Error during mutation: ", error);
+            alert("There was an error: " + error);
           }
-        });
+        );
     }
   },
   data: () => ({
@@ -758,6 +768,7 @@ export default Vue.extend({
     panPhotoUrls: [],
     shopPhotoUrl: null,
     OTPInput: null,
+    isVerifying: false,
     isPhoneAvailable: false,
     isEmailAvailable: false,
     isBankAccountAvailable: false,
@@ -788,7 +799,9 @@ export default Vue.extend({
     ],
     passwordValidationRules: [
       v => !!v || "Password is required",
-      v => (v != null && v.length > 7) || "Password length is short"
+      v =>
+        (v != null && v.length > 7) ||
+        "Password length is short (min 8 characters)"
     ],
     confirmPasswordValidationRules: [v => !!v || "Password is required"],
     storeNameValidationRules: [v => !!v || "Store name is required"],
