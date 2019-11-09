@@ -374,8 +374,8 @@ export default {
         return [];
       }
       orders = orders.filter(order => {
-        return order.status == 'PLACED_BY_CUSTOMER' ||
-          order.status == 'RECEIVED_BY_STORE'
+        return ((order.status == 'PLACED_BY_CUSTOMER' || order.status == 'RECEIVED_BY_STORE') && (order.transactionSuccess == true || order.paymentMode == 'Cash On Delivery'));
+
       });
       return orders;
     }

@@ -209,7 +209,7 @@ export default {
       }
       navigator.clipboard.writeText(text).then(function () {
         console.log('Async: Copying to clipboard was successful!');
-        alert('Bank details copied. Now you can paste anywhere');
+        alert('Details copied. Now you can paste anywhere');
       }, function (err) {
         console.error('Async: Could not copy text: ', err);
       });

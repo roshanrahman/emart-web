@@ -23,6 +23,7 @@ export let getAllVendors = gql`
       bankAccountName
       bankAccountIFSC
       bankAccountNumber
+      vendorGSTNumber
     }
   }
 `;

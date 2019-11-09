@@ -426,10 +426,7 @@ export default Vue.extend({
         return [];
       }
       orders = orders.filter(order => {
-        return order.status == 'PLACED_BY_CUSTOMER' ||
-          order.status == 'RECEIVED_BY_STORE' ||
-          order.status == 'PICKED_UP' ||
-          (order.transactionSuccess == false && order.status == 'DELIVERED_AND_PAID')
+        return ((order.status == 'PLACED_BY_CUSTOMER' || order.status == 'PICKED_UP' || order.status == 'RECEIVED_BY_STORE') && (order.transactionSuccess == true || order.paymentMode == 'Cash On Delivery'));
       });
       return orders;
     }

@@ -210,9 +210,9 @@
                 class="mt-4 px-4"
                 elevation="0"
               >
-                <v-row> <span class="title primary--text"> {{ computedStatus(item.itemStatus).short }}</span>
+                <v-row> <span class="title primary--text"> {{ computedStatusForVendor(item.itemStatus).short }}</span>
                 </v-row>
-                <v-row><span class="subtitle-1 grey--text"> {{ computedStatus(item.itemStatus).long }}</span></v-row>
+                <v-row><span class="subtitle-1 grey--text"> {{ computedStatusForVendor(item.itemStatus).long }}</span></v-row>
               </v-card>
               <v-spacer></v-spacer>
 
@@ -378,8 +378,7 @@ export default {
         return [];
       }
       orders = orders.filter(order => {
-        return order.status == 'PLACED_BY_CUSTOMER' ||
-          order.status == 'RECEIVED_BY_STORE'
+        return ((order.status == 'PLACED_BY_CUSTOMER' || order.status == 'RECEIVED_BY_STORE') && (order.transactionSuccess == true || order.paymentMode == 'Cash On Delivery'));
       });
       return orders;
     }

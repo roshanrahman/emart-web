@@ -92,7 +92,7 @@
                       label="Password"
                       type="password"
                       required
-                      hint="At least 8 characters are required"
+                      hint="At least 6 characters are required"
                       :rules="passwordValidationRules"
                       v-model="formInputs.passwordInput"
                     ></v-text-field>
@@ -168,7 +168,12 @@
                       :rules="addressLineValidationRules"
                     >
                     </v-textarea>
-
+                    <v-textarea
+                      filled=""
+                      label="Landmark"
+                      v-model="formInputs.landmarkInput"
+                    >
+                    </v-textarea>
                     <v-text-field
                       filled=""
                       label="City"
@@ -365,13 +370,20 @@
                       filled=""
                       display-size
                       accept="image/*"
-                      multiple
                       chips
-                      v-model="formInputs.panImagesInput"
-                      label="PAN Scanned Images"
-                      persistent-hint="Upload both front and back of your PAN Card. Select multiple items when the dialog opens."
+                      v-model="formInputs.panImage1Input"
+                      label="PAN Scanned Image - Front"
+                      persistent-hint="Upload the front of the PAN Card"
                     ></v-file-input>
-
+                    <v-file-input
+                      filled=""
+                      display-size
+                      accept="image/*"
+                      chips
+                      v-model="formInputs.panImage2Input"
+                      label="PAN Scanned Image - Back"
+                      persistent-hint="Upload the back of the PAN Card"
+                    ></v-file-input>
                   </v-form>
                 </v-col>
                 <v-divider class="my-4"></v-divider>
@@ -557,7 +569,7 @@ export default Vue.extend({
         this.formInputs.emailAddressInput != null &&
         /.+@.+/.test(this.formInputs.emailAddressInput) != false &&
         this.formInputs.passwordInput != null &&
-        this.formInputs.passwordInput.length >= 8 &&
+        this.formInputs.passwordInput.length >= 6 &&
         this.formInputs.confirmPasswordInput == this.formInputs.passwordInput
       ) {
         return true;
@@ -589,7 +601,8 @@ export default Vue.extend({
     },
     page4Complete: function() {
       if (
-        this.formInputs.panImagesInput != null &&
+        this.formInputs.panImage1Input != null &&
+        this.formInputs.panImage2Input != null &&
         this.formInputs.shopImageInput != null
       ) {
         return true;
@@ -733,6 +746,11 @@ export default Vue.extend({
       this.submissionProgressMessage = "Uploading your images (Step 1/2)";
       var storageRef = firebase.storage().ref();
       var shopPhotoRef = storageRef.child(`${userPhone}/shop.jpg`);
+      this.formInputs.panImagesInput = [];
+      this.formInputs.panImagesInput = [
+        this.formInputs.panImage1Input,
+        this.formInputs.panImage2Input
+      ];
       await this.formInputs.panImagesInput.forEach(async (image, i) => {
         var panPhotoRef = storageRef.child(`${userPhone}/pan${i}.jpg`);
         var uploadTask = panPhotoRef.put(image);
@@ -783,7 +801,7 @@ export default Vue.extend({
             address: {
               name: this.formInputs.storeNameInput,
               addressLine: this.formInputs.addressLineInput,
-              landmark: "null",
+              landmark: this.formInputs.landmarkInput,
               city: this.formInputs.cityInput,
               phoneNumber: this.formInputs.addressPhoneInput,
               pinCode: this.formInputs.pincodeInput
@@ -836,6 +854,7 @@ export default Vue.extend({
       confirmPasswordInput: null,
       storeNameInput: null,
       addressLineInput: null,
+      landmarkInput: null,
       addressPhoneInput: null,
       pincodeInput: null,
       shopImageInput: null,
@@ -848,7 +867,9 @@ export default Vue.extend({
       paytmNameInput: null,
       paytmNumberInput: null,
       alternatePhone1Input: null,
-      alternatePhone2Input: null
+      alternatePhone2Input: null,
+      panImage1Input: null,
+      panImage2Input: null
     },
     passwordsMatch: true,
     phoneNumberValidationRules: [
@@ -862,8 +883,8 @@ export default Vue.extend({
     passwordValidationRules: [
       v => !!v || "Password is required",
       v =>
-        (v != null && v.length > 7) ||
-        "Password length is short (min 8 characters)"
+        (v != null && v.length > 5) ||
+        "Password length is short (min 6 characters)"
     ],
     confirmPasswordValidationRules: [v => !!v || "Password is required"],
     storeNameValidationRules: [v => !!v || "Store name is required"],

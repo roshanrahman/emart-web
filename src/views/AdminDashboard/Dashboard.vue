@@ -268,7 +268,8 @@ export default Vue.extend({
       console.log(ordersList);
       var count = 0;
       ordersList.forEach(order => {
-        if (order.status == "PLACED_BY_CUSTOMER" || order.status == 'RECEIVED_BY_STORE' || order.status == 'PICKED_UP') {
+        if (((order.status == 'PLACED_BY_CUSTOMER' || order.status == 'PICKED_UP' || order.status == 'RECEIVED_BY_STORE') && (order.transactionSuccess == true || order.paymentMode == 'Cash On Delivery'))
+        ) {
           count += 1;
         }
       });
@@ -285,7 +286,7 @@ export default Vue.extend({
       console.log(ordersList);
       var count = 0;
       ordersList.forEach(order => {
-        if (order.status == "PLACED_BY_CUSTOMER" || order.status == 'RECEIVED_BY_STORE' || order.status == 'PICKED_UP') {
+        if (((order.status == 'PLACED_BY_CUSTOMER' || order.status == 'RECEIVED_BY_STORE') && (order.transactionSuccess == true || order.paymentMode == 'Cash On Delivery'))) {
           count += 1;
         }
       });

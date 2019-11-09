@@ -211,12 +211,18 @@
           </v-toolbar-items>
         </v-toolbar>
         <v-card-text class="pa-8">
-
-          <InventoryDetailsComponent
-            :inventoryItem="currentItem"
-            :key="currentItem.id"
-          ></InventoryDetailsComponent>
-
+          <v-row justify="center">
+            <v-col
+              cols="12"
+              md="8"
+              lg="6"
+            >
+              <InventoryDetailsComponent
+                :inventoryItem="currentItem"
+                :key="currentItem.id"
+              ></InventoryDetailsComponent>
+            </v-col>
+          </v-row>
         </v-card-text>
       </v-card>
     </v-dialog>

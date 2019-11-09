@@ -31,6 +31,38 @@
       <v-row class="ml-2">
         <h2 class="subtitle-1 mt-2"> {{ review.text }} </h2>
       </v-row>
+      <v-row>
+        <v-card
+          v-for="url in JSON.parse(review.images)"
+          :key="url"
+          class="ma-4 pa-4"
+          outlined
+        >
+          <a
+            :href="url"
+            target="_blank"
+          >
+            <v-img
+              :src="url"
+              max-height="200"
+              width="200"
+              contain
+            ></v-img>
+          </a>
+          <v-row
+            justify="center"
+            class="mt-4"
+          >
+            <a
+              :href="url"
+              target="_blank"
+            >View full image<v-icon
+                small
+                right
+              >mdi-open-in-new</v-icon></a>
+          </v-row>
+        </v-card>
+      </v-row>
     </v-card>
 
   </div>
