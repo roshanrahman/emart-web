@@ -35,7 +35,7 @@
         <v-icon left>mdi-pencil</v-icon>
         Edit details
       </v-btn>
-      <v-btn
+      <!-- <v-btn
         class="mx-2"
         outlined
         rounded
@@ -45,7 +45,7 @@
       >
         <v-icon left>mdi-key-variant</v-icon>
         Change Password
-      </v-btn>
+      </v-btn> -->
     </v-row>
     <v-row class="mt-8">
       <v-col
