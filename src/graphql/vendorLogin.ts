@@ -19,6 +19,11 @@ export let vendorLogin = gql`
         bankAccountIFSC
         bankAccountNumber
         vendorGSTNumber
+        amountToPay
+        alternativePhone1
+        alternativePhone2
+        paytmName
+        paytmNumber
       }
       error {
         path

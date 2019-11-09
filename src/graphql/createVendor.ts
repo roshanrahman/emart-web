@@ -13,6 +13,10 @@ export var createVendorMutation = gql`
     $bankAccountIFSC: String
     $bankAccountNumber: String
     $vendorGSTNumber: String
+    $paytmName: String
+    $paytmNumber: String
+    $alternativePhone1: String
+    $alternativePhone2: String
   ) {
     createVendor(
       storeName: $storeName
@@ -26,6 +30,10 @@ export var createVendorMutation = gql`
       bankAccountIFSC: $bankAccountIFSC
       bankAccountNumber: $bankAccountNumber
       vendorGSTNumber: $vendorGSTNumber
+      paytmName: $paytmName
+      paytmNumber: $paytmNumber
+      alternativePhone1: $alternativePhone1
+      alternativePhone2: $alternativePhone2
     ) {
       user {
         id
@@ -33,8 +41,14 @@ export var createVendorMutation = gql`
         phoneNumber
         address
         email
+        fcmToken
         storeName
         blocked
+        amountToPay
+        alternativePhone1
+        alternativePhone2
+        paytmName
+        paytmNumber
         pancardPhotoUrls
         shopPhotoUrl
         admin

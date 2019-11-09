@@ -129,6 +129,16 @@ import { LoginSessionHandler } from "../../helpers/loginSessionHandler";
 import { ErrorCodes } from "../../helpers/errorCodes";
 
 export default Vue.extend({
+  mounted() {
+    if (LoginSessionHandler.isLoggedIn()) {
+      var user = new LoginSessionHandler();
+      if (user.isAdmin) {
+        this.$router.replace("/admin");
+      } else {
+        this.$router.replace("/vendor");
+      }
+    }
+  },
   computed: {
     isValidated: function() {
       return !!this.usernameInput && !!this.passwordInput;

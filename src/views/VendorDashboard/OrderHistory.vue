@@ -397,21 +397,23 @@ export default Vue.extend({
       return moment(date).format('DD/MM/YYYY h:mm:ss A');
     },
     async runDownloadDataMutation () {
-      await this.$apollo.mutate({
-        mutation: downloadDataMutation,
-        variables: {
-          startDate: this.startDate,
-          endDate: this.endDate
-        }
-      }).then((result) => {
-        console.log('Returned from mutation: ', result);
-        this.download(`OrderHistory from ${this.startDate} to ${this.endDate}.csv`, result.data.downloadData);
-        this.isDownloadDataDialogVisible = false;
-      }, (error) => {
-        console.error(error);
-        alert(error);
-      });
-    }
+      // await this.$apollo.mutate({
+      //   mutation: downloadDataMutation,
+      //   variables: {
+      //     startDate: this.startDate,
+      //     endDate: this.endDate
+      //   }
+      // }).then((result) => {
+      //   console.log('Returned from mutation: ', result);
+      //   this.download(`OrderHistory from ${this.startDate} to ${this.endDate}.csv`, result.data.downloadData);
+      //   this.isDownloadDataDialogVisible = false;
+      // }, (error) => {
+      //   console.error(error);
+      //   alert(error);
+      // });
+      var vendorId = this.loggedInUser.id;
+      window.open(`http://cezhop.herokuapp.com/downloadCSV?vendorId=${vendorId}&startDate=${this.startDate}&endDate=${this.endDate}`);
+      this.isDownloadDataDialogVisible = false;    }
   },
   components: {
 

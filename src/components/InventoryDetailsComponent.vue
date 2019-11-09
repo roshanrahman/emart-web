@@ -82,6 +82,17 @@
       outlined
       style="border-radius:8px;"
     >
+      <h3 class="subtitle-2 grey--text">Dimensions</h3>
+      <h1 class="title">Length: {{ inventoryItem['length'] }} cm</h1>
+      <h1 class="title">Breadth: {{ inventoryItem.breadth }} cm</h1>
+      <h1 class="title">Height: {{ inventoryItem.height }} cm</h1>
+    </v-card>
+
+    <v-card
+      class="pa-4 my-4"
+      outlined
+      style="border-radius:8px;"
+    >
       <h3 class="subtitle-2 grey--text">Sold by</h3>
       <h1 class="title">{{ inventoryItem.vendor.storeName }} ({{ inventoryItem.vendor.phoneNumber}})</h1>
       <h1 class="title grey--text">{{ JSON.parse(inventoryItem.vendor.address).addressLine }}, {{ JSON.parse(inventoryItem.vendor.address).city }}</h1>

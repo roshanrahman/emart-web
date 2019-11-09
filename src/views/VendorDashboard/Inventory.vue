@@ -21,10 +21,24 @@
     </h2>
 
     <v-divider class="my-8"></v-divider>
+    <v-row align="center">
+      <v-btn
+        outlined
+        rounded
+        text
+        color="primary"
+        @click="isAddInventoryDialogVisible = true; key = key + 1;"
+      >
+        <v-icon left>mdi-plus</v-icon>
+        Add new item
+      </v-btn>
+      <v-spacer></v-spacer>
+
+    </v-row>
 
     <v-row class="mt-8">
       <v-data-table
-        :items="getVendorInventory.inventory"
+        :items="!!getVendorInventory.inventory ? getVendorInventory.inventory : []"
         :headers="headers"
         :loading="$apollo.loading"
         no-data-text="No items found"

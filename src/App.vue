@@ -3,6 +3,44 @@
     <v-app>
       <v-content>
         <router-view></router-view>
+        <v-dialog
+          v-model="showDialog"
+          fullscreen
+        >
+          <v-card>
+            <v-card-title class="pt-4 display-1 font-weight-light primary--text">
+              Are you on mobile? We have an app for your device.
+            </v-card-title>
+            <v-card-text>
+              <h1 class="font-weight-regular subtitle-1 mt-4"> For the best experience on your mobile device, we recommend that you use the mobile app.
+              </h1>
+              <v-spacer></v-spacer>
+            </v-card-text>
+
+            <v-card-actions>
+
+              <v-col>
+                <v-row class="mx-2">
+                  <v-btn
+                    block
+                    rounded
+                    color="primary"
+                  >Download app</v-btn>
+                </v-row>
+                <v-row class="mt-4 mx-2">
+                  <v-btn
+                    block
+                    rounded
+                    outlined=""
+                    text
+                    color="primary"
+                    @click="showDialog = false;"
+                  >Maybe later</v-btn>
+                </v-row>
+              </v-col>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-bottom-sheet
           v-model="isOfflineDialogVisible"
           persistent
@@ -43,6 +81,9 @@ import gql from "graphql-tag";
 
 export default Vue.extend({
   name: "App",
+  mounted() {
+    this.showDialog = this.$vuetify.breakpoint.xsOnly;
+  },
   components: {
     Login,
     Register
@@ -66,7 +107,8 @@ export default Vue.extend({
     }
   },
   data: () => ({
-    checkNetwork: "connected"
+    checkNetwork: "connected",
+    showDialog: true
   }),
   methods: {}
 });

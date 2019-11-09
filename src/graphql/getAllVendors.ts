@@ -8,8 +8,14 @@ export let getAllVendors = gql`
       phoneNumber
       address
       email
+      fcmToken
       storeName
       blocked
+      amountToPay
+      alternativePhone1
+      alternativePhone2
+      paytmName
+      paytmNumber
       pancardPhotoUrls
       shopPhotoUrl
       admin
@@ -17,7 +23,6 @@ export let getAllVendors = gql`
       bankAccountName
       bankAccountIFSC
       bankAccountNumber
-      vendorGSTNumber
     }
   }
 `;

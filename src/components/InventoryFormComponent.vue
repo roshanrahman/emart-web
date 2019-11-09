@@ -173,7 +173,8 @@
                 type="number"
                 v-model.number="sellingPriceInput"
                 :rules="formRules.sellingPriceRules"
-                hint="The product will be sold at this price"
+                persistent-hint=""
+                hint="The product will be sold at this price. 11% of this price will be deducted by the BeShoppi platform."
               ></v-text-field>
             </v-col>
             <v-fade-transition>
@@ -191,8 +192,13 @@
                     <h1 class="caption grey--text">This is how the price will be displayed</h1>
                   </v-card-title>
                   <v-card-text>
-                    <h1 class="title primary--text">₹ {{ sellingPriceInput }}</h1>
                     <h2 class="subtitle-2 striked red--text text--accent-1">₹ {{ originalPriceInput }}</h2>
+                    <h1 class="title primary--text">₹ {{ sellingPriceInput }}</h1>
+                    <h1 class="caption grey--text"> - ₹{{sellingPriceInput * 0.11 }} (11%)</h1>
+                    <v-divider class="my-2"></v-divider>
+                    <h1 class="title black--text">₹ {{ sellingPriceInput - (sellingPriceInput * 0.11) }}</h1>
+                    <h1 class="caption grey--text">This will be your income from this product</h1>
+
                   </v-card-text>
                 </v-card>
 
@@ -207,6 +213,31 @@
             type="number"
             v-model.number="quantityInput"
             :rules="formRules.quantityRules"
+          ></v-text-field>
+          <h1 class="subtitle-2 my-4  grey--text">Dimensions (in cm)</h1>
+          <v-text-field
+            filled
+            label="Length (in cm)"
+            single-line=""
+            type="number"
+            v-model.number="lengthInput"
+            :rules="formRules.dimensionsRules"
+          ></v-text-field>
+          <v-text-field
+            filled
+            label="Breadth (in cm)"
+            single-line=""
+            type="number"
+            v-model.number="breadthInput"
+            :rules="formRules.dimensionsRules"
+          ></v-text-field>
+          <v-text-field
+            filled
+            label="Height (in cm)"
+            single-line=""
+            type="number"
+            v-model.number="heightInput"
+            :rules="formRules.dimensionsRules"
           ></v-text-field>
           <v-divider class="mb-4 mt-8"></v-divider>
           <v-row class="mx-2">
@@ -302,15 +333,16 @@ export default {
     },
     handleFormSubmit () {
       this.$refs.form.validate();
-      if (!!this.imageURLInput.length < 1) {
-        this.error.title = "Product photo not provided";
-        this.error.text = "Please upload an image for the product photo."
-        this.isErrorDialogVisible = true;
-        return;
-      }
+
       if (!this.isFormValid) {
         this.error.title = "Please provide the required details";
         this.error.text = "The details are incomplete. Please fill the form."
+        this.isErrorDialogVisible = true;
+        return;
+      }
+      if (!this.selectedCategory) {
+        this.error.title = "Please provide the product category";
+        this.error.text = "The details are incomplete. Please select the category of the product."
         this.isErrorDialogVisible = true;
         return;
       }
@@ -319,6 +351,12 @@ export default {
         if (!!element)
           correctImageUrls.push(element);
       });
+      if (correctImageUrls.length < 1) {
+        this.error.title = "Product photo not provided";
+        this.error.text = "Please upload an image for the product photo."
+        this.isErrorDialogVisible = true;
+        return;
+      }
       var inventoryObj = {
         name: this.nameInput,
         description: this.descriptionInput,
@@ -326,7 +364,10 @@ export default {
         sellingPrice: this.sellingPriceInput,
         category: this.selectedCategory,
         inStock: this.quantityInput,
-        imageUrl: JSON.stringify(correctImageUrls)
+        imageUrl: JSON.stringify(correctImageUrls),
+        length: this.lengthInput,
+        breadth: this.breadthInput,
+        height: this.heightInput
       };
       this.$emit('submit', inventoryObj);
       this.$refs.form.reset();
@@ -358,13 +399,18 @@ export default {
         sellingPriceRules: [v => !!v || 'Selling Price is required',
         v => this.sellingPriceInput <= this.originalPriceInput || 'Selling price cannot be greater than original price'],
         quantityRules: [v => !!v || 'Quantity is required',
-        v => v > 0 || 'Quantity must be a positive value']
+        v => v > 0 || 'Quantity must be a positive value'],
+        dimensionsRules: [v => !!v || 'Proper dimension is required',
+        v => v > 0 || 'Dimension must be a positive value'],
       },
       nameInput: !!this.existingItem ? this.existingItem.name : '',
       descriptionInput: !!this.existingItem ? this.existingItem.description : '',
       originalPriceInput: !!this.existingItem ? this.existingItem.originalPrice : null,
       sellingPriceInput: !!this.existingItem ? this.existingItem.sellingPrice : null,
       quantityInput: !!this.existingItem ? this.existingItem.inStock : null,
+      lengthInput: !!this.existingItem ? this.existingItem['length'] : null,
+      breadthInput: !!this.existingItem ? this.existingItem.breadth : null,
+      heightInput: !!this.existingItem ? this.existingItem.height : null,
       imageURLInput: !!this.existingItem ? JSON.parse(this.existingItem.imageUrl) : [null, null, null, null, null],
       isFormValid: false,
       selectedCategory: !!this.existingItem ? this.existingItem.category : '',

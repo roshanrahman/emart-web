@@ -14,6 +14,10 @@ export class LoginSessionHandler {
   bankAccountIFSC;
   bankAccountNumber;
   vendorGSTNumber;
+  paytmName;
+  paytmNumber;
+  alternativePhone1;
+  alternativePhone2;
   constructor() {
     if (!!localStorage.getItem("loginInfo")) {
       var jsonString = localStorage.getItem("loginInfo");
@@ -33,6 +37,10 @@ export class LoginSessionHandler {
       this.bankAccountIFSC = object.bankAccountIFSC;
       this.bankAccountNumber = object.bankAccountNumber;
       this.vendorGSTNumber = object.vendorGSTNumber;
+      this.paytmName = object.paytmName;
+      this.paytmNumber = object.paytmNumber;
+      this.alternativePhone1 = object.alternativePhone1;
+      this.alternativePhone2 = object.alternativePhone2;
     }
   }
   static setLogin(jsonString, jwt) {

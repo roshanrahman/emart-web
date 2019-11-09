@@ -248,7 +248,7 @@ export default Vue.extend({
       this.$router.replace("/");
     },
     routeTo (item) {
-      this.$router.replace(item);
+      this.$router.push(item);
       this.selectedDrawerItem = item;
     }
   }

@@ -10,6 +10,7 @@ export let getReviews = gql`
         date
         rating
         text
+        images
         customer {
           id
           name

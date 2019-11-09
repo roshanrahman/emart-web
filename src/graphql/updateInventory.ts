@@ -10,6 +10,9 @@ export let updateInventoryMutation = gql`
     $category: String
     $inStock: Float
     $imageUrl: String
+    $length: Float
+    $breadth: Float
+    $height: Float
   ) {
     updateInventory(
       inventoryId: $inventoryId
@@ -20,6 +23,9 @@ export let updateInventoryMutation = gql`
       category: $category
       inStock: $inStock
       imageUrl: $imageUrl
+      length: $length
+      breadth: $breadth
+      height: $height
     ) {
       error {
         message

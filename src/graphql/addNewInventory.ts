@@ -3,6 +3,9 @@ import gql from "graphql-tag";
 export let addNewInventoryMutation = gql`
   mutation(
     $name: String
+    $height: Float
+    $length: Float
+    $breadth: Float
     $description: String
     $originalPrice: Float
     $sellingPrice: Float
@@ -18,6 +21,9 @@ export let addNewInventoryMutation = gql`
       category: $category
       inStock: $inStock
       imageUrl: $imageUrl
+      height: $height
+      length: $length
+      breadth: $breadth
     ) {
       error {
         message
@@ -25,6 +31,9 @@ export let addNewInventoryMutation = gql`
       inventory {
         id
         name
+        length
+        breadth
+        height
         originalPrice
         sellingPrice
         description

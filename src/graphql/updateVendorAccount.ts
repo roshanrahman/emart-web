@@ -11,10 +11,16 @@ export var updateVendorAccountMutation = gql`
     $address: AddressType
     $approved: Boolean
     $password: String
-    $bankAccountName: String 
+    $bankAccountName: String
     $bankAccountIFSC: String
     $bankAccountNumber: String
     $vendorGSTNumber: String
+    $otpToken: String
+    $paytmName: String
+    $paytmNumber: String
+    $alternativePhone1: String
+    $alternativePhone2: String
+    $amountToPay: Float
   ) {
     updateVendorAccount(
       storeName: $storeName
@@ -30,6 +36,12 @@ export var updateVendorAccountMutation = gql`
       bankAccountIFSC: $bankAccountIFSC
       bankAccountNumber: $bankAccountNumber
       vendorGSTNumber: $vendorGSTNumber
+      otpToken: $otpToken
+      paytmName: $paytmName
+      paytmNumber: $paytmNumber
+      alternativePhone1: $alternativePhone1
+      alternativePhone2: $alternativePhone2
+      amountToPay: $amountToPay
     ) {
       jwtToken
       user {
@@ -48,6 +60,12 @@ export var updateVendorAccountMutation = gql`
         bankAccountIFSC
         bankAccountNumber
         vendorGSTNumber
+        otpToken
+        paytmName
+        paytmNumber
+        alternativePhone1
+        alternativePhone2
+        password
       }
       error {
         path

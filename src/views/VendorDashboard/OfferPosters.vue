@@ -21,6 +21,20 @@
     </h2>
 
     <v-divider class="my-8"></v-divider>
+    <v-row align="center">
+
+      <v-btn
+        outlined
+        rounded
+        text
+        color="primary"
+        @click="isAddPosterDialogVisible = true; key = key + 1;"
+      >
+        <v-icon left>mdi-plus</v-icon>
+        Add new poster
+      </v-btn>
+
+    </v-row>
 
     <v-row class="mt-8">
       <v-data-table

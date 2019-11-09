@@ -182,6 +182,25 @@
                       v-model="formInputs.pincodeInput"
                       :rules="pincodeValidationRules"
                     ></v-text-field>
+                    <v-divider></v-divider>
+                    <v-text-field
+                      filled=""
+                      label="Phone Number for customer support"
+                      v-model="formInputs.addressPhoneInput"
+                      :rules="phoneNumberValidationRules"
+                    ></v-text-field>
+                    <v-text-field
+                      filled=""
+                      label="Alternate Phone Number 1"
+                      v-model="formInputs.alternatePhone1Input"
+                      :rules="phoneNumberValidationRules"
+                    ></v-text-field>
+                    <v-text-field
+                      filled=""
+                      label="Alternate Phone Number 2"
+                      v-model="formInputs.alternatePhone2Input"
+                      :rules="phoneNumberValidationRules"
+                    ></v-text-field>
                   </v-form>
                 </v-col>
                 <h2 class="title mt-8">GST Number</h2>
@@ -276,10 +295,43 @@
                     ></v-text-field>
                   </v-form>
                 </v-col>
-                <v-divider>
+                <v-divider class="mb-6">
 
                 </v-divider>
+                <h2 class="title">PayTM Number</h2>
+                <h3 class="body-1">Please enter the number associated with your PayTM account</h3>
+                <v-col
+                  class="pa-0"
+                  cols="12"
+                  lg="6"
+                >
+                  <v-form class="mt-6">
+                    <v-text-field
+                      filled=""
+                      label="PayTM Number"
+                      v-model="formInputs.paytmNumberInput"
+                      :rules="paytmNumberValidationRules"
+                    ></v-text-field>
 
+                  </v-form>
+                </v-col>
+                <h2 class="title">PayTM Name</h2>
+                <h3 class="body-1">Please enter the name associated with your PayTM account</h3>
+                <v-col
+                  class="pa-0"
+                  cols="12"
+                  lg="6"
+                >
+                  <v-form class="mt-6">
+                    <v-text-field
+                      filled=""
+                      label="PayTM Name"
+                      v-model="formInputs.paytmNameInput"
+                      :rules="paytmNameValidationRules"
+                    ></v-text-field>
+
+                  </v-form>
+                </v-col>
                 <v-row
                   justify="space-between"
                   class="ma-2"
@@ -518,7 +570,8 @@ export default Vue.extend({
         this.formInputs.addressLineInput != null &&
         this.formInputs.pincodeInput != null &&
         this.formInputs.cityInput != null &&
-        this.formInputs.gstInput != null
+        this.formInputs.gstInput != null &&
+        this.formInputs.addressPhoneInput != null
       ) {
         return true;
       }
@@ -732,13 +785,17 @@ export default Vue.extend({
               addressLine: this.formInputs.addressLineInput,
               landmark: "null",
               city: this.formInputs.cityInput,
-              phoneNumber: this.formInputs.phoneNumberInput,
+              phoneNumber: this.formInputs.addressPhoneInput,
               pinCode: this.formInputs.pincodeInput
             },
             bankAccountName: this.formInputs.bankAccountHolderInput,
             bankAccountIFSC: this.formInputs.bankIFSCInput,
             bankAccountNumber: this.formInputs.bankAccountNumberInput,
-            vendorGSTNumber: this.formInputs.gstInput
+            vendorGSTNumber: this.formInputs.gstInput,
+            paytmName: this.formInputs.paytmNameInput,
+            paytmNumber: this.formInputs.paytmNumberInput,
+            alternativePhone1: this.formInputs.alternatePhone1Input,
+            alternativePhone2: this.formInputs.alternatePhone2Input
           }
         })
         .then(
@@ -779,6 +836,7 @@ export default Vue.extend({
       confirmPasswordInput: null,
       storeNameInput: null,
       addressLineInput: null,
+      addressPhoneInput: null,
       pincodeInput: null,
       shopImageInput: null,
       panImagesInput: null,
@@ -786,7 +844,11 @@ export default Vue.extend({
       gstInput: null,
       bankAccountHolderInput: null,
       bankAccountNumberInput: null,
-      bankIFSCInput: null
+      bankIFSCInput: null,
+      paytmNameInput: null,
+      paytmNumberInput: null,
+      alternatePhone1Input: null,
+      alternatePhone2Input: null
     },
     passwordsMatch: true,
     phoneNumberValidationRules: [
@@ -809,8 +871,10 @@ export default Vue.extend({
     cityValidationRules: [v => !!v || "City is required"],
     pincodeValidationRules: [v => !!v || "Pin Code is required"],
     bankAccountNumberValidationRules: [v => !!v || "A/C Number is required"],
-    bankAccountHolderValidationRules: [
-      v => !!v || "A/C Holder Name is required"
+    paytmNameValidationRules: [v => !!v || "PayTM Name is required"],
+    paytmNumberValidationRules: [
+      v => !!v || "PayTM Number is required",
+      v => (v != null && v.length >= 10) || "PayTM Number must be valid"
     ],
     bankIFSCValidationRules: [v => !!v || "IFSC Code is required"],
     GSTValidationRules: [v => !!v || "GST Number is required"],

@@ -429,7 +429,7 @@ export default Vue.extend({
         return order.status == 'PLACED_BY_CUSTOMER' ||
           order.status == 'RECEIVED_BY_STORE' ||
           order.status == 'PICKED_UP' ||
-          order.transactionSuccess == false && order.status != 'CANCELLED_BY_CUSTOMER'
+          (order.transactionSuccess == false && order.status == 'DELIVERED_AND_PAID')
       });
       return orders;
     }

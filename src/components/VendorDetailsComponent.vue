@@ -25,12 +25,27 @@
       outlined
       style="border-radius:8px;"
     >
+      <v-row
+        justify="space-between"
+        class="mx-2"
+      >
+        <h3 class="subtitle-2 grey--text">Address</h3>
+        <v-btn
+          text
+          @click="copyTextToClipboard(`Vendor: ${vendor.storeName}\nAddress: ${JSON.parse(vendor.address).addressLine}\n${JSON.parse(vendor.address).phoneNumber}\n${JSON.parse(vendor.address).city}\n${JSON.parse(vendor.address).pinCode}\nPhone Numbers:\n${JSON.parse(vendor.address).phoneNumber}\n${vendor.alternativePhone1}\n${vendor.alternativePhone2}`)"
+        >
+          <v-icon left>mdi-content-copy</v-icon> Copy
+        </v-btn>
+      </v-row>
       <h3 class="subtitle-2 grey--text">Address</h3>
       <h1 class="title">{{ `${JSON.parse(vendor.address).name}` }}</h1>
       <h1 class="title">{{ `${JSON.parse(vendor.address).addressLine}` }}</h1>
       <h1 class="title">{{ `${JSON.parse(vendor.address).phoneNumber}` }}</h1>
       <h1 class="title">{{ `${JSON.parse(vendor.address).city}` }}</h1>
       <h1 class="title">{{ `${JSON.parse(vendor.address).pinCode}` }}</h1>
+      <h3 class="subtitle-2 grey--text">Alternative Phone Numbers</h3>
+      <h1 class="title">{{ `${vendor.alternativePhone1}` }}</h1>
+      <h1 class="title">{{ `${vendor.alternativePhone2}` }}</h1>
 
     </v-card>
     <v-card
@@ -61,7 +76,7 @@
         <h3 class="subtitle-2 grey--text">Bank Details</h3>
         <v-btn
           text
-          @click="copyTextToClipboard(`Vendor: ${vendor.storeName}\nA/C Number: ${vendor.bankAccountNumber}\nA/C Holder Name: ${vendor.bankAccountName}\nIFSC Code: ${vendor.bankAccountIFSC}`)"
+          @click="copyTextToClipboard(`Vendor: ${vendor.storeName}\nA/C Number: ${vendor.bankAccountNumber}\nA/C Holder Name: ${vendor.bankAccountName}\nIFSC Code: ${vendor.bankAccountIFSC}\nPayTM Name: ${vendor.paytmName}\nPayTM Number: ${vendor.paytmNumber}`)"
         >
           <v-icon left>mdi-content-copy</v-icon> Copy
         </v-btn>
@@ -81,7 +96,14 @@
           <v-list-item-subtitle> Bank Account IFSC Code </v-list-item-subtitle>
           <h3 class="headline">{{ vendor.bankAccountIFSC }}</h3>
         </v-list-item-content>
-
+        <v-list-item-content>
+          <v-list-item-subtitle> PayTM Name </v-list-item-subtitle>
+          <h3 class="headline">{{ vendor.paytmName }}</h3>
+        </v-list-item-content>
+        <v-list-item-content>
+          <v-list-item-subtitle> PayTM Number </v-list-item-subtitle>
+          <h3 class="headline">{{ vendor.paytmNumber }}</h3>
+        </v-list-item-content>
       </v-list>
     </v-card>
     <v-card

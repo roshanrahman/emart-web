@@ -95,6 +95,20 @@
         </v-text-field>
         <v-text-field
           :disabled="isEditingDisabled"
+          label="Alternative Phone 1"
+          filled
+          v-model="alternativePhone1Input"
+        >
+        </v-text-field>
+        <v-text-field
+          :disabled="isEditingDisabled"
+          label="Alternative Phone 2"
+          filled
+          v-model="alternativePhone2Input"
+        >
+        </v-text-field>
+        <v-text-field
+          :disabled="isEditingDisabled"
           label="GST Number"
           filled
           v-model="GSTInput"
@@ -121,6 +135,20 @@
           label="A/C IFSC Code"
           filled
           v-model="bankAccountIFSCInput"
+        >
+        </v-text-field>
+        <v-text-field
+          :disabled="isEditingDisabled"
+          label="PayTM Name"
+          filled
+          v-model="paytmNameInput"
+        >
+        </v-text-field>
+        <v-text-field
+          :disabled="isEditingDisabled"
+          label="PayTM Number"
+          filled
+          v-model="paytmNumberInput"
         >
         </v-text-field>
         <v-slide-y-transition>
@@ -195,6 +223,10 @@ export default Vue.extend({
     this.bankAccountNameInput = user.bankAccountName;
     this.bankAccountIFSCInput = user.bankAccountIFSC;
     this.bankAccountNumberInput = user.bankAccountNumber;
+    this.paytmNameInput = user.paytmName;
+    this.paytmNumberInput = user.paytmNumberInput;
+    this.alternativePhone1Input = user.alternativePhone1;
+    this.alternativePhone2Input = user.alternativePhone2;
   },
   computed: {
 
@@ -217,6 +249,10 @@ export default Vue.extend({
       bankAccountNameInput: '',
       bankAccountIFSCInput: '',
       bankAccountNumberInput: '',
+      paytmNameInput: '',
+      paytmNumberInput: '',
+      alternativePhone1Input: '',
+      alternativePhone2Input: ''
     }
   },
   methods: {
@@ -237,7 +273,11 @@ export default Vue.extend({
           vendorGSTNumber: this.GSTInput,
           bankAccountName: this.bankAccountNameInput,
           bankAccountNumber: this.bankAccountNumberInput,
-          bankAccountIFSC: this.bankAccountIFSCInput
+          bankAccountIFSC: this.bankAccountIFSCInput,
+          paytmName: this.paytmNameInput,
+          paytmNumber: this.paytmNumberInput,
+          alternativePhone1: this.alternativePhone1Input,
+          alternativePhone2: this.alternativePhone2Input
         }
       }).then((data) => {
         console.log(data);
@@ -248,7 +288,8 @@ export default Vue.extend({
           );
         }
       }, (error) => {
-
+        console.log("Error in profile mutation: ", error);
+        alert(error);
       })
     }
   }

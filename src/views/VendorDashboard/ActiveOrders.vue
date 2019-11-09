@@ -375,8 +375,7 @@ export default {
       }
       orders = orders.filter(order => {
         return order.status == 'PLACED_BY_CUSTOMER' ||
-          order.status == 'RECEIVED_BY_STORE' ||
-          order.transactionSuccess == false && order.status != 'CANCELLED_BY_CUSTOMER'
+          order.status == 'RECEIVED_BY_STORE'
       });
       return orders;
     }

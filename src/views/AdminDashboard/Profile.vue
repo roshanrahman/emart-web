@@ -4,7 +4,9 @@
     tile
     class="pa-12"
   >
+
     <v-row justify="space-between">
+
       <h1 class=" display-1 primary--text mx-2"><b>Your Profile</b></h1>
       <v-btn
         icon
@@ -33,7 +35,17 @@
         <v-icon left>mdi-pencil</v-icon>
         Edit details
       </v-btn>
-
+      <v-btn
+        class="mx-2"
+        outlined
+        rounded
+        text
+        v-if="isEditingDisabled"
+        @click="isChangePasswordDialogVisible = true;"
+      >
+        <v-icon left>mdi-key-variant</v-icon>
+        Change Password
+      </v-btn>
     </v-row>
     <v-row class="mt-8">
       <v-col
@@ -100,6 +112,20 @@
         </v-text-field>
         <v-text-field
           :disabled="isEditingDisabled"
+          label="Alternative Phone 1"
+          filled
+          v-model="alternativePhone1Input"
+        >
+        </v-text-field>
+        <v-text-field
+          :disabled="isEditingDisabled"
+          label="Alternative Phone 2"
+          filled
+          v-model="alternativePhone2Input"
+        >
+        </v-text-field>
+        <v-text-field
+          :disabled="isEditingDisabled"
           label="GST Number"
           filled
           v-model="GSTInput"
@@ -126,6 +152,20 @@
           label="A/C IFSC Code"
           filled
           v-model="bankAccountIFSCInput"
+        >
+        </v-text-field>
+        <v-text-field
+          :disabled="isEditingDisabled"
+          label="PayTM Name"
+          filled
+          v-model="paytmNameInput"
+        >
+        </v-text-field>
+        <v-text-field
+          :disabled="isEditingDisabled"
+          label="PayTM Number"
+          filled
+          v-model="paytmNumberInput"
         >
         </v-text-field>
         <v-slide-y-transition>
@@ -178,6 +218,54 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <v-dialog
+      v-model="isChangePasswordDialogVisible"
+      max-width="600"
+    >
+      <v-card class="pa-8">
+        <v-row justify="center">
+          <h1 class="headline mb-4 primary--text">Change your password</h1>
+        </v-row>
+        <v-divider class="my-4"></v-divider>
+        <h3 class="caption mt-4 mb-2">Enter the existing password</h3>
+        <v-text-field
+          type="password"
+          single-line=""
+          filled
+          label="Current Password"
+          v-model="currentPasswordInput"
+        ></v-text-field>
+        <h3 class="caption mt-4 mb-2">Provide a new password</h3>
+        <v-text-field
+          type="password"
+          single-line=""
+          filled
+          label="New Password"
+          v-model="newPasswordInput"
+        ></v-text-field>
+        <v-text-field
+          type="password"
+          single-line=""
+          filled
+          label="Confirm New Password"
+          v-model="confirmNewPasswordInput"
+        ></v-text-field>
+        <v-divider class="mb-4"></v-divider>
+        <v-row class="ma-2">
+          <v-btn
+            outlined
+            text
+            @click="isChangePasswordDialogVisible = false;"
+          >Cancel</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn
+            elevation="0"
+            color="primary"
+            @click="handlePasswordChange();"
+          >Save Changes</v-btn>
+        </v-row>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -200,6 +288,10 @@ export default Vue.extend({
     this.bankAccountNameInput = user.bankAccountName;
     this.bankAccountIFSCInput = user.bankAccountIFSC;
     this.bankAccountNumberInput = user.bankAccountNumber;
+    this.paytmNameInput = user.paytmName;
+    this.paytmNumberInput = user.paytmNumberInput;
+    this.alternativePhone1Input = user.alternativePhone1;
+    this.alternativePhone2Input = user.alternativePhone2;
   },
   computed: {
     loggedInUser: function () {
@@ -215,6 +307,10 @@ export default Vue.extend({
       this.bankAccountNameInput = user.bankAccountName;
       this.bankAccountIFSCInput = user.bankAccountIFSC;
       this.bankAccountNumberInput = user.bankAccountNumber;
+      this.paytmNameInput = user.paytmName;
+      this.paytmNumberInput = user.paytmNumberInput;
+      this.alternativePhone1Input = user.alternativePhone1;
+      this.alternativePhone2Input = user.alternativePhone2;
       return user;
     }
   },
@@ -225,6 +321,7 @@ export default Vue.extend({
     return {
       isHelpDialogVisible: false,
       isEditingDisabled: true,
+      isChangePasswordDialogVisible: false,
       nameInput: '',
       emailInput: '',
       phoneNumberInput: '',
@@ -236,6 +333,13 @@ export default Vue.extend({
       bankAccountNameInput: '',
       bankAccountIFSCInput: '',
       bankAccountNumberInput: '',
+      paytmNameInput: '',
+      paytmNumberInput: '',
+      alternativePhone1Input: '',
+      alternativePhone2Input: '',
+      currentPasswordInput: '',
+      newPasswordInput: '',
+      confirmNewPasswordInput: ''
     }
   },
   methods: {
@@ -256,7 +360,11 @@ export default Vue.extend({
           vendorGSTNumber: this.GSTInput,
           bankAccountName: this.bankAccountNameInput,
           bankAccountNumber: this.bankAccountNumberInput,
-          bankAccountIFSC: this.bankAccountIFSCInput
+          bankAccountIFSC: this.bankAccountIFSCInput,
+          paytmName: this.paytmNameInput,
+          paytmNumber: this.paytmNumberInput,
+          alternativePhone1: this.alternativePhone1Input,
+          alternativePhone2: this.alternativePhone2Input
         }
       }).then((data) => {
         console.log("Received: ", data);
@@ -268,7 +376,21 @@ export default Vue.extend({
         }
       }, (error) => {
         console.log("Error in profile mutation: ", error);
+        alert(error);
       })
+    },
+    handlePasswordChange () {
+      if (!!this.currentPasswordInput || !!this.newPasswordInput || !!this.confirmNewPasswordInput) {
+        alert('Please enter all the required fields');
+        return;
+      }
+      if (this.newPasswordInput == this.currentPasswordInput) {
+        alert('Your new password is the same as your previous password.');
+        return;
+      }
+      if (this.newPasswordInput != this.confirmNewPasswordInput) {
+        alert('The new password and confirm new password do not match.');
+      }
     }
   }
 });

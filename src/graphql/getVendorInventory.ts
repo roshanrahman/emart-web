@@ -18,6 +18,10 @@ export let getVendorInventory = gql`
         date
         averageRating
         unAnswered
+        length
+        breadth
+        height
+        deleted
         vendor {
           id
           name
