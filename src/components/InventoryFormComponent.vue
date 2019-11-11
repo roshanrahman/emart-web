@@ -202,8 +202,9 @@
                       color="warning"
                       dark
                       class="subtitle-2 my-2"
+                      v-if="sellingPriceInput >= 1500"
                     >
-                      As the selling price of this product is under ₹ 1500, a delivery charge of ₹ 45 will be added to its price at the customers' end
+                      As the selling price of this product is over ₹ 1500, a delivery charge of ₹ 45 will be added to its price at the customers' end
                     </v-alert>
                   </v-card-text>
                 </v-card>
@@ -362,6 +363,9 @@ export default {
         this.error.text = "Please upload an image for the product photo."
         this.isErrorDialogVisible = true;
         return;
+      }
+      if (this.sellingPriceInput >= 1500) {
+        this.sellingPriceInput = this.sellingPriceInput + 45;
       }
       var inventoryObj = {
         name: this.nameInput,
