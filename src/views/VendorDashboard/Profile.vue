@@ -21,7 +21,24 @@
     </h2>
 
     <v-divider class="my-8"></v-divider>
-    <v-row align="center">
+    <v-card outlined>
+      <v-card-title class="primary--text title">Your due income</v-card-title>
+      <v-card-text>
+        <VendorIncomeComponent
+          :vendorId="loggedInUser.id"
+          :key="
+          loggedInUser.id"
+        > </VendorIncomeComponent>
+
+      </v-card-text>
+    </v-card>
+    <v-divider class="my-8"></v-divider>
+
+    <v-row
+      align="center"
+      class="mt-4"
+    >
+
       <v-btn
         outlined
         rounded
@@ -209,6 +226,7 @@ import Vue from "vue";
 
 import { LoginSessionHandler } from '../../helpers/loginSessionHandler';
 import { updateVendorAccountMutation } from "../../graphql/updateVendorAccount";
+import VendorIncomeComponent from "../../components/VendorIncomeComponent.vue";
 export default Vue.extend({
   mounted () {
     var user = new LoginSessionHandler()
@@ -229,10 +247,12 @@ export default Vue.extend({
     this.alternativePhone2Input = user.alternativePhone2;
   },
   computed: {
-
+    loggedInUser: function () {
+      return new LoginSessionHandler();
+    }
   },
   components: {
-
+    VendorIncomeComponent
   },
   data () {
     return {

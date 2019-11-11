@@ -185,7 +185,7 @@
               >
                 <v-card
                   max-width="
-              250"
+              350"
                   outlined
                 >
                   <v-card-title>
@@ -198,7 +198,13 @@
                     <v-divider class="my-2"></v-divider>
                     <h1 class="title black--text">₹ {{ sellingPriceInput - (sellingPriceInput * 0.11) }}</h1>
                     <h1 class="caption grey--text">This will be your income from this product</h1>
-
+                    <v-alert
+                      color="warning"
+                      dark
+                      class="subtitle-2 my-2"
+                    >
+                      As the selling price of this product is under ₹ 1500, a delivery charge of ₹ 45 will be added to its price at the customers' end
+                    </v-alert>
                   </v-card-text>
                 </v-card>
 

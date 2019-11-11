@@ -41,7 +41,7 @@
           rounded
           elevation="0"
           @click="isAnswerQuestionDialogVisible = true; currentQuestion = question; answerInput = '';"
-          v-if="item.vendor.id == loggedInUser.id && !!question.answerText == false"
+          v-if="!!item.vendor ? item.vendor.id == loggedInUser.id && !!question.answerText == false : !!question.answerText == false"
         >
           <v-icon
             left
@@ -57,7 +57,7 @@
           text
           elevation="0"
           @click="isAnswerQuestionDialogVisible = true; currentQuestion = question; answerInput = question.answerText;"
-          v-if="item.vendor.id == loggedInUser.id  && !!question.answerText"
+          v-if="!!item.vendor ? item.vendor.id == loggedInUser.id  && !!question.answerText : !!question.answerText"
         >
           <v-icon
             left
@@ -66,7 +66,7 @@
           Edit answer
         </v-btn>
         <v-btn
-          v-else
+          v-if="!!item.vendor && (item.vendor == loggedInUser.id) == false"
           disabled
           text
           class="ma-4"

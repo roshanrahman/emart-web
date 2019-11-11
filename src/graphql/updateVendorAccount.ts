@@ -11,11 +11,11 @@ export var updateVendorAccountMutation = gql`
     $address: AddressType
     $approved: Boolean
     $password: String
+    $otpToken: String
     $bankAccountName: String
     $bankAccountIFSC: String
     $bankAccountNumber: String
     $vendorGSTNumber: String
-    $otpToken: String
     $paytmName: String
     $paytmNumber: String
     $alternativePhone1: String
@@ -32,11 +32,11 @@ export var updateVendorAccountMutation = gql`
       vendorId: $vendorId
       approved: $approved
       password: $password
+      otpToken: $otpToken
       bankAccountName: $bankAccountName
       bankAccountIFSC: $bankAccountIFSC
       bankAccountNumber: $bankAccountNumber
       vendorGSTNumber: $vendorGSTNumber
-      otpToken: $otpToken
       paytmName: $paytmName
       paytmNumber: $paytmNumber
       alternativePhone1: $alternativePhone1
@@ -60,12 +60,10 @@ export var updateVendorAccountMutation = gql`
         bankAccountIFSC
         bankAccountNumber
         vendorGSTNumber
-        otpToken
         paytmName
         paytmNumber
         alternativePhone1
         alternativePhone2
-        password
       }
       error {
         path

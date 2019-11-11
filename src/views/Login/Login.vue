@@ -53,10 +53,15 @@
 
           </v-form>
           <v-row
-            justify="end"
+            justify="space-between"
             class="mx-1"
           >
-
+            <v-btn
+              text
+              dark
+              large
+              @click="isForgotPasswordDialogVisible = true;"
+            >Forgot password?</v-btn>
             <v-btn
               color="primary"
               large
@@ -119,6 +124,13 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog
+      max-width="600"
+      v-model="isForgotPasswordDialogVisible"
+      persistent
+    >
+      <ForgotPasswordComponent @closeDialog='isForgotPasswordDialogVisible = false;'></ForgotPasswordComponent>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -127,8 +139,12 @@ import Vue from "vue";
 import { vendorLogin } from "../../graphql/vendorLogin";
 import { LoginSessionHandler } from "../../helpers/loginSessionHandler";
 import { ErrorCodes } from "../../helpers/errorCodes";
+import ForgotPasswordComponent from "../../components/ForgotPasswordComponent.vue";
 
 export default Vue.extend({
+  components: {
+    ForgotPasswordComponent
+  },
   mounted() {
     if (LoginSessionHandler.isLoggedIn()) {
       var user = new LoginSessionHandler();
@@ -151,6 +167,7 @@ export default Vue.extend({
         title: ""
       },
       isErrorDialogVisible: false,
+      isForgotPasswordDialogVisible: false,
       usernameInput: "",
       passwordInput: "",
       isBusy: false

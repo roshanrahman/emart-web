@@ -243,7 +243,7 @@
                     elevation="0"
                     color="primary"
                     :disabled="!page2Complete"
-                    @click="goToStep(3)"
+                    @click="checkAndGoToStepThree();"
                   >Continue
                   </v-btn>
                 </v-row>
@@ -566,6 +566,7 @@ export default Vue.extend({
     page1Complete: function() {
       if (
         this.formInputs.phoneNumberInput != null &&
+        this.formInputs.phoneNumberInput.length > 9 &&
         this.formInputs.emailAddressInput != null &&
         /.+@.+/.test(this.formInputs.emailAddressInput) != false &&
         this.formInputs.passwordInput != null &&
@@ -580,10 +581,18 @@ export default Vue.extend({
       if (
         this.formInputs.storeNameInput != null &&
         this.formInputs.addressLineInput != null &&
+        this.formInputs.addressPhoneInput != null &&
+        this.formInputs.addressPhoneInput.length > 9 &&
         this.formInputs.pincodeInput != null &&
+        this.formInputs.pincodeInput.length > 5 &&
         this.formInputs.cityInput != null &&
         this.formInputs.gstInput != null &&
-        this.formInputs.addressPhoneInput != null
+        (!!this.formInputs.alternatePhone1Input
+          ? this.formInputs.alternatePhone1Input.length > 9
+          : true) &&
+        (!!this.formInputs.alternatePhone2Input
+          ? this.formInputs.alternatePhone2Input.length > 9
+          : true)
       ) {
         return true;
       }
@@ -593,7 +602,10 @@ export default Vue.extend({
       if (
         this.formInputs.bankAccountHolderInput != null &&
         this.formInputs.bankAccountNumberInput != null &&
-        this.formInputs.bankIFSCInput != null
+        this.formInputs.bankIFSCInput != null &&
+        this.formInputs.paytmNameInput != null &&
+        this.formInputs.paytmNumberInput != null &&
+        this.formInputs.paytmNumberInput.length > 9
       ) {
         return true;
       }
@@ -654,6 +666,32 @@ export default Vue.extend({
                 "The email address you provided already exists, please use a different email address"
               );
             }
+          }
+        });
+    },
+    async checkAndGoToStepThree() {
+      var vm = this;
+      //Check if phone and email are available
+      await this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation($pinCode: String) {
+              canPickUp(pinCode: $pinCode)
+            }
+          `,
+          variables: {
+            pinCode: this.formInputs.pincodeInput
+          }
+        })
+        .then(function(data) {
+          console.log("Validate returned: ", data);
+          data = data.data.canPickUp;
+          if (data == true) {
+            vm.goToStep(3);
+          } else {
+            alert(
+              "The Pin Code you provided is not under our serviceable area, making it not eligible for delivery. Please use an address that falls under our serviceable locations"
+            );
           }
         });
     },

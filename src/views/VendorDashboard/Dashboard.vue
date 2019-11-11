@@ -208,6 +208,9 @@ export default Vue.extend({
       return new LoginSessionHandler()
     },
     activeOrdersCount: function () {
+      if (!!this.getVendorOrders == false) {
+        return 0;
+      }
       var ordersList = this.getVendorOrders.orders;
       if (!!ordersList == false) {
         return 0;
@@ -215,7 +218,7 @@ export default Vue.extend({
       console.log(ordersList);
       var count = 0;
       ordersList.forEach(order => {
-        if (order.status == "PLACED_BY_CUSTOMER") {
+        if (((order.status == 'PLACED_BY_CUSTOMER' || order.status == 'RECEIVED_BY_STORE') && (order.transactionSuccess == true || order.paymentMode == 'Cash On Delivery'))) {
           count += 1;
         }
       });

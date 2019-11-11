@@ -35,6 +35,30 @@
           }">
           {{ !!item.address ? JSON.parse(item.address ).addressLine : 'N/A'}}, {{ !!item.address ? JSON.parse(item.address ).city : 'N/A'}}
         </template>
+        <template v-slot:item.amountToPay="{
+          item
+          }">
+
+          <v-btn
+            rounded
+            small
+            color="primary"
+            v-if="item.amountToPay > 0"
+            @click="isPayVendorDialogVisible = true; currentVendor = item;"
+          >
+            <h2 class="body-1"><b>₹ {{ item.amountToPay - (item.amountToPay * 0.11) }} </b></h2>
+
+            <v-icon
+              right
+              dark
+              small
+            >mdi-arrow-right</v-icon>
+          </v-btn>
+          <h2
+            class="caption"
+            v-else
+          >None</h2>
+        </template>
         <template v-slot:item.shopPhoto="{
           item
           }">
@@ -108,6 +132,8 @@
             small
             class="ml-4"
             rounded
+            outlined
+            text
             @click="currentVendor = item; isBankDetailsDialogVisible = true;"
           >View Details</v-btn>
         </template>
@@ -118,6 +144,8 @@
             small
             color="primary"
             rounded
+            outlined
+            text
             @click="checkIfValidDetails(item); isVendorDetailsDialogVisible = true; currentVendor = item;"
           >View Details</v-btn>
         </template>
@@ -378,6 +406,61 @@
         </v-row>
       </v-card>
     </v-dialog>
+    <v-dialog
+      v-model="isPayVendorDialogVisible"
+      max-width="650"
+      persistent=""
+    >
+      <v-card>
+        <v-card-title>
+          <v-row
+            justify="space-between"
+            no-gutters=""
+          >
+            <h2 class="title primary--text">Due income for vendor {{ currentVendor.storeName }} </h2>
+            <v-btn
+              @click="isPayVendorDialogVisible = false;"
+              rounded
+              outlined
+              text
+              color="red"
+            >Close</v-btn>
+          </v-row>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text>
+          <v-row>
+            <VendorIncomeComponent :vendorId="currentVendor.id"></VendorIncomeComponent>
+          </v-row>
+          <v-divider></v-divider>
+          <v-row>
+            <h2 class="body-1 ma-4 primary--text">Please enter the amount you have credited to this vendor. It will be deducted from the pending payment amount.</h2>
+          </v-row>
+          <v-row>
+            <v-text-field
+              class="mx-4"
+              filled
+              single-line
+              v-model.number="amountInput"
+              persistent-hint
+              prefix="₹ "
+              hint="Please enter the amount you have paid this vendor"
+            ></v-text-field>
+          </v-row>
+          <v-row justify="end">
+            <v-btn
+              rounded
+              class="mx-4"
+              elevation="0"
+              color="primary"
+              :loading="isPaymentBusy"
+              :disabled="!!amountInput == false"
+              @click="makePayment();"
+            >Save Changes</v-btn>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -388,12 +471,15 @@ import { LoginSessionHandler } from '../../helpers/loginSessionHandler';
 import { getAllVendors } from "../../graphql/getAllVendors";
 import { disableVendorAccountMutation } from "../../graphql/disableVendorAccountMutation";
 import VendorDetailsComponent from "../../components/VendorDetailsComponent";
+import VendorIncomeComponent from "../../components/VendorIncomeComponent";
 import { OrderStatuses } from '../../helpers/orderStatuses';
 import moment from "moment";
+import { updateVendorAccountMutation } from '../../graphql/updateVendorAccount';
 
 export default Vue.extend({
   components: {
-    VendorDetailsComponent
+    VendorDetailsComponent,
+    VendorIncomeComponent
   },
   computed: {
     loggedInUser: function () {
@@ -409,6 +495,30 @@ export default Vue.extend({
     }
   },
   methods: {
+    makePayment () {
+      //TODO: Fix amountToPay issue.
+      this.isPaymentBusy = true;
+      var amountToPay = this.currentVendor.amountToPay - (this.amountInput + (this.currentVendor.amountToPay * 0.11));
+      console.log('Amount to pay', amountToPay);
+      console.log('To vendor', this.currentVendor.id)
+      this.$apollo.mutate({
+        mutation: updateVendorAccountMutation,
+        variables: {
+          vendorId: this.currentVendor.id,
+          amountToPay: amountToPay
+        }
+      }).then((data) => {
+        console.log('MUTATION SUCCESS: ', data);
+        this.isPaymentBusy = false;
+        this.isPayVendorDialogVisible = false;
+      }, (error) => {
+        console.log('ERROR OCCURED: ', error);
+        alert(error);
+        this.isPaymentBusy = false;
+
+      });
+
+    },
     checkIfValidDetails: function (vendor) {
       try {
         var a = JSON.parse(vendor.address);
@@ -480,6 +590,7 @@ export default Vue.extend({
   },
   data () {
     return {
+      amountInput: '',
       isItemDetailDialogVisible: false,
       isBlockVendorDialogVisible: false,
       isUnblockVendorDialogVisible: false,
@@ -488,12 +599,23 @@ export default Vue.extend({
       isShopDialogVisible: false,
       isPanCardDialogVisible: false,
       isHelpDialogVisible: false,
+      isPayVendorDialogVisible: false,
       currentVendor: {},
       getAllVendors: [],
+      isPaymentBusy: false,
       headers: [
         {
           text: "Store Name",
           value: "storeName"
+        },
+
+        {
+          text: "Details",
+          value: "vendorDetails"
+        },
+        {
+          text: "Pending Payment",
+          value: "amountToPay"
         },
         {
           text: "Address",
@@ -512,10 +634,6 @@ export default Vue.extend({
           value: "vendorGSTNumber"
         },
 
-        {
-          text: "Details",
-          value: "vendorDetails"
-        },
         {
           text: "Blocked Status",
           value: "blocked"

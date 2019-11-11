@@ -24,6 +24,7 @@
 
     <v-divider class="my-8"></v-divider>
     <v-row align="center">
+
       <v-btn
         outlined
         rounded

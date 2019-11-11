@@ -92,6 +92,7 @@
       class="pa-4 my-4"
       outlined
       style="border-radius:8px;"
+      v-if="!!inventoryItem.vendor"
     >
       <h3 class="subtitle-2 grey--text">Sold by</h3>
       <h1 class="title">{{ inventoryItem.vendor.storeName }} ({{ inventoryItem.vendor.phoneNumber}})</h1>
@@ -162,6 +163,7 @@ import ReviewsComponent from "./ReviewsComponent";
 export default {
   mounted () {
     try {
+      console.log('Received ', this.inventoryItem);
       var a = JSON.parse(this.inventoryItem.vendor.address);
       var b = JSON.parse(this.inventoryItem.imageUrl);
       if (!!this.inventoryItem.vendor.storeName == false) {
@@ -169,7 +171,6 @@ export default {
       }
     } catch (error) {
       console.error(error);
-      alert('The details of this item are incorrectly formatted and causing error. This could be due to empty fields, or incorrect inputs in the item details or the vendor details. Please ask the vendor to check if their profile data and item details are correct.')
     }
   },
   props: ['inventoryItem'],

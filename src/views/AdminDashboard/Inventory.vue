@@ -19,7 +19,26 @@
     <h2 class=" body-1 mt-2">
       View all products being sold on the platform, including yours.
     </h2>
-
+    <v-alert
+      color="warning"
+      dark
+      text=""
+      icon="mdi-alert-outline"
+      class="mt-4"
+      v-if="outOfStock"
+    >
+      Some items are out of stock.
+    </v-alert>
+    <v-alert
+      color="warning"
+      dark
+      text=""
+      class="mt-4"
+      icon="mdi-alert-outline"
+      v-if="unAnswered"
+    >
+      Some items have unanswered questions.
+    </v-alert>
     <v-divider class="my-8"></v-divider>
     <v-row align="center">
       <v-btn
@@ -53,7 +72,19 @@
         sort-by="name"
         :items-per-page="100"
         :search="searchQuery"
-      >
+      ><template v-slot:item.inStock="{ item }">
+          <v-row>
+            <span v-if="item.inStock >= 1"> {{ item.inStock }}</span>
+            <span
+              v-else
+              class="red--text"
+            >0 <v-icon
+                right
+                small
+                color="red"
+              >mdi-alert</v-icon></span>
+          </v-row>
+        </template>
         <template v-slot:item.image="{ item }">
           <v-avatar
             size="48"
@@ -64,13 +95,20 @@
           </v-avatar>
         </template>
         <template v-slot:item.description="{ item }">
-          <v-btn
-            text
-            outlined
-            rounded
-            small
-            @click="currentItem = item; isShowInventoryDialogVisible = true;"
-          >View details</v-btn>
+          <v-badge overlap>
+            <template
+              title="There are unanswered questions for this item."
+              v-slot:badge
+              v-if="item.unAnswered > 0"
+            > {{ item.unAnswered }}</template>
+            <v-btn
+              text
+              outlined
+              rounded
+              small
+              @click="currentItem = item; isShowInventoryDialogVisible = true;"
+            >View details</v-btn>
+          </v-badge>
         </template>
         <template v-slot:item.sellingPrice="{ item }">
           <b>₹ {{item.sellingPrice }}</b>
@@ -339,6 +377,7 @@ import Vue from "vue";
 
 import { LoginSessionHandler } from '../../helpers/loginSessionHandler';
 import { getAllInventory } from "../../graphql/getAllInventory";
+import { getVendorInventory } from "../../graphql/getVendorInventory";
 import InventoryFormComponent from "../../components/InventoryFormComponent";
 import InventoryDetailsComponent from "../../components/InventoryDetailsComponent";
 import { addNewInventoryMutation } from "../../graphql/addNewInventory";
@@ -353,7 +392,26 @@ export default Vue.extend({
   computed: {
     loggedInUser: function () {
       return new LoginSessionHandler()
-    }
+    },
+
+    outOfStock: function () {
+      var outOfStock = 0;
+      this.getVendorInventory.inventory.forEach(item => {
+        if (item.inStock < 1) {
+          outOfStock += 1;
+        }
+      });
+      return outOfStock;
+    },
+    unAnswered: function () {
+      var unAnswered = 0;
+      this.getVendorInventory.inventory.forEach(item => {
+        if (item.unAnswered > 0) {
+          unAnswered += 1;
+        }
+      });
+      return unAnswered;
+    },
   },
 
   data () {
@@ -468,6 +526,11 @@ export default Vue.extend({
   apollo: {
     getAllInventory: {
       query: getAllInventory,
+
+      pollInterval: 3
+    },
+    getVendorInventory: {
+      query: getVendorInventory,
 
       pollInterval: 3
     }

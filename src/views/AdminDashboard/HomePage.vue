@@ -21,12 +21,12 @@
       >
         <RecommendedActionsComponentAdmin @emitRoute="emitRoute"></RecommendedActionsComponentAdmin>
       </v-col>
-      <!-- <v-col
+      <v-col
         cols="12"
         lg="6"
       >
-        <QuickStatisticsComponent></QuickStatisticsComponent>
-      </v-col> -->
+        <InsightsAdmin @emitRoute="emitRoute"></InsightsAdmin>
+      </v-col>
     </v-row>
 
   </v-card>
@@ -34,7 +34,7 @@
 
 <script>
 import Vue from "vue";
-import QuickStatisticsComponent from "../../components/QuickStatisticsComponent.vue";
+import InsightsAdmin from "../../components/InsightsAdmin.vue";
 import RecommendedActionsComponentAdmin from "../../components/RecommendedActionsComponentAdmin.vue";
 import { LoginSessionHandler } from '../../helpers/loginSessionHandler';
 export default Vue.extend({
@@ -44,7 +44,7 @@ export default Vue.extend({
     }
   },
   components: {
-    QuickStatisticsComponent,
+    InsightsAdmin,
     RecommendedActionsComponentAdmin
   },
   methods: {
