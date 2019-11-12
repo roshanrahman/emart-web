@@ -32,17 +32,17 @@
         <h3 class="subtitle-2 grey--text">Address</h3>
         <v-btn
           text
-          @click="copyTextToClipboard(`Vendor: ${vendor.storeName}\nAddress: ${JSON.parse(vendor.address).addressLine}\n${JSON.parse(vendor.address).phoneNumber}\n${JSON.parse(vendor.address).city}\n${JSON.parse(vendor.address).pinCode}\nPhone Numbers:\n${JSON.parse(vendor.address).phoneNumber}\n${vendor.alternativePhone1}\n${vendor.alternativePhone2}`)"
+          @click="copyTextToClipboard(`Vendor: ${vendor.storeName}\nAddress: ${vendorAddress.addressLine}\n${vendorAddress.phoneNumber}\n${vendorAddress.city}\n${vendorAddress.pinCode}\nPhone Numbers:\n${vendorAddress.phoneNumber}\n${vendor.alternativePhone1}\n${vendor.alternativePhone2}`)"
         >
           <v-icon left>mdi-content-copy</v-icon> Copy
         </v-btn>
       </v-row>
       <h3 class="subtitle-2 grey--text">Address</h3>
-      <h1 class="title">{{ `${JSON.parse(vendor.address).name}` }}</h1>
-      <h1 class="title">{{ `${JSON.parse(vendor.address).addressLine}` }}</h1>
-      <h1 class="title">{{ `${JSON.parse(vendor.address).phoneNumber}` }}</h1>
-      <h1 class="title">{{ `${JSON.parse(vendor.address).city}` }}</h1>
-      <h1 class="title">{{ `${JSON.parse(vendor.address).pinCode}` }}</h1>
+      <h1 class="title">{{ `${vendorAddress.name}` }}</h1>
+      <h1 class="title">{{ `${vendorAddress.addressLine}` }}</h1>
+      <h1 class="title">{{ `${vendorAddress.phoneNumber}` }}</h1>
+      <h1 class="title">{{ `${vendorAddress.city}` }}</h1>
+      <h1 class="title">{{ `${vendorAddress.pinCode}` }}</h1>
       <h3 class="subtitle-2 grey--text">Alternative Phone Numbers</h3>
       <h1 class="title">{{ `${vendor.alternativePhone1}` }}</h1>
       <h1 class="title">{{ `${vendor.alternativePhone2}` }}</h1>
@@ -110,7 +110,7 @@
       class="pa-4 my-4"
       outlined
       style="border-radius:8px;"
-      v-for="(url, index) in JSON.parse(!! vendor.pancardPhotoUrls ? vendor.pancardPhotoUrls : '[]')"
+      v-for="(url, index) in vendorPanCardObj"
       :key="url"
     >
       <v-row
@@ -180,9 +180,30 @@ import ReviewsComponent from "./ReviewsComponent";
 
 export default {
   props: ['vendor'],
+  mounted () {
+    console.log('Vendor details component received ', this.vendor);
+  },
   components: {
     QuestionsComponent,
     ReviewsComponent
+  },
+  computed: {
+    vendorAddress: function () {
+      console.log('Vendor address JSON String ', this.vendor.address);
+      try {
+        return JSON.parse(this.vendor.address);
+      } catch {
+        return {};
+      }
+    },
+    vendorPanCardObj: function () {
+      console.log('Vendor PAN Card URLs string', this.vendor.pancardPhotoUrls);
+      try {
+        return JSON.parse(this.vendor.pancardPhotoUrls);
+      } catch {
+        return {};
+      }
+    }
   },
   methods: {
     fallbackCopyTextToClipboard (text) {

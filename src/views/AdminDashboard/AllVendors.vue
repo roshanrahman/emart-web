@@ -146,7 +146,7 @@
             rounded
             outlined
             text
-            @click="checkIfValidDetails(item); isVendorDetailsDialogVisible = true; currentVendor = item;"
+            @click="isVendorDetailsDialogVisible = true; currentVendor = item;"
           >View Details</v-btn>
         </template>
       </v-data-table>

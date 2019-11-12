@@ -68,7 +68,7 @@
               small
               color="primary"
               rounded
-              @click="checkIfValidDetails(item); isVendorDetailsDialogVisible = true; currentVendor = item;"
+              @click="isVendorDetailsDialogVisible = true; currentVendor = item;"
             >View Details</v-btn>
           </template>
           <template v-slot:item.approve="{
@@ -201,7 +201,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog
+    <!-- <v-dialog
       fullscreen
       v-model="isPanCardDialogVisible"
     >
@@ -245,7 +245,7 @@
           </template>
         </v-img>
       </v-card>
-    </v-dialog>
+    </v-dialog> -->
     <v-dialog
       fullscreen
       v-model="isShopDialogVisible"

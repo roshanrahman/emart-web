@@ -365,6 +365,7 @@ export default {
         return;
       }
       if (this.sellingPriceInput >= 1500) {
+        this.originalPriceInput = this.originalPriceInput + 45;
         this.sellingPriceInput = this.sellingPriceInput + 45;
       }
       var inventoryObj = {
