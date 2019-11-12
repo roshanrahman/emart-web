@@ -17,7 +17,7 @@
       </v-btn>
     </v-row>
     <h2 class=" body-1 mt-2">
-      View all orders on the app so far processed by you
+      View all orders on the app so far
     </h2>
 
     <v-divider class="my-8"></v-divider>
@@ -45,13 +45,13 @@
 
     <v-row class="mt-8">
       <v-data-table
-        :items="getVendorOrders.orders"
+        :items="!!getVendorOrders.orders ? getVendorOrders.orders : []"
         :headers="headers"
         :loading="$apollo.loading"
-        :search="searchQuery"
         loading-text="Fetching data, please wait..."
         no-data-text="No orders found"
         :items-per-page="100"
+        :search="searchQuery"
       >
         <template v-slot:item.items="{ item }">
           <v-btn
@@ -100,11 +100,11 @@
                       :value="item.status == 'PLACED_BY_CUSTOMER' ? 10 : item.status == 'RECEIVED_BY_STORE' ? 50 : item.status == 'PICKED_UP' ? 75 : 0"
                     ></v-progress-circular>
                   </v-avatar>
-                  <span> {{ computedStatus(item.status).short }}</span>
+                  <span> {{ item.status }}</span>
                 </v-card>
               </v-row>
             </template>
-            <span>{{ computedStatus(item.status).long }}</span>
+            <span>{{ computedStatus(item.status) }}</span>
           </v-tooltip>
 
         </template>
@@ -194,7 +194,12 @@
                   <v-list-item-subtitle><span class="subtitle-1 primary--text">₹ {{item.inventory.sellingPrice}}</span> </v-list-item-subtitle>
                 </v-col>
               </v-row>
-
+              <v-row>
+                <v-list class="ml-4">
+                  <h1 class="subtitle-2">Sold by</h1>
+                  <h2 class="title">{{item.inventory.vendor.storeName }} ({{ item.inventory.vendor.phoneNumber }}) </h2>
+                </v-list>
+              </v-row>
               <v-divider class="mt-2"></v-divider>
               <v-spacer></v-spacer>
               <v-card
@@ -333,7 +338,7 @@
           <h3>Available Functions: </h3>
           <h4>Order History Table</h4>
           <ul>
-            <li>Fetches all the orders done on the app so far and processed by you.</li>
+            <li>Fetches all the orders done on the app so far.</li>
             <li>You can sort by clicking on the field headings. Use the search field to filter the orders shown.</li>
             <li>View the items in the order by clicking ‘View Items’</li>
           </ul>
@@ -360,6 +365,12 @@ import { downloadDataMutation } from "../../graphql/downloadDataMutation";
 import moment from "moment";
 
 export default Vue.extend({
+  mounted () {
+    var startDateObj = moment().startOf('month');
+    var endDateObj = moment().endOf('month');
+    this.startDate = startDateObj.format('YYYY-MM-DD');
+    this.endDate = endDateObj.format('YYYY-MM-DD');
+  },
   computed: {
     loggedInUser: function () {
       return new LoginSessionHandler()
@@ -396,6 +407,7 @@ export default Vue.extend({
       var date = new Date(epoch);
       return moment(date).format('DD/MM/YYYY h:mm:ss A');
     },
+
     async runDownloadDataMutation () {
       // await this.$apollo.mutate({
       //   mutation: downloadDataMutation,
@@ -413,7 +425,9 @@ export default Vue.extend({
       // });
       var vendorId = this.loggedInUser.id;
       window.open(`http://cezhop.herokuapp.com/downloadCSV?vendorId=${vendorId}&startDate=${this.startDate}&endDate=${this.endDate}`);
-      this.isDownloadDataDialogVisible = false;    }
+      this.isDownloadDataDialogVisible = false;
+    }
+
   },
   components: {
 
