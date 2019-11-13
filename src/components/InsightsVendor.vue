@@ -70,6 +70,9 @@ export default {
   computed: {
     outOfStock: function () {
       var outOfStock = 0;
+      if (!!this.getVendorInventory == false) {
+        return 0;
+      }
       this.getVendorInventory.inventory.forEach(item => {
         if (item.inStock < 1) {
           outOfStock += 1;
@@ -79,6 +82,9 @@ export default {
     },
     unAnswered: function () {
       var unAnswered = 0;
+      if (!!this.getVendorInventory == false) {
+        return 0;
+      }
       this.getVendorInventory.inventory.forEach(item => {
         if (item.unAnswered > 0) {
           unAnswered += 1;
@@ -87,6 +93,9 @@ export default {
       return unAnswered;
     },
     totalAmountToPay: function () {
+      if (!!this.getVendorInfo == false) {
+        return 0;
+      }
       var amountToPay = this.getVendorInfo.user.amountToPay;
       return amountToPay - (amountToPay * 0.11);
     }

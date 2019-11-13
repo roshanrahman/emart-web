@@ -242,7 +242,7 @@ export default Vue.extend({
     this.bankAccountIFSCInput = user.bankAccountIFSC;
     this.bankAccountNumberInput = user.bankAccountNumber;
     this.paytmNameInput = user.paytmName;
-    this.paytmNumberInput = user.paytmNumberInput;
+    this.paytmNumberInput = user.paytmNumber;
     this.alternativePhone1Input = user.alternativePhone1;
     this.alternativePhone2Input = user.alternativePhone2;
   },
