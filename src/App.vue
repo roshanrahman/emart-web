@@ -3,6 +3,7 @@
     <v-app>
       <v-content>
         <router-view></router-view>
+
         <v-dialog
           v-model="showDialog"
           fullscreen
@@ -68,6 +69,15 @@
           </v-sheet>
         </v-bottom-sheet>
       </v-content>
+      <v-footer>
+        <v-spacer></v-spacer>
+
+        <div class="caption">BeShoppi platform &copy; BeShoppi {{ new Date().getFullYear() }} - <a
+            target="_blank"
+            href="https://roshanrahman.github.io/emart-web/about.html"
+          >About the developers</a></div>
+
+      </v-footer>
     </v-app>
   </div>
 </template>
