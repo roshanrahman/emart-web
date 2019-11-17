@@ -349,10 +349,10 @@
                         color="red"
                         text
                         v-on="on"
-                        @dblclick="changeStatus('CANCELLED_BY_STORE')"
+                        @click="isCancelOrderDialogVisible = true;"
                       >Cancel</v-btn>
                     </template>
-                    <span> Are you sure you want to cancel this order? Double click the button if you want to cancel order.</span>
+                    <span> Click only if you are sure you want to cancel the order.</span>
                   </v-tooltip>
                   <v-btn
                     color="primary"
@@ -399,6 +399,76 @@
             <li>To update the status of your order, use the 'Your Active Orders' page</li>
           </ul>
 
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      max-width="600"
+      v-model="isCancelOrderDialogVisible"
+    >
+      <v-card>
+        <v-card-title>
+          <v-row
+            justify="space-between"
+            class="mx-4"
+          >
+            <h1 class="title">Cancel this order?</h1>
+            <v-btn
+              rounded
+              outlined
+              text
+            >Close</v-btn>
+          </v-row>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text>
+          <v-row>
+            <h2 class="body-1 ma-4">Please provide a reason for cancelling this order.</h2>
+
+          </v-row>
+          <v-row
+            class="ml-2"
+            align="center"
+          >
+            <h2 class="caption">Suggestions: </h2>
+            <v-chip
+              small=""
+              class="mx-2"
+              @click="reasonForChangeInput = 'The customer was not reachable at delivery.'"
+            >Customer not reachable</v-chip>
+            <v-chip
+              small=""
+              class="mx-2"
+              @click="reasonForChangeInput = 'Some items in your order were out of stock, and could not be sent for shipping.'"
+            >Product out of stock</v-chip>
+            <v-chip
+              small=""
+              class="mx-2"
+              @click="reasonForChangeInput = 'Cancelling on behalf of the customer.'"
+            >On customer's request</v-chip>
+          </v-row>
+          <v-row>
+            <v-textarea
+              class="ma-4"
+              v-model="reasonForChangeInput"
+              label="Reason for cancellation"
+              required
+              filled
+            ></v-textarea>
+          </v-row>
+          <v-divider></v-divider>
+          <v-row justify="end">
+            <v-btn
+              class="ma-4"
+              color="red"
+              rounded
+              outlined
+              text=""
+              elevation="0"
+              @click="changeStatusForCancelling();"
+              :disabled="!!reasonForChangeInput == false"
+            >Cancel Order</v-btn>
+          </v-row>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -459,6 +529,22 @@ export default Vue.extend({
         console.log(successResult);
         this.isUpdateStatusDialogVisible = false;
       }, (error) => { console.error(error); alert(error); });
+    },
+    changeStatusForCancelling () {
+      this.$apollo.mutate({
+        mutation: changeOrderStatusMutation,
+        variables: {
+          status: 'CANCELLED_BY_STORE',
+          orderId: this.currentOrder.id,
+          cancelledReason: this.reasonForChangeInput
+        }
+      }).then((successResult) => {
+        console.log(successResult);
+        this.isUpdateStatusDialogVisible = false;
+        this.isCancelOrderDialogVisible = false;
+      }, (error) => {        console.error(error); alert(error); this.isUpdateStatusDialogVisible = false;
+        this.isCancelOrderDialogVisible = false;      });
+
     }
   },
   components: {
@@ -470,6 +556,9 @@ export default Vue.extend({
       isItemDetailDialogVisible: false,
       isUpdateStatusDialogVisible: false,
       isHelpDialogVisible: false,
+      reasonForChangeInput: null,
+      isCancelOrderDialogVisible: false,
+
       getAllOrders: { orders: [] },
       headers: [
         {
@@ -487,6 +576,10 @@ export default Vue.extend({
         {
           text: "Last updated",
           value: "updatedDate"
+        },
+        {
+          text: "Additional Charges",
+          value: "additionalCharges"
         },
         {
           text: "Total Amount",

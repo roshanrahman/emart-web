@@ -463,6 +463,10 @@ export default Vue.extend({
           value: "updatedDate"
         },
         {
+          text: "Additional Charges",
+          value: "additionalCharges"
+        },
+        {
           text: "Total Amount",
           value: "totalPrice"
         },

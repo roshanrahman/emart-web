@@ -96,7 +96,7 @@ export default {
       if (!!this.getVendorInfo == false) {
         return 0;
       }
-      var amountToPay = this.getVendorInfo.user.amountToPay;
+      var amountToPay = Number(this.getVendorInfo.user.amountToPay);
       return amountToPay - (amountToPay * 0.11);
     }
   },

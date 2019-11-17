@@ -43,10 +43,10 @@
             rounded
             small
             color="primary"
-            v-if="item.amountToPay > 0"
+            v-if="Number(item.amountToPay) > 0"
             @click="isPayVendorDialogVisible = true; currentVendor = item;"
           >
-            <h2 class="body-1"><b>₹ {{ item.amountToPay - (item.amountToPay * 0.11) }} </b></h2>
+            <h2 class="body-1"><b>₹ {{ Number(item.amountToPay) - (Number(item.amountToPay) * 0.11) }} </b></h2>
 
             <v-icon
               right

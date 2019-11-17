@@ -43,6 +43,8 @@ export let getVendorOrders = gql`
         totalPrice
         paymentMode
         transactionSuccess
+        cancelledReason
+        additionalCharges
       }
     }
   }

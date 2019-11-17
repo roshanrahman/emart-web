@@ -5,15 +5,15 @@
         <tbody>
           <tr>
             <td>Gross Pending Income</td>
-            <td class="title font-weight-regular text-right">₹ {{ getVendorInfo.user.amountToPay }}</td>
+            <td class="title font-weight-regular text-right">₹ {{ Number(getVendorInfo.user.amountToPay) }}</td>
           </tr>
           <tr>
             <td>Amount deducted by BeShoppi platform (11%)</td>
-            <td class="body-1 text-right">- ₹ {{ getVendorInfo.user.amountToPay * 0.11 }}</td>
+            <td class="body-1 text-right">- ₹ {{ Number(getVendorInfo.user.amountToPay) * 0.11 }}</td>
           </tr>
           <tr>
             <td><b>Net income to be credited</b></td>
-            <td class="title text-right">₹ {{ getVendorInfo.user.amountToPay - (getVendorInfo.user.amountToPay * 0.11) }}</td>
+            <td class="title text-right">₹ {{ Number(getVendorInfo.user.amountToPay) - (Number(getVendorInfo.user.amountToPay) * 0.11) }}</td>
           </tr>
         </tbody>
       </v-simple-table>

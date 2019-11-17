@@ -44,6 +44,8 @@ export let getAllOrders = gql`
         totalPrice
         paymentMode
         transactionSuccess
+        cancelledReason
+        additionalCharges
       }
     }
   }

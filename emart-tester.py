@@ -263,9 +263,9 @@ def add_inventory():
     vendor_id_list = []
     for vendor in vendors:
         vendor_id_list.append(vendor.get('phoneNumber'))
+    vendor_token = vendor_login_mutation(
+        phoneNumber='7708898349', password='123456').get('jwtToken')
     while(counter < int(user_selection)):
-        vendor_token = vendor_login_mutation(phoneNumber=random.choice(
-            vendor_id_list), password='123456').get('jwtToken')
         add_mutation = f'''
         addNewInventory(
             name: "{randomword(16)} - Variant: {randomword(16)} - Edition: {randomword(16)} by {randomword(16)}"
@@ -315,7 +315,6 @@ def show_admin_interface():
 
 
 def main():
-
     prGreen('✔️ Logged in successfully as ADMIN ✔️')
     show_admin_interface()
 

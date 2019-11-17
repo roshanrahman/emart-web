@@ -20,7 +20,7 @@ export var updateVendorAccountMutation = gql`
     $paytmNumber: String
     $alternativePhone1: String
     $alternativePhone2: String
-    $amountToPay: Float
+    $amountToPay: String
   ) {
     updateVendorAccount(
       storeName: $storeName

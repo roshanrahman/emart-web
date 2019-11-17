@@ -100,11 +100,16 @@
                       :value="item.status == 'PLACED_BY_CUSTOMER' ? 10 : item.status == 'RECEIVED_BY_STORE' ? 50 : item.status == 'PICKED_UP' ? 75 : 0"
                     ></v-progress-circular>
                   </v-avatar>
-                  <span> {{ item.status }}</span>
+                  <span> {{ computedStatus(item.status).short }}</span>
+
                 </v-card>
               </v-row>
             </template>
-            <span>{{ computedStatus(item.status) }}</span>
+            <span class="body-1">{{ computedStatus(item.status).long }}</span>
+            <br>
+            <span v-if="!!item.cancelledReason">
+              Reason: {{ item.cancelledReason}}
+            </span>
           </v-tooltip>
 
         </template>
@@ -462,6 +467,7 @@ export default Vue.extend({
           text: "Last updated",
           value: "updatedDate"
         },
+
         {
           text: "Total Amount",
           value: "totalPrice"

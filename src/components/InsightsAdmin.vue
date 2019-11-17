@@ -69,7 +69,7 @@ export default {
   computed: {
     outOfStock: function () {
       var outOfStock = 0;
-      if(!!this.getVendorInventory == false) {
+      if (!!this.getVendorInventory == false) {
         return 0;
       }
       this.getVendorInventory.inventory.forEach(item => {
@@ -81,7 +81,7 @@ export default {
     },
     unAnswered: function () {
       var unAnswered = 0;
-      if(!!this.getVendorInventory == false) {
+      if (!!this.getVendorInventory == false) {
         return 0;
       }
       this.getVendorInventory.inventory.forEach(item => {
@@ -93,11 +93,11 @@ export default {
     },
     totalAmountToPay: function () {
       var totalAmount = 0;
-      if(!!this.getAllVendors == false) {
+      if (!!this.getAllVendors == false) {
         return 0;
       }
       this.getAllVendors.forEach(vendor => {
-        totalAmount += vendor.amountToPay - (vendor.amountToPay * 0.11);
+        totalAmount += Number(vendor.amountToPay) - (Number(vendor.amountToPay) * 0.11);
       });
       return totalAmount;
     }
