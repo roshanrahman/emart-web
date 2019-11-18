@@ -104,7 +104,11 @@
                 </v-card>
               </v-row>
             </template>
-            <span>{{ computedStatus(item.status).long }}</span>
+            <span class="body-1">{{ computedStatus(item.status).long }}</span>
+            <br>
+            <span v-if="!!item.cancelledReason">
+              Reason: {{ item.cancelledReason}}
+            </span>
           </v-tooltip>
 
         </template>
