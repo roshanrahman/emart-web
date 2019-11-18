@@ -462,10 +462,7 @@ export default Vue.extend({
           text: "Last updated",
           value: "updatedDate"
         },
-        {
-          text: "Additional Charges",
-          value: "additionalCharges"
-        },
+
         {
           text: "Total Amount",
           value: "totalPrice"

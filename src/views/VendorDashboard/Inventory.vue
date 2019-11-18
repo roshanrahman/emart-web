@@ -63,6 +63,7 @@
         no-data-text="No items found"
         loading-text="Fetching data, please wait..."
         sort-by="name"
+        :items-per-page="100"
       >
         <template v-slot:item.inStock="{ item }">
           <v-row>

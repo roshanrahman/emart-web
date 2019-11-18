@@ -417,6 +417,7 @@
               rounded
               outlined
               text
+              @click="isCancelOrderDialogVisible = false;"
             >Close</v-btn>
           </v-row>
         </v-card-title>
@@ -576,10 +577,6 @@ export default Vue.extend({
         {
           text: "Last updated",
           value: "updatedDate"
-        },
-        {
-          text: "Additional Charges",
-          value: "additionalCharges"
         },
         {
           text: "Total Amount",

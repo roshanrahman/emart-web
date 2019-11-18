@@ -275,7 +275,7 @@
                         color="red"
                         text
                         v-on="on"
-                        @dblclick="changeStatus('CANCELLED_BY_STORE')"
+                        @dblclick="isCancelOrderDialogVisible = true;"
                       >Reject</v-btn>
                     </template>
                     <span> Are you sure you want to reject this order? Double click the button if you want to reject order.</span>
@@ -371,6 +371,7 @@
               rounded
               outlined
               text
+              @click="isCancelOrderDialogVisible = false;"
             >Close</v-btn>
           </v-row>
         </v-card-title>

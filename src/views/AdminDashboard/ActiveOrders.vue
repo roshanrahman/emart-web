@@ -371,6 +371,7 @@
               rounded
               outlined
               text
+              @click="isCancelOrderDialogVisible = false;"
             >Close</v-btn>
           </v-row>
         </v-card-title>
