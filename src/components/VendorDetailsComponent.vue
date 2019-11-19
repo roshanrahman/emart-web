@@ -225,7 +225,7 @@ export default {
     },
     copyTextToClipboard (text) {
       if (!navigator.clipboard) {
-        fallbackCopyTextToClipboard(text);
+        this.fallbackCopyTextToClipboard(text);
         return;
       }
       navigator.clipboard.writeText(text).then(function () {
