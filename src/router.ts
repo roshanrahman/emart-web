@@ -99,6 +99,12 @@ export default new Router({
           name: "admin-inventory",
           component: () => import("./views/AdminDashboard/Inventory.vue")
         },
+
+        {
+          path: "/admin-all-inventory",
+          name: "admin-all-inventory",
+          component: () => import("./views/AdminDashboard/AllInventory.vue")
+        },
         {
           path: "/admin-profile",
           name: "admin-profile",

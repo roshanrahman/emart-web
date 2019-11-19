@@ -505,12 +505,13 @@ export default Vue.extend({
         mutation: updateVendorAccountMutation,
         variables: {
           vendorId: this.currentVendor.id,
-          amountToPay: amountToPay
+          amountToPay: `${amountToPay}`
         }
       }).then((data) => {
         console.log('MUTATION SUCCESS: ', data);
         this.isPaymentBusy = false;
         this.isPayVendorDialogVisible = false;
+        this.$apollo.queries.getAllVendors.refetch();
       }, (error) => {
         console.log('ERROR OCCURED: ', error);
         alert(error);
@@ -546,7 +547,7 @@ export default Vue.extend({
           vendorId: this.currentVendor.id,
           block: true
         }
-      }).then((successResult) => { }, (error) => { console.log('Disable Vendor failed', error) })
+      }).then((successResult) => { this.$apollo.queries.getAllVendors.refetch(); }, (error) => { console.log('Disable Vendor failed', error) })
     },
     enableVendor () {
       this.isUnblockVendorDialogVisible = false;
@@ -556,7 +557,7 @@ export default Vue.extend({
           vendorId: this.currentVendor.id,
           block: false
         }
-      }).then((successResult) => { }, (error) => { console.log('Disable Vendor failed', error) })
+      }).then((successResult) => { this.$apollo.queries.getAllVendors.refetch(); }, (error) => { console.log('Disable Vendor failed', error) })
     },
     fallbackCopyTextToClipboard (text) {
       var textArea = document.createElement("textarea");
@@ -577,7 +578,7 @@ export default Vue.extend({
     },
     copyTextToClipboard (text) {
       if (!navigator.clipboard) {
-        fallbackCopyTextToClipboard(text);
+        this.fallbackCopyTextToClipboard(text);
         return;
       }
       navigator.clipboard.writeText(text).then(function () {

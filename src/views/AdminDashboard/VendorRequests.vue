@@ -381,7 +381,7 @@ export default Vue.extend({
           vendorId: vendorId,
           approved: true
         }
-      }).then((successResult) => { console.log("Approve vendor success ", successResult) }, (error) => { console.log('Verify vendor approved failed', error) })
+      }).then((successResult) => { console.log("Approve vendor success ", successResult); this.$apollo.queries.getAllVendors.refetch(); }, (error) => { console.log('Verify vendor approved failed', error) })
     },
     enableVendor () {
       this.isUnblockVendorDialogVisible = false;
@@ -391,7 +391,7 @@ export default Vue.extend({
           vendorId: this.currentVendor.id,
           block: false
         }
-      }).then((successResult) => { }, (error) => { console.log('Disable Vendor failed', error) })
+      }).then((successResult) => { this.$apollo.queries.getAllVendors.refetch(); }, (error) => { console.log('Disable Vendor failed', error) })
     }
   },
   components: {
@@ -446,7 +446,7 @@ export default Vue.extend({
   apollo: {
     getAllVendors: {
       query: getAllVendors,
-      pollInterval: 2000
+      pollInterval: 20000
     }
   }
 });

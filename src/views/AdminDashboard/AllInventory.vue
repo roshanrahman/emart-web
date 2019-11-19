@@ -5,7 +5,7 @@
     class="pa-12"
   >
     <v-row justify="space-between">
-      <h1 class=" display-1 primary--text mx-2"><b>Your Inventory</b></h1>
+      <h1 class=" display-1 primary--text mx-2"><b>All Inventory</b></h1>
       <v-btn
         icon
         color="primary"
@@ -17,7 +17,7 @@
       </v-btn>
     </v-row>
     <h2 class=" body-1 mt-2">
-      View and manage your products on the platform
+      View all products being sold on the platform, including yours.
     </h2>
     <v-alert
       color="warning"
@@ -53,19 +53,26 @@
       </v-btn>
       <v-spacer></v-spacer>
 
+      <v-text-field
+        label="Search"
+        single-line
+        v-model="searchQuery"
+        append-icon="mdi-magnify"
+      ></v-text-field>
+
     </v-row>
 
     <v-row class="mt-8">
       <v-data-table
-        :items="!!getVendorInventory.inventory ? getVendorInventory.inventory : []"
+        :items="!!getAllInventory.inventory ? getAllInventory.inventory : []"
         :headers="headers"
         :loading="$apollo.loading"
         no-data-text="No items found"
         loading-text="Fetching data, please wait..."
         sort-by="name"
         :items-per-page="100"
-      >
-        <template v-slot:item.inStock="{ item }">
+        :search="searchQuery"
+      ><template v-slot:item.inStock="{ item }">
           <v-row>
             <span v-if="item.inStock >= 1"> {{ item.inStock }}</span>
             <span
@@ -87,17 +94,6 @@
             <v-img :src="JSON.parse(item.imageUrl)[0]"></v-img>
           </v-avatar>
         </template>
-        <template v-slot:item.averageRating="{ item }">
-
-          <v-chip small>
-            <v-icon
-              left
-              small
-            >mdi-star</v-icon>
-            <span class="subtitle-2">{{item.averageRating }}</span>
-          </v-chip>
-
-        </template>
         <template v-slot:item.description="{ item }">
           <v-badge overlap>
             <template
@@ -117,8 +113,27 @@
         <template v-slot:item.sellingPrice="{ item }">
           <b>₹ {{item.sellingPrice }}</b>
         </template>
+        <template v-slot:item.averageRating="{ item }">
+
+          <v-chip small>
+            <v-icon
+              left
+              small
+            >mdi-star</v-icon>
+            <span class="subtitle-2">{{item.averageRating }}</span>
+          </v-chip>
+
+        </template>
         <template v-slot:item.originalPrice="{ item }">
           ₹ {{item.originalPrice }}
+        </template>
+        <template v-slot:item.vendor.storeName="{ item }">
+          {{!!item.vendor ? item.vendor.storeName : 'loading' }}
+          <v-chip
+            small
+            v-if="!!item.vendor ? item.vendor.id == loggedInUser.id : false"
+            color="primary"
+          >You</v-chip>
         </template>
         <template v-slot:item.actions="{ item }">
           <v-btn
@@ -331,11 +346,11 @@
         <v-divider></v-divider>
         <v-card-text class="mt-4">
           <h1 class="title primary--text text-center">Inventory</h1>
-          <h2 class="body-2 grey--text text-center mb-4">Allows you to view and manage your products on sale on the platform</h2>
+          <h2 class="body-2 grey--text text-center mb-4">Allows you to view and manage the products on sale on the platform</h2>
           <h3>Available Functions: </h3>
           <h4>Inventory List Table</h4>
           <ul>
-            <li>Fetches all the items for sale put up by you.</li>
+            <li>Fetches all the items for sale by all the vendors.</li>
             <li>You can sort by clicking on the field headings.</li>
           </ul>
           <h4>Add new item</h4>
@@ -361,6 +376,7 @@
 import Vue from "vue";
 
 import { LoginSessionHandler } from '../../helpers/loginSessionHandler';
+import { getAllInventory } from "../../graphql/getAllInventory";
 import { getVendorInventory } from "../../graphql/getVendorInventory";
 import InventoryFormComponent from "../../components/InventoryFormComponent";
 import InventoryDetailsComponent from "../../components/InventoryDetailsComponent";
@@ -377,6 +393,7 @@ export default Vue.extend({
     loggedInUser: function () {
       return new LoginSessionHandler()
     },
+
     outOfStock: function () {
       var outOfStock = 0;
       if (!!this.getVendorInventory == false) {
@@ -414,12 +431,13 @@ export default Vue.extend({
           text: 'Name',
           value: 'name'
         },
+
         {
-          text: 'Category',
-          value: 'category'
+          text: 'Sold by',
+          value: 'vendor.storeName'
         },
         {
-          text: 'Description',
+          text: 'Details',
           value: 'description'
         },
         {
@@ -444,14 +462,15 @@ export default Vue.extend({
         }
 
       ],
-      getVendorInventory: {},
+      getAllInventory: {},
       isAddInventoryDialogVisible: false,
       isErrorDialogVisible: false,
+      isHelpDialogVisible: false,
       isEditInventoryDialogVisible: false,
       isDeleteInventoryDialogVisible: false,
-      isHelpDialogVisible: false,
       isShowInventoryDialogVisible: false,
       currentItem: {},
+      searchQuery: '',
       key: 0,
       error: {
         title: "",
@@ -468,9 +487,10 @@ export default Vue.extend({
         variables: {
           ...item
         }
-      }).then((result) => {        console.log('Mutation succeeded', result);
+      }).then((result) => {        console.log('Mutation succeeded', result); this.$apollo.queries.getAllInventory.refetch();
         this.$apollo.queries.getVendorInventory.refetch();      },
         (reason) => {
+          console.log("Error: ", reason);
           this.error.title = "Server returned error.";
           this.error.text = reason;
           this.isErrorDialogVisible = true;
@@ -502,8 +522,11 @@ export default Vue.extend({
         variables: {
           inventoryId: this.currentItem.id,
         }
-      }).then((result) => {        console.log('Mutation succeeded', result); this.$apollo.queries.getAllInventory.refetch();
-        this.$apollo.queries.getVendorInventory.refetch();      },
+      }).then((result) => {        console.log('Mutation succeeded', result);
+        this.$apollo.queries.getAllInventory.refetch();
+        this.$apollo.queries.getVendorInventory.refetch();
+
+      },
         (reason) => {
           this.error.title = "Server returned error.";
           this.error.text = reason;
@@ -512,9 +535,13 @@ export default Vue.extend({
     }
   },
   apollo: {
+    getAllInventory: {
+      query: getAllInventory,
+
+      pollInterval: 5000
+    },
     getVendorInventory: {
       query: getVendorInventory,
-
       pollInterval: 5000
     }
   },
