@@ -55,6 +55,12 @@ export default new Router({
           path: "/vendor-posters",
           name: "vendor-posters",
           component: () => import("./views/VendorDashboard/OfferPosters.vue")
+        },
+        {
+          path: "/vendor-helpline",
+          name: "vendor-helpline",
+          component: () => import("./views/VendorDashboard/Helpline.vue")
+
         }
       ]
     },

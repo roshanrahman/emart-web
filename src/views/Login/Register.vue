@@ -11,8 +11,8 @@
           <v-img
             contain
             class="mt-2"
-            max-height="50"
-            src="@/assets/logo-black.png"
+            max-height="60"
+            src="@/assets/logo-color.png"
           ></v-img>
         </v-row>
 

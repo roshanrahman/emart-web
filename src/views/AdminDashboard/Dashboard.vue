@@ -228,16 +228,16 @@
         <v-img
           v-if="isDark"
           src="@/assets/logo-white.png"
-          max-height="40"
-          contain
+          max-height="50"
+          max-width="100"
           alt="Be Shoppi"
           class="mt-2"
         ></v-img>
         <v-img
           v-else
           src="@/assets/logo-color.png"
-          max-height="40"
-          contain
+          max-height="50"
+          max-width="100"
           alt="Be Shoppi"
           class="mt-2"
         ></v-img>

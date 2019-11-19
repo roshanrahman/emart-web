@@ -130,6 +130,18 @@
               <v-list-item-title>Your Stats</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+          <v-list-item
+            value="vendor-helpline"
+            @click="routeTo('vendor-helpline')"
+            color="primary"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-phone-classic</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Helpline</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <!-- <v-list-item
             value="vendor-stats"
             color="primary"
@@ -178,16 +190,16 @@
         <v-img
           v-if="isDark"
           src="@/assets/logo-white.png"
-          max-height="40"
-          contain
+          max-height="50"
+          max-width="100"
           alt="Be Shoppi"
           class="mt-2"
         ></v-img>
         <v-img
           v-else
           src="@/assets/logo-color.png"
-          max-height="40"
-          contain
+          max-height="50"
+          max-width="100"
           alt="Be Shoppi"
           class="mt-2"
         ></v-img>
