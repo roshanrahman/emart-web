@@ -288,7 +288,7 @@
     </v-dialog>
     <v-dialog
       v-model="isItemDetailDialogVisible"
-      max-width="600"
+      max-width="850"
     >
       <v-card>
         <v-card-title>
