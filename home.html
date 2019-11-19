@@ -18,7 +18,7 @@ body, html {
 .bgimg-1 {
   background-position: center;
   background-size: cover;
-  background-image: url("/w3images/mac.jpg");
+  background-image: linear-gradient(to bottom, rgba(16, 26, 82, 0.52), rgba(21, 19, 117, 0.73)),url("https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80");
   min-height: 100%;
 }
 
@@ -31,11 +31,16 @@ body, html {
 <!-- Navbar (sit on top) -->
 <div class="w3-top">
   <div class="w3-bar w3-white w3-card" id="myNavbar">
-    <a href="#home" class="w3-bar-item w3-button w3-wide">BESHOPPI</a>
+   
+      <img src="/logo-color.png" height="60" />
+   
     <!-- Right-sided navbar links -->
     <div class="w3-right w3-hide-small">
       <a href="#about" class="w3-bar-item w3-button">ABOUT</a>
       <a href="#contact" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> CONTACT</a>
+          <a href="http://www.beshoppi.in/web" class="w3-bar-item w3-button"><i class="fa fa-external-link" aria-hidden="true"></i> GET STARTED</a>
+
+    
     </div>
     <!-- Hide right-floated links on small screens and replace them with a menu icon -->
 
@@ -51,6 +56,9 @@ body, html {
   <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button">ABOUT</a>
 
   <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button">CONTACT</a>
+          <a href="http://www.beshoppi.in/web" class="w3-bar-item w3-button"><i class="fa fa-external-link"
+              aria-hidden="true"></i> GET STARTED</a>
+
 </nav>
 
 <!-- Header with full-height image -->
@@ -59,7 +67,7 @@ body, html {
     <span class="w3-jumbo w3-hide-small">Welcome to BeShoppi</span><br>
     <span class="w3-xxlarge w3-hide-large w3-hide-medium">Welcome to BeShoppi</span><br>
     <span class="w3-large">There's much to see here. So, take your time, look around, and learn all there is to know about us. We hope you enjoy our site and take a moment to drop us a line.</span>
-    <p><a href="#about" class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Get Started</a></p>
+    <p><a href="http://www.beshoppi.in/web" class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Get Started</a></p>
   </div> 
   <div class="w3-display-bottomleft w3-text-grey w3-large" style="padding:24px 48px">
   
@@ -67,30 +75,26 @@ body, html {
 </header>
 
 <!-- About Section -->
-<div class="w3-container" style="padding:128px 16px" id="about">
+<div class="w3-container " style="padding:128px 16px" id="about">
   <h3 class="w3-center">ABOUT THE COMPANY</h3>
   <p class="w3-center w3-large">Key features of our company</p>
-  <div class="w3-row-padding w3-center" style="margin-top:64px">
-    <div class="w3-quarter">
+  <div class="w3-center w3-row-padding w3-center" style="margin-top:64px">
+    <div class="w3-quarter w3-center">
       <i class="fa fa-desktop w3-margin-bottom w3-jumbo w3-center"></i>
       <p class="w3-large">Professional Customer Service</p>
       <p>Our goal is to make sure we support you every step of the way. If there is an issue, our customer service staff are ready to help you over email or a phone call. We value your business!</p>
     </div>
-    <div class="w3-quarter">
+    <div class="w3-quarter w3-center">
       <i class="fa fa-heart w3-margin-bottom w3-jumbo"></i>
       <p class="w3-large">Committed to Quality</p>
       <p>We believe quality should never be a compromise. No matter what product you're looking for, we guarantee reliability. We want you to feel confident that your purchase is of the highest caliber.</p>
     </div>
-    <div class="w3-quarter">
+    <div class="w3-quarter w3-center">
       <i class="fa fa-diamond w3-margin-bottom w3-jumbo"></i>
       <p class="w3-large">100% Satisfaction Guaranteed</p>
       <p>While shopping with us, we want you to be completely happy with the experience. If you have questions about us, our products, or even shipping, get in touch! We hope you continue to shop with us for many years to come.</p>
     </div>
-    <!-- <div class="w3-quarter">
-      <i class="fa fa-cog w3-margin-bottom w3-jumbo"></i>
-      <p class="w3-large">Support</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
-    </div> -->
+  
   </div>
 </div>
 
@@ -101,10 +105,12 @@ body, html {
       <h3>Get started today!</h3>
       <p>Send us a message or call us to ask us about ecommerce options that are available for you. Once we understand your needs, we will provide the package of services and support.</p>
       <p><a href="https://wa.me/08870148242" class="w3-button w3-black"><i class="fa fa-whatsapp"> </i> Message us on WhatsApp</a></p>
+    <p>Our Contact Numbers</p>
+    <p><a href="tel:08870148242">+91 8870148242 </a></p>
+        <p><a href="tel:8608175782">+91 8608175782 </a></p>
+<p><a href="mailto:beshoppiin@gmail.com">beshoppiin@gmail.com </a></p>
     </div>
-    <div class="w3-col m6">
-      <img class="w3-image w3-round-large" src="/w3images/phone_buildings.jpg" alt="Buildings" width="700" height="394">
-    </div>
+    
   </div>
 </div>
 
@@ -304,7 +310,7 @@ body, html {
   </div>
 </div>
 
-<!-- Contact Section -->
+<!-- Contact Section 
 <div class="w3-container w3-light-grey" style="padding:128px 16px" id="contact">
   <h3 class="w3-center">CONTACT</h3>
   <p class="w3-center w3-large">Lets get in touch. Send us a message:</p>
@@ -324,22 +330,16 @@ body, html {
         </button>
       </p>
     </form>
-    <!-- Image of location/map -->
+     Image of location/map 
     <img src="/w3images/map.jpg" class="w3-image w3-greyscale" style="width:100%;margin-top:48px">
   </div>
-</div> 
+</div> -->
 
 <!-- Footer -->
 <footer class="w3-center w3-black w3-padding-64">
   <a href="#home" class="w3-button w3-light-grey"><i class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
-  <div class="w3-xlarge w3-section">
-    <i class="fa fa-facebook-official w3-hover-opacity"></i>
-    <i class="fa fa-instagram w3-hover-opacity"></i>
-    <i class="fa fa-snapchat w3-hover-opacity"></i>
-    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-    <i class="fa fa-twitter w3-hover-opacity"></i>
-    <i class="fa fa-linkedin w3-hover-opacity"></i>
-  </div>
+  <p>Copyright © BeShoppi 2019</p>
+
   <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
 </footer>
  
