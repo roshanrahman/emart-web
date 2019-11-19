@@ -452,7 +452,8 @@ export default Vue.extend({
 
           ...item
         }
-      }).then((result) => console.log('Mutation succeeded', result),
+      }).then((result) => {        console.log('Mutation succeeded', result);
+        this.$apollo.queries.getPosters.refetch();      },
         (reason) => {
           this.error.title = "Server returned error.";
           this.error.text = reason;
@@ -467,7 +468,8 @@ export default Vue.extend({
         variables: {
           posterId: this.currentItem.id,
         }
-      }).then((result) => console.log('Mutation succeeded', result),
+      }).then((result) => {        console.log('Mutation succeeded', result);
+        this.$apollo.queries.getPosters.refetch();      },
         (reason) => {
           this.error.title = "Server returned error.";
           this.error.text = reason;

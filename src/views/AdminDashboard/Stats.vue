@@ -227,7 +227,7 @@ export default Vue.extend({
           endDate: this.endDate
         }
       },
-      pollInterval: 5000,
+      pollInterval: 2000,
       result (data) {
         this.fillData();
       }

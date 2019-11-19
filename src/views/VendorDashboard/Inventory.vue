@@ -468,7 +468,8 @@ export default Vue.extend({
         variables: {
           ...item
         }
-      }).then((result) => console.log('Mutation succeeded', result),
+      }).then((result) => {        console.log('Mutation succeeded', result);
+        this.$apollo.queries.getVendorInventory.refetch();      },
         (reason) => {
           this.error.title = "Server returned error.";
           this.error.text = reason;
@@ -501,7 +502,8 @@ export default Vue.extend({
         variables: {
           inventoryId: this.currentItem.id,
         }
-      }).then((result) => console.log('Mutation succeeded', result),
+      }).then((result) => {        console.log('Mutation succeeded', result); this.$apollo.queries.getAllInventory.refetch();
+        this.$apollo.queries.getVendorInventory.refetch();      },
         (reason) => {
           this.error.title = "Server returned error.";
           this.error.text = reason;
