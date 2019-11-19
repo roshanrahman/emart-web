@@ -217,6 +217,8 @@ export default {
         var successful = document.execCommand('copy');
         var msg = successful ? 'successful' : 'unsuccessful';
         console.log('Fallback: Copying text command was ' + msg);
+        alert('Details copied. Now you can paste anywhere');
+
       } catch (err) {
         console.error('Fallback: Oops, unable to copy', err);
       }
@@ -224,16 +226,18 @@ export default {
       document.body.removeChild(textArea);
     },
     copyTextToClipboard (text) {
-      if (!navigator.clipboard) {
+      try {
+        navigator.clipboard.writeText(text).then(function () {
+          console.log('Async: Copying to clipboard was successful!');
+          alert('Details copied. Now you can paste anywhere');
+        }, function (err) {
+          console.error('Async: Could not copy text: ', err);
+        });
+      } catch {
         this.fallbackCopyTextToClipboard(text);
         return;
       }
-      navigator.clipboard.writeText(text).then(function () {
-        console.log('Async: Copying to clipboard was successful!');
-        alert('Details copied. Now you can paste anywhere');
-      }, function (err) {
-        console.error('Async: Could not copy text: ', err);
-      });
+      return;
     }
   }
 }
