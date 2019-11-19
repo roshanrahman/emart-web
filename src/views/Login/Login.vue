@@ -24,7 +24,6 @@
         >
           <v-img
             class="mb-6"
-            max-height="100"
             max-width="400"
             contain
             src='@/assets/logo-large.png'

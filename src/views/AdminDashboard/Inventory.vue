@@ -128,10 +128,10 @@
           ₹ {{item.originalPrice }}
         </template>
         <template v-slot:item.vendor.storeName="{ item }">
-          {{item.vendor.storeName }}
+          {{!!item.vendor ? item.vendor.storeName : 'loading' }}
           <v-chip
             small
-            v-if="item.vendor.id == loggedInUser.id"
+            v-if="!!item.vendor ? item.vendor.id == loggedInUser.id : false"
             color="primary"
           >You</v-chip>
         </template>
