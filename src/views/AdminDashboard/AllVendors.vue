@@ -644,7 +644,7 @@ export default Vue.extend({
   apollo: {
     getAllVendors: {
       query: getAllVendors,
-      pollInterval: 5000
+      pollInterval: 2000
     }
   }
 });
