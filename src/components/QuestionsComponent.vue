@@ -187,7 +187,7 @@ export default {
           inventoryId: this.item.id
         }
       },
-      pollInterval: 3
+      pollInterval: 5000
     }
   },
   methods: {

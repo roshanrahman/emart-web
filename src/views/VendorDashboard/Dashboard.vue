@@ -231,7 +231,7 @@ export default Vue.extend({
       variables () {
         vendorId: this.loggedInUser.id;
       },
-      pollInterval: 3
+      pollInterval: 5000
     }
   },
   components: {

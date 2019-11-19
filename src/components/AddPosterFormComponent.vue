@@ -116,7 +116,7 @@ export default {
     getVendorInventory: {
       query: getVendorInventory,
 
-      pollInterval: 3
+      pollInterval: 5000
     }
   },
   computed: {

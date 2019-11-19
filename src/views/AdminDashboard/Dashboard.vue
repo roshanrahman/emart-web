@@ -310,15 +310,15 @@ export default Vue.extend({
   apollo: {
     getAllOrders: {
       query: getAllOrders,
-      pollInterval: 3
+      pollInterval: 5000
     },
     getVendorOrders: {
       query: getVendorOrders,
-      pollInterval: 3
+      pollInterval: 5000
     },
     getAllVendors: {
       query: getAllVendors,
-      pollInterval: 3
+      pollInterval: 5000
     }
   },
   components: {

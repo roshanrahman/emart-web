@@ -105,7 +105,7 @@ export default Vue.extend({
           checkNetwork
         }
       `,
-      pollInterval: 3000
+      pollInterval: 5000
     }
   },
   computed: {

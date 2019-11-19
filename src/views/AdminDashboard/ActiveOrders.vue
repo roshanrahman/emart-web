@@ -565,7 +565,7 @@ export default {
       variables () {
         vendorId: this.loggedInUser.id;
       },
-      pollInterval: 3
+      pollInterval: 5000
     }
   }
 }

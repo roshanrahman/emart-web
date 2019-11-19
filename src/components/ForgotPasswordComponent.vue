@@ -112,7 +112,7 @@
           >
           </v-text-field>
         </v-row>
-        <v-row>
+        <v-row no-gutters>
           <v-text-field
             single-line
             label="Confirm New Password"
@@ -134,10 +134,31 @@
             rounded
             elevation="0"
             color="primary"
-            :disabled='this.newPasswordInput.length > 5 && this.newPasswordInput == this.confirmNewPasswordInput'
+            :disabled='!(this.newPasswordInput.length > 5 && this.newPasswordInput == this.confirmNewPasswordInput)'
             :loading="isWorking"
             @click="changePassword();"
           >Change password</v-btn>
+
+        </v-row>
+      </div>
+      <div v-if="step == 4">
+        <v-row no-gutters>
+
+          <h2 class="body-1 primary--text">Password has been successfully changed. You can now login with your new password.</h2>
+
+        </v-row>
+
+        <v-row
+          no-gutters
+          justify="end"
+          class="mt-4"
+        >
+          <v-btn
+            rounded
+            elevation="0"
+            color="primary"
+            @click="$emit('closeDialog');"
+          >Got it</v-btn>
 
         </v-row>
       </div>
@@ -197,6 +218,8 @@ export default Vue.extend({
         .then(
           data => {
             console.log("PASSWORD CHANGE SUCCESS ", data);
+            this.isWorking = false;
+            this.step = 4;
           },
           error => {
             console.log("ERROR OCCURED ", error);

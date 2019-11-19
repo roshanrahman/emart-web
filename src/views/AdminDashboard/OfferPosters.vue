@@ -478,12 +478,12 @@ export default Vue.extend({
   apollo: {
     getPosters: {
       query: getPosters,
-      pollInterval: 3
+      pollInterval: 5000
     },
     getAllInventory: {
       query: getAllInventory,
 
-      pollInterval: 3
+      pollInterval: 5000
     }
   },
 

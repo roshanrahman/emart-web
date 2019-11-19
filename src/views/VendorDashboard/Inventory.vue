@@ -513,7 +513,7 @@ export default Vue.extend({
     getVendorInventory: {
       query: getVendorInventory,
 
-      pollInterval: 3
+      pollInterval: 5000
     }
   },
 

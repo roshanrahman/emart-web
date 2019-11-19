@@ -111,15 +111,15 @@ export default {
   apollo: {
     getAllInventory: {
       query: getAllInventory,
-      pollInterval: 3
+      pollInterval: 5000
     },
     getAllVendors: {
       query: getAllVendors,
-      pollInterval: 3
+      pollInterval: 5000
     },
     getVendorInventory: {
       query: getVendorInventory,
-      pollInterval: 3
+      pollInterval: 5000
     }
   }
 }
