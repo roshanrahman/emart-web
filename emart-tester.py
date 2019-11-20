@@ -288,6 +288,31 @@ def add_inventory():
         result = run_mutation(mutation=add_mutation, token=vendor_token)
         print(result)
 
+def delete_all_inventory():
+    query = ''' 
+getAllInventory {
+    inventory {
+        id
+    }
+}
+    '''
+    result = run_query(query=query, token=ADMIN_TOKEN)
+    result = result.get('data').get('getAllInventory').get('inventory')
+    inventory_id_list = []
+    for item in result:
+        mutation = f''' 
+      
+            deleteInventory(inventoryId: "{item.get('id')}") {{
+                error {{
+                    message
+                }}
+            }}
+     
+        '''
+        result = run_mutation(mutation=mutation, token=ADMIN_TOKEN)
+        print(result)
+
+    
 
 def show_admin_interface():
     print('======================')
@@ -296,6 +321,7 @@ def show_admin_interface():
     print('1. Print all vendors')
     print('2. Create new vendors')
     print('3. Randomly add inventory')
+    print('4. Delete all inventory')
 
     try:
         user_selection = int(input('\nEnter your choice: '))
@@ -308,7 +334,8 @@ def show_admin_interface():
         admin_functions = {
             1: print_all_vendors,
             2: create_new_vendors,
-            3: add_inventory
+            3: add_inventory,
+            4: delete_all_inventory
         }
         admin_functions.get(user_selection)()
         show_admin_interface()

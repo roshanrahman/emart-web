@@ -225,7 +225,7 @@ export default Vue.extend({
       rgba(10, 29, 92, 0.432),
       rgba(0, 13, 43, 0.952)
     ),
-    url("https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80");
+    url("~@/assets/back.png");
 }
 
 .v-card.rounded-card {
