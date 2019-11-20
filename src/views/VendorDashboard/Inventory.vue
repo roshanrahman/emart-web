@@ -379,26 +379,34 @@ export default Vue.extend({
     },
     outOfStock: function () {
       var outOfStock = 0;
-      if (!!this.getVendorInventory == false) {
+      try {
+        if (!this.getVendorInventory) {
+          return 0;
+        }
+        this.getVendorInventory.inventory.forEach(item => {
+          if (item.inStock < 1) {
+            outOfStock += 1;
+          }
+        });
+      } catch {
         return 0;
       }
-      this.getVendorInventory.inventory.forEach(item => {
-        if (item.inStock < 1) {
-          outOfStock += 1;
-        }
-      });
       return outOfStock;
     },
     unAnswered: function () {
       var unAnswered = 0;
-      if (!!this.getVendorInventory == false) {
+      try {
+        if (!!this.getVendorInventory == false) {
+          return 0;
+        }
+        this.getVendorInventory.inventory.forEach(item => {
+          if (item.unAnswered > 0) {
+            unAnswered += 1;
+          }
+        });
+      } catch {
         return 0;
       }
-      this.getVendorInventory.inventory.forEach(item => {
-        if (item.unAnswered > 0) {
-          unAnswered += 1;
-        }
-      });
       return unAnswered;
     },
   },

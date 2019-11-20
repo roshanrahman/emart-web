@@ -200,12 +200,7 @@
                   <v-list-item-subtitle><span class="subtitle-1 primary--text">₹ {{item.inventory.sellingPrice}}</span> </v-list-item-subtitle>
                 </v-col>
               </v-row>
-              <v-row>
-                <v-list class="ml-4">
-                  <h1 class="subtitle-2">Sold by</h1>
-                  <h2 class="title">{{item.inventory.vendor.storeName }} ({{ item.inventory.vendor.phoneNumber }}) </h2>
-                </v-list>
-              </v-row>
+
               <v-divider class="mt-2"></v-divider>
               <v-spacer></v-spacer>
               <v-card
@@ -420,7 +415,7 @@
               outlined
               text=""
               elevation="0"
-              @click="changeStatusForCancelling();"
+              @click="changeStatusForCancelling()"
               :disabled="!!reasonForChangeInput == false"
             >Cancel Order</v-btn>
           </v-row>
@@ -484,24 +479,25 @@ export default {
         console.log(successResult);
         this.isUpdateStatusDialogVisible = false;
       }, (error) => { console.error(error); alert(error); });
+    },
+    changeStatusForCancelling: function () {
+      this.$apollo.mutate({
+        mutation: changeOrderStatusMutation,
+        variables: {
+          status: 'CANCELLED_BY_STORE',
+          orderId: this.currentOrder.id,
+          cancelledReason: this.reasonForChangeInput
+        }
+      }).then((successResult) => {
+        console.log(successResult);
+        this.isUpdateStatusDialogVisible = false;
+        this.isCancelOrderDialogVisible = false;
+      }, (error) => {        console.error(error); alert(error); this.isUpdateStatusDialogVisible = false;
+        this.isCancelOrderDialogVisible = false;      });
+
     }
   },
-  changeStatusForCancelling () {
-    this.$apollo.mutate({
-      mutation: changeOrderStatusMutation,
-      variables: {
-        status: 'CANCELLED_BY_STORE',
-        orderId: this.currentOrder.id,
-        cancelledReason: this.reasonForChangeInput
-      }
-    }).then((successResult) => {
-      console.log(successResult);
-      this.isUpdateStatusDialogVisible = false;
-      this.isCancelOrderDialogVisible = false;
-    }, (error) => {      console.error(error); alert(error); this.isUpdateStatusDialogVisible = false;
-      this.isCancelOrderDialogVisible = false;    });
 
-  },
   components: {
 
   },

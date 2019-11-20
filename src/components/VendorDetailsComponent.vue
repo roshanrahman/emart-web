@@ -40,6 +40,7 @@
       <h3 class="subtitle-2 grey--text">Address</h3>
       <h1 class="title">{{ `${vendorAddress.name}` }}</h1>
       <h1 class="title">{{ `${vendorAddress.addressLine}` }}</h1>
+      <h1 class="title">{{ `${vendorAddress.landmark}` }}</h1>
       <h1 class="title">{{ `${vendorAddress.phoneNumber}` }}</h1>
       <h1 class="title">{{ `${vendorAddress.city}` }}</h1>
       <h1 class="title">{{ `${vendorAddress.pinCode}` }}</h1>
@@ -206,6 +207,20 @@ export default {
     }
   },
   methods: {
+    copyTextToClipboard (text) {
+      try {
+        navigator.clipboard.writeText(text).then(function () {
+          console.log('Async: Copying to clipboard was successful!');
+          alert('Details copied. Now you can paste anywhere');
+        }, function (err) {
+          console.error('Async: Could not copy text: ', err);
+        });
+      } catch {
+        this.fallbackCopyTextToClipboard(text);
+        return;
+      }
+      return;
+    },
     fallbackCopyTextToClipboard (text) {
       var textArea = document.createElement("textarea");
       textArea.value = text;
@@ -225,20 +240,6 @@ export default {
 
       document.body.removeChild(textArea);
     },
-    copyTextToClipboard (text) {
-      try {
-        navigator.clipboard.writeText(text).then(function () {
-          console.log('Async: Copying to clipboard was successful!');
-          alert('Details copied. Now you can paste anywhere');
-        }, function (err) {
-          console.error('Async: Could not copy text: ', err);
-        });
-      } catch {
-        this.fallbackCopyTextToClipboard(text);
-        return;
-      }
-      return;
-    }
   }
 }
 </script>
