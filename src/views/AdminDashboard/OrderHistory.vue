@@ -100,11 +100,11 @@
                       :value="item.status == 'PLACED_BY_CUSTOMER' ? 10 : item.status == 'RECEIVED_BY_STORE' ? 50 : item.status == 'PICKED_UP' ? 75 : 0"
                     ></v-progress-circular>
                   </v-avatar>
-                  <span> {{ computedStatus(item.status).short }}</span>
+                  <span> {{ (item.status) }}</span>
                 </v-card>
               </v-row>
             </template>
-            <span class="body-1">{{ computedStatus(item.status).long }}</span>
+            <span class="body-1">{{ (item.status) }}</span>
             <br>
             <span v-if="!!item.cancelledReason">
               Reason: {{ item.cancelledReason}}
@@ -403,8 +403,15 @@ export default Vue.extend({
       document.body.removeChild(element);
     },
     computedStatus: function (status) {
+      try {
+        return OrderStatuses.resolveOrderStatus(status);
 
-      return OrderStatuses.resolveOrderStatus(status);
+      } catch {
+        return {
+          short: 'null',
+          long: 'null'
+        };
+      }
     },
     computedDate: function (dateString) {
       var epoch = parseInt(dateString);

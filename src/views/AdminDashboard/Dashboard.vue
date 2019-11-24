@@ -239,7 +239,7 @@
       <v-toolbar-title>
         <v-img
           v-if="isDark"
-          src="@/assets/logo-white.png"
+          src="@/assets/logo-color-admin.png"
           max-height="50"
           max-width="100"
           alt="Be Shoppi"
@@ -247,7 +247,7 @@
         ></v-img>
         <v-img
           v-else
-          src="@/assets/logo-color.png"
+          src="@/assets/logo-color-admin.png"
           max-height="50"
           max-width="100"
           alt="Be Shoppi"
